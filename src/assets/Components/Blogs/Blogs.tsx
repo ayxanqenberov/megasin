@@ -27,7 +27,7 @@ const Blogs = () => {
               alt=""
             />
             <span className="font-bold">ayxan</span>
-            <button className="text-blue-600 " onClick={toggleFollow}>
+            <button className={isFollow ? 'text-black' : 'text-blue-600 '} onClick={toggleFollow}>
               {isFollow ? "Following" : "Follow"}
             </button>
           </div>
@@ -36,7 +36,7 @@ const Blogs = () => {
               Js de qarsima cixan errorlar
             </h2>
             <div className="postTags">
-              <span>#js</span>
+              <a className="text-blue-600" href="">#js</a>
             </div>
           </div>
           <div className="postFeatures flex items-center gap-3">
