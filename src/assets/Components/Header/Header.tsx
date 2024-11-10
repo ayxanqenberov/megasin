@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { BsPencilSquare } from "react-icons/bs";
 import { FaUserAlt } from "react-icons/fa";
-import { IoNotifications } from "react-icons/io5";
-import { MdDarkMode, MdOutlineDarkMode } from "react-icons/md";
+import { IoBookSharp, IoNotifications } from "react-icons/io5";
+import { MdDarkMode, MdHome, MdOutlineDarkMode } from "react-icons/md";
+import { RiNewsLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
@@ -9,7 +11,7 @@ const Header = () => {
   const getChangeMode = () => {
     setDarkMode(!darkMode);
   };
-  const navigate= useNavigate();
+  const navigate = useNavigate();
   const getProfile = () => {
     navigate("/profile");
   };
@@ -22,23 +24,43 @@ const Header = () => {
           </a>
           <ul className="flex items-center justify-evenly w-[50%]">
             <li>
-              <a className="hover:text-red-700 duration-200 text-lg" href="">
+              <a href="" className="flex flex-col items-center hover:text-red-700 duration-200 ">
+                <MdHome className="text-[25px]" />
+              <span
+                className="text-[13px] "
+              >
                 Home
-              </a>
+              </span>
+                </a>
             </li>
             <li>
-              <a className="hover:text-red-700 duration-200 text-lg" href="">
+              <a href="" className="flex flex-col items-center hover:text-red-700 duration-200 ">
+                <IoBookSharp className="text-[25px]" />
+              <span
+                className="text-[13px]"
+              >
                 Blogs
-              </a>
+              </span>
+                            </a>
             </li>
             <li>
-              <a className="hover:text-red-700 duration-200 text-lg" href="">
-                About
-              </a>
+              <a href="" className="flex flex-col items-center hover:text-red-700 duration-200 ">
+                <RiNewsLine className="text-[25px]" />
+              <span
+                className="text-[13px]"
+              >
+                News
+              </span>
+                </a>
             </li>
             <li>
-              <a className="hover:text-red-700 duration-200 text-lg" href="">
+              <a href="" className="flex flex-col items-center hover:text-red-700 duration-200 ">
+                <BsPencilSquare className="text-[25px]" />
+              <span
+                className="text-[13px]"
+              >
                 Write
+              </span>
               </a>
             </li>
           </ul>

@@ -1,7 +1,7 @@
 // src/components/Register.tsx
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser , loginUser  } from "../../features/Users/userSlice";
+import { registerUser } from "../../features/Users/userSlice";
 import { AppDispatch, RootState } from "../../redux/app/store";
 import { useNavigate } from "react-router-dom";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
@@ -29,7 +29,7 @@ const Register: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(loginUser ({ username, password })); // Use username for login
+    dispatch(loginUser ({ username, password })); 
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +44,7 @@ const Register: React.FC = () => {
       </a>
       <span className="text-3xl font-bold">Join the Megasin Community</span>
       <span className="text-gray-500">
-        DEV Community is a community of 2 amazing developers
+        Megasin Community is a community of 2 amazing developers
       </span>
       <form className="flex flex-col gap-2 pt-4" onSubmit={handleRegister}>
         <input
