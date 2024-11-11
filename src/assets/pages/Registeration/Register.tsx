@@ -28,10 +28,10 @@ const Register: React.FC = () => {
     dispatch(registerUser ({ email, password, username }));
   };
 
-  // const handleLogin = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   dispatch(loginUser ({ username, password })); 
-  // };
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(loginUser ({ username, password })); 
+  };
 
   const [showPassword, setShowPassword] = useState(false);
   const toggleShowPassword = () => {

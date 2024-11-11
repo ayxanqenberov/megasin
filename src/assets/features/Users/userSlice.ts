@@ -17,6 +17,7 @@ interface User {
 
 interface UserState {
   user: User | null;
+  users:[];
   isLoading: boolean;
   error: string | null;
 }
@@ -24,6 +25,7 @@ interface UserState {
 const initialState: UserState = {
   user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user") as string) : null,
   isLoading: false,
+  users: [],
   error: null,
 };
 
@@ -76,7 +78,19 @@ export const updateData = createAsyncThunk<User, { id: string; username: string;
     }
   }
 );
-
+export const fetchUsers = createAsyncThunk<User[], void, { rejectValue: string }>(
+  'user/fetchUsers',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get('https://672e97cf229a881691f07176.mockapi.io/megasin/user');
+      console.log(response.data);
+      
+      return response.data; // Return data array to populate users
+    } catch (error: any) {
+      return rejectWithValue(handleApiError(error));
+    }
+  }
+);
 export const loginUser = createAsyncThunk<User, { username: string; password: string }, { rejectValue: string }>(
   "user/loginUser",
   async ({ username, password }, { rejectWithValue }) => {
@@ -147,6 +161,18 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "Login failed";
+      })
+      .addCase(fetchUsers.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<User[]>) => {
+        state.isLoading = false;
+        state.users = action.payload; // Populate users with API data
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to fetch users";
       });
   },
 });

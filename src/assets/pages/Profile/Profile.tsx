@@ -11,13 +11,14 @@ import { TiDelete } from "react-icons/ti";
 import { LuCake } from "react-icons/lu";
 const Profile: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
-  // console.log(user);
   
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [username, setUsername] = useState(user?.username || "");
+  // console.log(username);
+  
   const [email, setEmail] = useState(user?.email || "");
   const [bio, setBio] = useState(user?.bio || "");
   const [profilePictures, setProfilePictures] = useState(user?.profilePictures || "");
