@@ -42,10 +42,10 @@ export const registerUser = createAsyncThunk<User, { email: string; password: st
       const response = await axios.post("https://672e97cf229a881691f07176.mockapi.io/megasin/user", {
         email,
         username,
-        profilePictures: "https://plus.unsplash.com/premium_photo-1694819488591-a43907d1c5cc?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y3V0ZSUyMGRvZ3xlbnwwfHwwfHx8MA%3D%3D",
+        profilePictures: "https://t3.ftcdn.net/jpg/05/17/79/88/360_F_517798821_clzISlzMqjLxx8YjYFBfOaVvIj5qifwm.jpg",
         follower: 0,
         following: 0,
-        bio: "Add more information about yourself",
+        bio:"Add more information about yourself",
         password,
         bannerPict: "",
         createdAccount: new Date().toISOString(),
@@ -77,7 +77,6 @@ export const updateData = createAsyncThunk<User, { id: string; username: string;
   }
 );
 
-// Thunk to log in a user
 export const loginUser = createAsyncThunk<User, { username: string; password: string }, { rejectValue: string }>(
   "user/loginUser",
   async ({ username, password }, { rejectWithValue }) => {
@@ -104,6 +103,11 @@ const userSlice = createSlice({
     logout: (state) => {
       state.user = null;
       localStorage.removeItem("user");
+      // try{
+      //   const response = await axios.delete(`https://672e97cf229a881691f07176.mockapi.io/megasin/user/${id}`
+      // }catch(error){
+      //   return
+      // }
     },
   },
   extraReducers: (builder) => {

@@ -1,10 +1,11 @@
 // src/components/Register.tsx
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../../features/Users/userSlice";
+import { loginUser, registerUser } from "../../features/Users/userSlice";
 import { AppDispatch, RootState } from "../../redux/app/store";
 import { useNavigate } from "react-router-dom";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
+import Header from "../../Components/Header/Header";
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ const Register: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/profile");
+      navigate(`/profile/${username}`);
     }
   }, [user, navigate]);
 
@@ -27,10 +28,10 @@ const Register: React.FC = () => {
     dispatch(registerUser ({ email, password, username }));
   };
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(loginUser ({ username, password })); 
-  };
+  // const handleLogin = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   dispatch(loginUser ({ username, password })); 
+  // };
 
   const [showPassword, setShowPassword] = useState(false);
   const toggleShowPassword = () => {
@@ -38,6 +39,8 @@ const Register: React.FC = () => {
   };
 
   return (
+    <>
+    <Header/>
     <div className="registerContainer flex flex-col justify-center items-center gap-2 mt-4 h-[450px]">
       <a className="text-2xl font-bold text-[#E91E63] text-center" href="/">
         MEGASIN<span className="text-black">.</span>
@@ -108,6 +111,7 @@ const Register: React.FC = () => {
       </form>
       {error && <p className="error text-red-500">{error}</p>}
     </div>
+    </>
   );
 };
 

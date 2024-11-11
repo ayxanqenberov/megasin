@@ -4,3 +4,9 @@
 body{
     background-color: #F5F5F5;
 }
+.blogListsAsidePart:last-child{
+    border-radius: 0px 0px 12px 12px;
+}
+.blogListsAsidePart:first-child{
+    border-radius: 12px 12px 0px 0px;
+}
