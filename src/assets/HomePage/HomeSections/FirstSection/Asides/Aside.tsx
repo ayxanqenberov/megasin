@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../../../redux/app/store";
+import { RootState } from "../../../../redux/app/store";
 import { useSelector } from "react-redux";
 import { FaSquareInstagram, FaXTwitter } from "react-icons/fa6";
 import {
@@ -11,10 +11,10 @@ import {
 } from "react-icons/fa";
 import { SiGithub } from "react-icons/si";
 import { IoDiamondSharp } from "react-icons/io5";
-import createdPost from "../../../images/createPost.jpg";
-import neon from "../../../images/neon.png";
-import tagModerator from "../../../images/tagModerator.jpg";
-import structor from "../../../images/structure.jpg"
+import createdPost from "../../../../images/createPost.jpg";
+import neon from "../../../../images/neon.png";
+import tagModerator from "../../../../images/tagModerator.jpg";
+import structor from "../../../../images/structure.jpg"
 
 const Aside = () => {
   const { user } = useSelector((state: RootState) => state.user);

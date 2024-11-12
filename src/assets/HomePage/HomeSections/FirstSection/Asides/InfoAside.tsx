@@ -1,9 +1,14 @@
 import React from "react";
-import "../../../../input.css";
+import "../../../../../input.css";
 import { FaPlus } from "react-icons/fa";
-import moderator from "../../../images/moderator.png";
+import moderator from "../../../../images/moderator.png";
+import { AiFillLike } from "react-icons/ai";
+import { RootState } from "../../../../redux/app/store";
+import { useSelector } from "react-redux";
 
 const InfoAside = () => {
+  const { user } = useSelector((state: RootState) => state.user);
+
   return (
     <div className="w-[31%] flex flex-col gap-3 ">
       <div className="flex flex-col gap-[1.3px] bg-[#EAEAEA] pb-[px] rounded-xl">
@@ -98,7 +103,23 @@ const InfoAside = () => {
           </button>
         </div>
       </div>
-      <div>ss</div>
+      <div className={user ? "flex flex-col gap-[3.5px]" : "hidden"}>
+        <div className="blogListsAsidePart bg-white px-4 py-2">
+          <h2>Most Liked Blogs</h2>
+        </div>
+          <div className="blogListsAsidePart flex items-baseline justify-between bg-white px-4 py-2">
+            <a href="">hi everyone ! we are Megasin . We also support them . beacuse we are better </a>
+            <span className="flex items-center gap-1">123 <AiFillLike/></span>
+          </div>
+          <div className="blogListsAsidePart flex items-baseline justify-between bg-white px-4 py-2">
+            <a href="">hi everyone ! we are Megasin</a>
+            <span className="flex items-center gap-1">123 <AiFillLike/></span>
+          </div>
+          <div className="blogListsAsidePart flex items-baseline justify-between bg-white px-4 py-2">
+            <a href="">hi everyone ! we are Megasin</a>
+            <span className="flex items-center gap-1">123 <AiFillLike/></span>
+          </div>
+      </div>
     </div>
   );
 };

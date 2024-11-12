@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import Aside from './Aside'
-import Blogs from '../../../Components/Blogs/Blogs'
-import InfoAside from './InfoAside'
+import Aside from './Asides/Aside'
+import Blogs from './Blogs/Blogs'
+import InfoAside from './Asides/InfoAside'
 
 const FirstSect = () => {
 

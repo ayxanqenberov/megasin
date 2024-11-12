@@ -99,7 +99,7 @@ const Profile: React.FC = () => {
         </div>
 
         {isEditMode && (
-          <div className="editModal w-[60%] rounded-xl p-5 top-[24%] left-[20%] absolute bg-white border border-gray-600 z-30">
+          <div className="editModal w-[60%] rounded-xl p-5 top-[16%] left-[20%] absolute bg-white border border-gray-600 z-30">
             <div className="flex items-center justify-between">
               <h2 className="pt-3 text-black font-bold text-lg">Edit Profile</h2>
               <TiDelete onClick={() => setIsEditMode(false)} className="text-black text-3xl cursor-pointer" />
@@ -155,7 +155,7 @@ const Profile: React.FC = () => {
                   onChange={(e) => setBannerPict(e.target.value)}
                 />
               </div>
-              <button onClick={handleUpdateProfile}>Save Changes</button>
+              <button className="bg-green-400 w-[15%] m-auto p-2 rounded-md text-[#2b2b2b] font-bold text-[13px] hover:bg-green-500 duration-200 hover:text-black" onClick={handleUpdateProfile}>Save Changes</button>
             </div>
           </div>
         )}

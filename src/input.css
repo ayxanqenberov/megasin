@@ -49,3 +49,16 @@ body {
 .swiper-pagination-bullet{
     background-color: red !important;
 }
+.socialFooter{
+    width: 20%;
+    height: 15px;
+    .socialNamesFooter{
+        display: none;
+    }
+    &:hover{
+        .socialNamesFooter{
+            display: block;
+            transition: all .3s;
+        }
+    }
+}

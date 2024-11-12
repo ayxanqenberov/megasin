@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AiFillLike } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/app/store";
+import { RootState } from "../../../../redux/app/store";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoCloseOutline } from "react-icons/io5";
 

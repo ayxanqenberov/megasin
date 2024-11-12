@@ -9,7 +9,7 @@ import { RootState, AppDispatch } from "../../../redux/app/store";
 import { fetchUsers } from "../../../features/Users/userSlice";
 import { User } from "../../../features/Users/userSlice";
 
-const SecSect = () => {
+const UsersSect = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { users, isLoading, error } = useSelector(
     (state: RootState) =>
@@ -18,6 +18,7 @@ const SecSect = () => {
   //   const username = user?.username
   //   console.log(username);
   //   console.log(users);
+  const { user } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     console.log("Dispatching fetchUsers...");
@@ -32,7 +33,7 @@ const SecSect = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <section className="flex flex-col justify-between w-[90%] mt-2 m-auto pt-3">
+    <section className={user ? "flex flex-col justify-between w-[90%] mt-2 m-auto pt-3" : "hidden"}>
       <h2 className="font-medium text-[17px] mb-1">Discover more people</h2>
       <Swiper
         slidesPerView={4}
@@ -66,4 +67,4 @@ const SecSect = () => {
   );
 };
 
-export default SecSect;
+export default UsersSect;

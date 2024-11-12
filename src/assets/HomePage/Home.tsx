@@ -1,15 +1,15 @@
 import React from 'react'
 import FirstSect from './HomeSections/FirstSection/FirstSect'
 import Header from '../Components/Header/Header'
-import SecSect from './HomeSections/SecSection/SecSect'
 import Footer from '../Components/Footer/Footer'
+import UsersSect from './HomeSections/SecSection/UsersSect'
 
 const Home = () => {
   return (
     <>
       <Header />
       <FirstSect/>
-      <SecSect/>
+      <UsersSect/>
       <Footer/>
     </>
   )

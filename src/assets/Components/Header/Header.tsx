@@ -6,7 +6,7 @@ import { MdDarkMode, MdHome, MdOutlineDarkMode } from "react-icons/md";
 import { RiNewsLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/app/store"; // Adjust the path as needed
+import { RootState } from "../../redux/app/store"; 
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
