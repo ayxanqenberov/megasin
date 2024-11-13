@@ -17,6 +17,11 @@ const Footer = () => {
   const getLogin = () => {
     navigate("login");
   };
+  const username = useSelector((state: RootState) => state.user.user?.username);
+
+  const getWritePost = ()=>{
+    navigate(`/${username}/new`)
+  }
   return (
     <footer className="w-full bg-black text-white">
       <div>
@@ -46,76 +51,76 @@ const Footer = () => {
               </button>
             </div>
             <div className={user ? "flex" : "hidden"}>
-              <button className="border  border-[#3B49DF] p-2 rounded-md duration-200 text-[#3B49DF] font-semibold hover:bg-blue-600 hover:text-white">
+              <button onClick={getWritePost} className="border  border-[#3B49DF] p-2 rounded-md duration-200 text-[#3B49DF] font-semibold hover:bg-blue-600 hover:text-white">
                 Write Post
               </button>
             </div>
           </ul>
           <ul className="flex  justify-around text-2xl  h-[90%] gap-2  pt-4 flex-col items-center w-[25%]">
-            <li className="socialFooter flex gap-3 items-center">
-              <a className="hover:text-red-600 duration-200 text-white" href="">
+            <li className=" hover:text-red-600 socialFooter flex gap-3 items-center">
+              <a className=" duration-200 text-white" href="">
                 <FaFacebookSquare />
               </a>
               <a className="text-xl text-red-600 socialNamesFooter" href="">
-                twittre
+                Facebook
               </a>
             </li>
-            <li className="socialFooter flex gap-3 items-center">
-              <a className="hover:text-red-600 duration-200 text-white" href="">
+            <li className=" hover:text-red-600 socialFooter flex gap-3 items-center">
+              <a className=" duration-200 text-white" href="">
                 <FaDiscord />
               </a>
               <a className="text-xl text-red-600 socialNamesFooter" href="">
-                twittre
+                Discord
               </a>
             </li>
-            <li className="socialFooter flex gap-3 items-center">
-              <a className="hover:text-red-600 duration-200 text-white" href="">
+            <li className=" hover:text-red-600 socialFooter flex gap-3 items-center">
+              <a className=" duration-200 text-white" href="">
                 <FaSquareInstagram />
               </a>
               <a className="text-xl text-red-600 socialNamesFooter" href="">
-                twittre
+                Instagram
               </a>
             </li>
           </ul>
           <ul className="w-1/4 justify-around text-2xl  h-[90%] gap-2  pt-4  flex flex-col items-center">
-            <li className="socialFooter flex gap-3 items-center">
-              <a className="hover:text-red-600 duration-200 text-white" href="">
+            <li className=" hover:text-red-600 socialFooter flex gap-3 items-center">
+              <a className=" duration-200 text-white" href="">
                 <FaTelegram />
               </a>
               <a className="text-xl text-red-600 socialNamesFooter" href="">
-                twittre
+                Telegram
               </a>
             </li>
-            <li className="socialFooter flex gap-3 items-center">
-              <a className="hover:text-red-600 duration-200 text-white" href="">
+            <li className=" hover:text-red-600 socialFooter flex gap-3 items-center">
+              <a className=" duration-200 text-white" href="">
                 <SiGithub />
               </a>
               <a className="text-xl text-red-600 socialNamesFooter" href="">
-                twittre
+                Github
               </a>
             </li>
-            <li className="socialFooter flex gap-3 items-center">
-              <a className="hover:text-red-600 duration-200 text-white" href="">
+            <li className=" hover:text-red-600 socialFooter flex gap-3 items-center">
+              <a className=" duration-200 text-white" href="">
                 <FaXTwitter />
               </a>
               <a className="text-xl text-red-600 socialNamesFooter" href="">
-                twittre
+                Twitter
               </a>
             </li>
           </ul>
           <ul className="w-1/4 justify-around text-[17.5px]   h-[90%] gap-2  pt-4  flex flex-col items-center">
             <li>
-              <a href="">Term of Use</a>
+              <a href="" className="hover:text-red-600 duration-200">Term of Use</a>
             </li>
             <li>
-              <a href="">Privacy Policy</a>
+              <a href="" className="hover:text-red-600 duration-200">Privacy Policy</a>
             </li>
             <li>
-              <a href="">Cookie Policy</a>
+              <a href="" className="hover:text-red-600 duration-200">Cookie Policy</a>
             </li>
           </ul>
         </div>
-        <div className="downFooter text-center border-t-[1px] py-3 border-indigo-500 pt-2 ">
+        <div className={user ? "downFooter text-center border-t-[1px] py-3 border-indigo-500 pt-2 " : "downFooter text-center border-t-[1px] py-3 border-indigo-500 pt-2 mt-5"}>
           <span>2024 © Megasin , All rights reserved</span>
         </div>
       </div>

@@ -4,25 +4,38 @@ import { FaUserAlt } from "react-icons/fa";
 import { IoBookSharp, IoNotifications } from "react-icons/io5";
 import { MdDarkMode, MdHome, MdOutlineDarkMode } from "react-icons/md";
 import { RiNewsLine } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/app/store"; 
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const userName = useSelector((state: RootState) => state.user.user?.username);
   const getChangeMode = () => {
     setDarkMode(!darkMode);
   };
+  const { user } = useSelector((state: RootState) => state.user);
 
-  
+
+  const username = userName || '';
   const getProfile = (): void => {
-    const username = userName || '';
     navigate(username ? `/profile/${username}` : `/register`);
   };
+  const isProfilePage = location.pathname === `/profile/${username}`;
 
+  // const getWritePost = () => {
+  //   if (isProfilePage) {
+  //     navigate(`/${username}/new`);
+  //   } else {
+  //     navigate(`${username}/new`);
+  //   }
+  // }
+  const getWritePost = ()=>{
+    navigate(`/${username}/new`)
+  }
   return (
     <header className="bg-white text-black">
       <div className="headerpart border-none flex justify-between items-center pr-[19px]">
@@ -60,10 +73,10 @@ const Header = () => {
             </li>
             <li>
               <a
-                href="#"
+                href=""
                 className="flex flex-col items-center hover:text-red-700 duration-200"
               >
-                <BsPencilSquare className="text-[25px]" />
+                <BsPencilSquare onClick={user ? getWritePost : getProfile} className="text-[25px]" />
                 <span className="text-[13px]">Write</span>
               </a>
             </li>
@@ -73,7 +86,7 @@ const Header = () => {
           <button onClick={getChangeMode}>
             {darkMode ? <MdDarkMode /> : <MdOutlineDarkMode />}
           </button>
-          <div className="searching w-1/2">
+          <div className={isProfilePage ? 'hidden' : 'searching w-1/2'}>
             <input
               className="border-b border-grey outline-none w-full py-2"
               type="text"

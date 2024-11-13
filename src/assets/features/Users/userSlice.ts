@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface User {
-  id: string;
+  id: number;
   username: string;
   email: string;
   profilePictures: string;
@@ -53,7 +53,7 @@ export const registerUser = createAsyncThunk<User, { email: string; password: st
         createdAccount: new Date().toISOString(),
       });
 
-      localStorage.setItem("user", JSON.stringify(response.data));
+      // localStorage.setItem("user", JSON.stringify(response.data));
       return response.data;
     } catch (error: any) {
       return rejectWithValue(handleApiError(error));
@@ -78,12 +78,25 @@ export const updateData = createAsyncThunk<User, { id: string; username: string;
     }
   }
 );
+interface Posts {
+  id: number;
+  username:string;
+  userId:number;
+  likeCount:number;
+  content:string;
+  comentCount: number;
+  postPicture:string;
+  tags: object;
+  title:string;
+  createdAt:Date;
+}
+const posting = createAsyncThunk<Posts,{}>
+console.log(posting);
 export const fetchUsers = createAsyncThunk<User[], void, { rejectValue: string }>(
   'user/fetchUsers',
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get('https://672e97cf229a881691f07176.mockapi.io/megasin/user');
-      console.log(response.data);
       
       return response.data; // Return data array to populate users
     } catch (error: any) {
