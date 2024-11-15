@@ -1,36 +1,62 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiFillLike } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../redux/app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../../redux/app/store";
+import { fetchPosts } from "../../../../features/Posts/postSlice";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoCloseOutline } from "react-icons/io5";
 
 const Blogs = () => {
+  const [showWelcome, setShowWelcome] = useState(true);
   const [isFollow, setIsFollow] = useState(false);
   const [isLike, setIsLike] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(true); 
+  const [sliceEnd, setSliceEnd] = useState(3);
 
-  const toggleFollow = () => {
-    setIsFollow(!isFollow);
-  };
-  const toggleLike = () => {
-    setIsLike(!isLike);
-  };
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const dispatch: AppDispatch = useDispatch();
+  const { posts } = useSelector((state: RootState) => state.posts);
   const { user } = useSelector((state: RootState) => state.user);
-  
+
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (divRef.current) {
+      const height = divRef.current.offsetHeight;
+
+      if (height <= 1302) {
+        setSliceEnd(3);
+      } else if(height <= 1837) {
+        setSliceEnd(5);
+      }else{
+        setSliceEnd(3)
+      }
+    }
+  }, [posts]);
+
+  const toggleFollow = () => setIsFollow(!isFollow);
+  const toggleLike = () => setIsLike(!isLike);
+
+  // Sort posts in descending order
+  const sortedPosts = [...posts].sort((a, b) => b.id - a.id);
+
+  // Limit posts based on sliceEnd
+  const limitedPosts = sortedPosts.slice(0, sliceEnd);
 
   return (
     <div className="flex flex-col gap-4 w-[48%]">
-      {user && showWelcome && ( 
+      {user && showWelcome && (
         <div className="bg-[#3B49DF] p-[30px] text-white rounded-md flex flex-col gap-4">
           <div className="w-full flex items-center justify-between">
             <p className="text-2xl font-bold text-black">
               MEGASIN<span className="text-[#E91E63]">.</span>
             </p>
-            <IoCloseOutline 
+            <IoCloseOutline
               className="text-2xl cursor-pointer"
-              onClick={()=>setShowWelcome(false)}
+              onClick={() => setShowWelcome(false)}
             />
           </div>
           <div>
@@ -81,56 +107,55 @@ const Blogs = () => {
           </ul>
         </div>
       )}
-      
-      <div className="w-full border-2 border-red-700 rounded-md">
-        <img
-          className="w-full h-[270px] object-cover"
-          src="https://miro.medium.com/v2/resize:fit:828/format:webp/0*gSuR5yJljD9aFUNy"
-          alt=""
-        />
-        <div className="postInfos p-2 bg-white ">
-          <div className="flex items-center gap-2">
+
+      <div ref={divRef} className="bg-gray-100 rounded-lg flex flex-col gap-4">
+        {limitedPosts.map((item) => (
+          <div
+            key={item.id}
+            className="w-full border rounded-md bg-white shadow-md overflow-hidden"
+          >
             <img
-              className="h-8 w-8 object-cover rounded-[50%]"
-              src="https://i.guim.co.uk/img/media/fe1e34da640c5c56ed16f76ce6f994fa9343d09d/0_174_3408_2046/master/3408.jpg?width=620&dpr=2&s=none&crop=none"
-              alt=""
+              className="w-full h-[270px] object-cover"
+              src={item.postPicture || "https://via.placeholder.com/150"}
+              alt={item.title}
             />
-            <span className="font-bold">ayxan</span>
-            <button
-              className={isFollow ? "text-black" : "text-blue-600 "}
-              onClick={toggleFollow}
-            >
-              {isFollow ? "Following" : "Follow"}
-            </button>
-          </div>
-          <div>
-            <h2 className="text-black font-semibold">
-              Js de qarsima cixan errorlar
-            </h2>
-            <div className="postTags">
-              <a className="text-blue-600" href="">
-                #js
-              </a>
+            <div className="p-4">
+              <div className="flex items-center w-[25%] gap-2">
+                <img
+                  className="h-8 w-8 object-cover rounded-full"
+                  src={item.profilePicture || "https://via.placeholder.com/50"}
+                  alt={item.username}
+                />
+                <span className="font-bold">{item.username}</span>
+                <button
+                  className={`ml-auto text-sm ${
+                    isFollow ? "text-black" : "text-blue-600"
+                  }`}
+                  onClick={toggleFollow}
+                >
+                  {isFollow ? "Following" : "Follow"}
+                </button>
+              </div>
+              <h2 className="text-lg font-semibold mt-2">{item.title}</h2>
+              <p className="text-gray-500 text-sm">{item.tags.join(" ")}</p>
+              <div className="flex items-center gap-4 mt-3">
+                <div
+                  className="flex items-center gap-1 cursor-pointer"
+                  onClick={toggleLike}
+                >
+                  <AiFillLike
+                    className={isLike ? "text-red-500" : "text-gray-600"}
+                  />
+                  <span>{item.likeCount}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <FaComment />
+                  <span>{item.commentCount}</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="postFeatures flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              <AiFillLike
-                onClick={toggleLike}
-                className={
-                  isLike
-                    ? "text-[17px] cursor-pointer text-red-700"
-                    : "text-[17px] cursor-pointer"
-                }
-              />
-              <span>1</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <FaComment className="text-[17px]" />
-              <span>1</span>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

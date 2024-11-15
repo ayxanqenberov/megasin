@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/app/store"; 
 import axios from "axios";
-
 interface Posts {
   id: number;
   username: string;
@@ -46,6 +45,18 @@ export const createPost = createAsyncThunk<Posts, { title: string; content: stri
     }
   }
 );
+// In postsSlice.ts
+export const fetchPosts = createAsyncThunk<Posts[], void, { rejectValue: string }>(
+  "posts/fetchPosts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("https://672e97cf229a881691f07176.mockapi.io/megasin/posts");
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Failed to fetch posts");
+    }
+  }
+);
 
 const postsSlice = createSlice({
   name: "posts",
@@ -57,19 +68,20 @@ const postsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createPost.pending, (state) => {
+      .addCase(fetchPosts.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(createPost.fulfilled, (state, action: PayloadAction<Posts>) => {
+      .addCase(fetchPosts.fulfilled, (state, action: PayloadAction<Posts[]>) => {
         state.isLoading = false;
-        state.posts.push(action.payload);
+        state.posts = action.payload;
       })
-      .addCase(createPost.rejected, (state, action) => {
+      .addCase(fetchPosts.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload || "Failed to create post";
+        state.error = action.payload || "Failed to fetch posts";
       });
   },
+  
 });
 
 export default postsSlice.reducer;

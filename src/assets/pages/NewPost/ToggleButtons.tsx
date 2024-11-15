@@ -6,13 +6,8 @@ import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-export default function ToggleButtonsMultiple() {
-  const [formats, setFormats] = React.useState(() => ['bold', 'italic']);
-
-  const handleFormat = (
-    event: React.MouseEvent<HTMLElement>,
-    newFormats: string[],
-  ) => {
+export default function ToggleButtonsMultiple({formats,setFormats}) {
+  const handleFormat = (event, newFormats) => {
     setFormats(newFormats);
   };
 
