@@ -8,10 +8,12 @@ import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoCloseOutline } from "react-icons/io5";
 
 const Blogs = () => {
-  const [showWelcome, setShowWelcome] = useState(true);
-  const [isFollow, setIsFollow] = useState(false);
-  const [isLike, setIsLike] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(() => {
+    return localStorage.getItem("welcomeDismissed") !== "true";
+  });
   const [sliceEnd, setSliceEnd] = useState(3);
+  const [likes, setLikes] = useState<{ [key: number]: boolean }>({});
+  const [follows, setFollows] = useState<{ [key: number]: boolean }>({});
 
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -24,26 +26,22 @@ const Blogs = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (divRef.current) {
-      const height = divRef.current.offsetHeight;
-
-      if (height <= 1302) {
-        setSliceEnd(3);
-      } else if(height <= 1837) {
-        setSliceEnd(5);
-      }else{
-        setSliceEnd(3)
-      }
+    if (showWelcome) {
+      setSliceEnd(3); 
+    } else {
+      setSliceEnd(4);
     }
-  }, [posts]);
+  }, [showWelcome]);
 
-  const toggleFollow = () => setIsFollow(!isFollow);
-  const toggleLike = () => setIsLike(!isLike);
+  const toggleLike = (id: number) => {
+    setLikes((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
-  // Sort posts in descending order
+  const toggleFollow = (id: number) => {
+    setFollows((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
   const sortedPosts = [...posts].sort((a, b) => b.id - a.id);
-
-  // Limit posts based on sliceEnd
   const limitedPosts = sortedPosts.slice(0, sliceEnd);
 
   return (
@@ -108,19 +106,20 @@ const Blogs = () => {
         </div>
       )}
 
-      <div ref={divRef} className="bg-gray-100 rounded-lg flex flex-col gap-4">
+
+      <div ref={divRef} className="flex flex-col h-full gap-6">
         {limitedPosts.map((item) => (
           <div
             key={item.id}
-            className="w-full border rounded-md bg-white shadow-md overflow-hidden"
+            className="flex flex-col justify-between w-full border rounded-md bg-white shadow-md overflow-hidden"
           >
             <img
               className="w-full h-[270px] object-cover"
               src={item.postPicture || "https://via.placeholder.com/150"}
-              alt={item.title}
+              alt=""
             />
-            <div className="p-4">
-              <div className="flex items-center w-[25%] gap-2">
+            <div className="p-4 flex flex-col gap-4">
+              <div className="flex items-center w-[30%] text-ellipsis gap-2">
                 <img
                   className="h-8 w-8 object-cover rounded-full"
                   src={item.profilePicture || "https://via.placeholder.com/50"}
@@ -129,28 +128,36 @@ const Blogs = () => {
                 <span className="font-bold">{item.username}</span>
                 <button
                   className={`ml-auto text-sm ${
-                    isFollow ? "text-black" : "text-blue-600"
+                    follows[item.id] ? "text-black" : "text-blue-600"
                   }`}
-                  onClick={toggleFollow}
+                  onClick={() => toggleFollow(item.id)}
                 >
-                  {isFollow ? "Following" : "Follow"}
+                  {follows[item.id] ? "Following" : "Follow"}
                 </button>
               </div>
-              <h2 className="text-lg font-semibold mt-2">{item.title}</h2>
-              <p className="text-gray-500 text-sm">{item.tags.join(" ")}</p>
-              <div className="flex items-center gap-4 mt-3">
+              <h2 className="text-lg font-semibold">{item.title}</h2>
+              <ul>
+                {
+                  item.tags.map((item)=>(
+                    <li><a href="">{item}</a></li>
+                  ))
+                }
+              </ul>
+              <div className="flex items-center gap-4">
                 <div
                   className="flex items-center gap-1 cursor-pointer"
-                  onClick={toggleLike}
+                  onClick={() => toggleLike(item.id)}
                 >
                   <AiFillLike
-                    className={isLike ? "text-red-500" : "text-gray-600"}
+                    className={
+                      likes[item.id] ? "text-red-500" : "text-gray-600"
+                    }
                   />
                   <span>{item.likeCount}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <FaComment />
-                  <span>{item.commentCount}</span>
+                  <span>{item.comentCount}</span>
                 </div>
               </div>
             </div>

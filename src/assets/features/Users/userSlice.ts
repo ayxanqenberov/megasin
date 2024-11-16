@@ -1,4 +1,3 @@
-// src/redux/features/Users/userSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -28,20 +27,20 @@ const initialState: UserState = {
   users: [],
   error: null,
 };
-
+export const user_api_key = import.meta.env.VITE_USER_API_KEY
 const handleApiError = (error: any) => error.response?.data?.message || error.message || "Something went wrong";
 export const registerUser = createAsyncThunk<User, { email: string; password: string; username: string }, { rejectValue: string }>(
   "user/registerUser",
   async ({ email, password, username }, { rejectWithValue }) => {
     try {
-      const existingUsers = await axios.get("https://672e97cf229a881691f07176.mockapi.io/megasin/user");
+      const existingUsers = await axios.get(`https://${user_api_key}.mockapi.io/users/Users`);
       const usernameExists = existingUsers.data.some((user: User) => user.username === username);
       const emailExists = existingUsers.data.some((user: User) => user.email === email);
 
       if (usernameExists) throw new Error("Username already in use.");
       if (emailExists) throw new Error("Email already in use.");
 
-      const response = await axios.post("https://672e97cf229a881691f07176.mockapi.io/megasin/user", {
+      const response = await axios.post(`https://${user_api_key}.mockapi.io/users/Users`, {
         email,
         username,
         profilePictures: "https://t3.ftcdn.net/jpg/05/17/79/88/360_F_517798821_clzISlzMqjLxx8YjYFBfOaVvIj5qifwm.jpg",
@@ -60,11 +59,11 @@ export const registerUser = createAsyncThunk<User, { email: string; password: st
     }
   }
 );
-export const updateData = createAsyncThunk<User, { id: string; username: string; email: string; bio: string; profilePictures: string; bannerPict: string }, { rejectValue: string }>(
+export const updateData = createAsyncThunk<User, { id: string; username?: string; email?: string; bio?: string; profilePictures?: string; bannerPict?: string }, { rejectValue: string }>(
   "user/updateData",
   async ({ id, username, email, bio, profilePictures, bannerPict }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`https://672e97cf229a881691f07176.mockapi.io/megasin/user/${id}`, {
+      const response = await axios.put(`https://${user_api_key}.mockapi.io/users/Users/${id}`, {
         username,
         email,
         bio,
@@ -78,6 +77,7 @@ export const updateData = createAsyncThunk<User, { id: string; username: string;
     }
   }
 );
+
 interface Posts {
   id: number;
   username:string;
@@ -90,15 +90,13 @@ interface Posts {
   title:string;
   createdAt:Date;
 }
-const posting = createAsyncThunk<Posts,{}>
-console.log(posting);
+// const posting = createAsyncThunk<Posts>
 export const fetchUsers = createAsyncThunk<User[], void, { rejectValue: string }>(
   'user/fetchUsers',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('https://672e97cf229a881691f07176.mockapi.io/megasin/user');
-      
-      return response.data; // Return data array to populate users
+      const response = await axios.get(`https://${user_api_key}.mockapi.io/users/Users`);
+      return response.data; 
     } catch (error: any) {
       return rejectWithValue(handleApiError(error));
     }
@@ -108,7 +106,7 @@ export const loginUser = createAsyncThunk<User, { username: string; password: st
   "user/loginUser",
   async ({ username, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.get("https://672e97cf229a881691f07176.mockapi.io/megasin/user");
+      const response = await axios.get(`https://${user_api_key}.mockapi.io/users/Users`);
       const user = response.data.find((user: User) => user.username === username && user.password === password);
 
       if (!user) {
@@ -181,7 +179,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<User[]>) => {
         state.isLoading = false;
-        state.users = action.payload; // Populate users with API data
+        state.users = action.payload;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.isLoading = false;

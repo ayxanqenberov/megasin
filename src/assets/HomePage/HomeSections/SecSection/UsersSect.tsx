@@ -15,9 +15,6 @@ const UsersSect = () => {
     (state: RootState) =>
       state.user as { users: User[]; isLoading: boolean; error: string | null }
   );
-  //   const username = user?.username
-  //   console.log(username);
-  //   console.log(users);
   const { user } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
@@ -25,9 +22,9 @@ const UsersSect = () => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log("Users from Redux state:", users);
-  }, [users]);
+  // useEffect(() => {
+  //   console.log("Users from Redux state:", users);
+  // }, [users]);
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -53,7 +50,7 @@ const UsersSect = () => {
                 <img
                   src={item.profilePictures}
                   alt={`${item.username}'s profile`}
-                  className="rounded-[50%] object-cover border w-[100px] h-[100px]"
+                  className="object-cover rounded-[50%] border w-[100px] h-[100px]"
                 />
               </div>
               <span>{item.username}</span>

@@ -1,4 +1,3 @@
-// Profile.tsx
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/app/store";
@@ -73,14 +72,14 @@ const Profile: React.FC = () => {
       <Header />
       <section>
         <div
-          style={{ backgroundImage: `url(${bannerPict || user.bannerPict})` }}
+          style={{ backgroundImage: `url(${bannerPict || user.bannerPict})`,backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}}
           className={`bannerPict flex justify-end items-start p-5 relative h-[200px] w-full bg-black`}
         >
           <div className="profileContainer w-[60%] left-[20%] pb-4 absolute z-20 top-[50%] rounded-2xl flex flex-col justify-around items-start bg-white">
             <div className="flex px-7 w-full items-center">
-              <div className="border-none w-[150px] h-[150px] overflow-hidden m-3">
+              <div className="border border-gray-300 rounded-[50%] w-[150px] h-[150px] overflow-hidden m-3">
                 <img
-                  className="w-full h-full border-none object-cover flex items-center justify-center overflow-hidden rounded-[50%]"
+                  className="w-full h-full border-none object-cover flex items-center justify-center  rounded-[50%]"
                   src={
                     user.profilePictures ||
                     "https://t3.ftcdn.net/jpg/05/17/79/88/360_F_517798821_clzISlzMqjLxx8YjYFBfOaVvIj5qifwm.jpg"
@@ -129,7 +128,7 @@ const Profile: React.FC = () => {
                 className="text-black duration-200 hover:text-red-600 text-3xl cursor-pointer"
               />
             </div>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2 pt-5">
                 <label className="font-medium text-[#171717]">Username:</label>
                 <input
@@ -173,7 +172,7 @@ const Profile: React.FC = () => {
                   Profile Picture URL:
                 </label>
                 <input
-                  className="border border-[#A3A3A3] outline-red-600 rounded-lg"
+                  className="border border-[#A3A3A3] p-[7px] outline-red-600 rounded-lg"
                   type="text"
                   value={profilePictures}
                   onFocus={(e) => e.target.select()}
@@ -203,25 +202,23 @@ const Profile: React.FC = () => {
           </div>
         )}
       </section>
-      <section className="flex flex-col gap-3">
+      <section className={posts.length == 0 ? "hidden" : "flex flex-col gap-3"}>
         <div className="bg-[#f7f7f7]  gap-2 rounded-b-2xl shadow-md flex justify-start px-[30px] pb-[15px] items-end w-[60%] m-auto h-[170px]">
           <span>Posts:</span>
           <span>{userPosts.length}</span>
         </div>
         <div className="w-[60%] m-auto">
           <div className="w-full bg-[#f7f7f7] p-3 rounded-2xl shadow-md m-auto">
-            {/* {isLoading && <p>Loading posts...</p>} */}
-            {/* {!isLoading && userPosts.length === 0 && <p>No posts to display.</p>} */}
             <div className="post-list grid grid-cols-1 md:grid-cols-2 gap-4">
               {userPosts.map((post) => (
                 <div key={post.id} className="post-card border flex flex-col gap-3 rounded p-4">
                   <h3 className="font-bold">{post.title}</h3>
+                  <span className="text-[#9CA7BC]">{new Date(post.createdAt).toLocaleDateString()} {new Date(post.createdAt).toLocaleTimeString()}</span>
                   <img
                     src={post.postPicture}
                     alt={post.title}
                     className="w-full h-40 object-cover rounded"
                   />
-                  <p className="text-gray-600">{post.content}</p>
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>Likes: {post.likeCount}</span>
                     <span>Comments: {post.comentCount}</span>

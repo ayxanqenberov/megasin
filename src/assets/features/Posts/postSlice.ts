@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/app/store"; 
 import axios from "axios";
+import { user_api_key } from "../Users/userSlice";
 interface Posts {
   id: number;
   username: string;
@@ -11,7 +12,7 @@ interface Posts {
   postPicture: string;
   tags: object;
   title: string;
-  createdAt: string; 
+  createdAt: Date; 
   profilePicture:string;
 }
 
@@ -27,7 +28,7 @@ export const createPost = createAsyncThunk<Posts, { title: string; content: stri
         throw new Error("User not logged in");
       }
 
-      const res = await axios.post("https://672e97cf229a881691f07176.mockapi.io/megasin/posts", {
+      const res = await axios.post(`https://${user_api_key}.mockapi.io/users/Posts`, {
         title,
         content,
         userId: userID, 
@@ -45,13 +46,23 @@ export const createPost = createAsyncThunk<Posts, { title: string; content: stri
     }
   }
 );
-// In postsSlice.ts
 export const fetchPosts = createAsyncThunk<Posts[], void, { rejectValue: string }>(
   "posts/fetchPosts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("https://672e97cf229a881691f07176.mockapi.io/megasin/posts");
-      return response.data;
+      const postsResponse = await axios.get(`https://${user_api_key}.mockapi.io/users/Posts`);
+      const usersResponse = await axios.get(`https://${user_api_key}.mockapi.io/users/Users`);
+
+      const users = usersResponse.data; 
+      const posts = postsResponse.data.map((post: any) => {
+        const user = users.find((user: any) => user.id === post.userId);
+        return {
+          ...post,
+          username: user?.username || "Unknown",
+        };
+      });
+
+      return posts;
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch posts");
     }
