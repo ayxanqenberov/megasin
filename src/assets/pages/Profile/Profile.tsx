@@ -10,6 +10,7 @@ import { FaPen } from "react-icons/fa";
 import { CiLogin } from "react-icons/ci";
 import { TiDelete } from "react-icons/ti";
 import { LuCake } from "react-icons/lu";
+import notPost from "../../images/Empty inbox.png";
 
 const Profile: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -33,6 +34,9 @@ const Profile: React.FC = () => {
     dispatch(logout());
     navigate("/");
   };
+  const getWrite = () =>{
+    navigate(`/${username}/new`)
+  }
 
   const handleUpdateProfile = () => {
     if (user && bio.length <= 200) {
@@ -72,7 +76,11 @@ const Profile: React.FC = () => {
       <Header />
       <section>
         <div
-          style={{ backgroundImage: `url(${bannerPict || user.bannerPict})`,backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}}
+          style={{
+            backgroundImage: `url(${bannerPict || user.bannerPict})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }}
           className={`bannerPict flex justify-end items-start p-5 relative h-[200px] w-full bg-black`}
         >
           <div className="profileContainer w-[60%] left-[20%] pb-4 absolute z-20 top-[50%] rounded-2xl flex flex-col justify-around items-start bg-white">
@@ -202,7 +210,9 @@ const Profile: React.FC = () => {
           </div>
         )}
       </section>
-      <section className={posts.length == 0 ? "hidden" : "flex flex-col gap-3"}>
+      <section
+        className={userPosts.length == 0 ? "hidden" : "flex flex-col gap-3"}
+      >
         <div className="bg-[#f7f7f7]  gap-2 rounded-b-2xl shadow-md flex justify-start px-[30px] pb-[15px] items-end w-[60%] m-auto h-[170px]">
           <span>Posts:</span>
           <span>{userPosts.length}</span>
@@ -211,9 +221,15 @@ const Profile: React.FC = () => {
           <div className="w-full bg-[#f7f7f7] p-3 rounded-2xl shadow-md m-auto">
             <div className="post-list grid grid-cols-1 md:grid-cols-2 gap-4">
               {userPosts.map((post) => (
-                <div key={post.id} className="post-card border flex flex-col gap-3 rounded p-4">
+                <div
+                  key={post.id}
+                  className="post-card border flex flex-col gap-3 rounded p-4"
+                >
                   <h3 className="font-bold">{post.title}</h3>
-                  <span className="text-[#9CA7BC]">{new Date(post.createdAt).toLocaleDateString()} {new Date(post.createdAt).toLocaleTimeString()}</span>
+                  <span className="text-[#9CA7BC]">
+                    {new Date(post.createdAt).toLocaleDateString()}{" "}
+                    {new Date(post.createdAt).toLocaleTimeString()}
+                  </span>
                   <img
                     src={post.postPicture}
                     alt={post.title}
@@ -227,6 +243,21 @@ const Profile: React.FC = () => {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+      <section
+        className={
+          userPosts.length == 0
+            ? "flex h-[454px] flex-col justify-end pb-[30px] items-center w-full m-auto"
+            : "hidden"
+        }
+      >
+        <div className="w-[60%] rounded-xl mb-[10px] flex flex-col gap-4 justify-center items-center bg-white p-3">
+          <span>Not post yet</span>
+          <div className="h-[150px] [w-150px] overflow-hidden">
+            <img src={notPost} className="w-[300px] object-cover" alt="" />
+          </div>
+          <button onClick={getWrite} className="border hover:bg-black duration-200 hover:text-white border-black p-2.5 rounded-[15px]">Get Started</button>
         </div>
       </section>
     </>

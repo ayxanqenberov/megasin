@@ -90,7 +90,7 @@ const postsSlice = createSlice({
       .addCase(fetchPosts.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "Failed to fetch posts";
-      });
+      })
   },
   
 });

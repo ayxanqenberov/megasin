@@ -36,6 +36,9 @@ const Header = () => {
   const getWritePost = ()=>{
     navigate(`/${username}/new`)
   }
+  const getBlogs = ()=>{
+    navigate(`/blogs`)
+  }
   return (
     <header className="bg-white text-black">
       <div className="headerpart border-none flex justify-between items-center pr-[19px]">
@@ -55,10 +58,10 @@ const Header = () => {
             </li>
             <li>
               <a
-                href="#"
+                href="/blogs"
                 className="flex flex-col items-center hover:text-red-700 duration-200"
               >
-                <IoBookSharp className="text-[25px]" />
+                <IoBookSharp onClick={getBlogs} className="text-[25px]" />
                 <span className="text-[13px]">Blogs</span>
               </a>
             </li>
@@ -73,7 +76,7 @@ const Header = () => {
             </li>
             <li>
               <a
-                href=""
+                href=''
                 className="flex flex-col items-center hover:text-red-700 duration-200"
               >
                 <BsPencilSquare onClick={user ? getWritePost : getProfile} className="text-[25px]" />
