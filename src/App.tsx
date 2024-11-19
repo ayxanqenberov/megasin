@@ -8,6 +8,7 @@ import Profile from './assets/pages/Profile/Profile';
 import Login from './assets/pages/Registeration/Login';
 import NewPost from './assets/pages/NewPost/NewPost';
 import BlogPage from './assets/pages/Blogs/BlogPage';
+import Detail from './assets/pages/Detail/Detail';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/profile/:username" element={<Profile />} />
         <Route path=':username/new' element={<NewPost/>}/>
         <Route path='/blogs' element={<BlogPage/>}/>
+        <Route path='/detail?id:id' element={<Detail />} />
       </Routes>
     </BrowserRouter>
   );

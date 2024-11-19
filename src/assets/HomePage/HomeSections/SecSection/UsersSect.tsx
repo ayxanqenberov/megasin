@@ -28,8 +28,10 @@ const UsersSect = () => {
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
+  const sortedUsers = [...users].sort((a, b) => b.id - a.id);
 
   return (
+    
     <section className={user ? "flex flex-col justify-between w-[90%] mt-2 m-auto pt-3" : "hidden"}>
       <h2 className="font-medium text-[17px] mb-1">Discover more people</h2>
       <Swiper
@@ -41,7 +43,7 @@ const UsersSect = () => {
         modules={[Pagination]}
         className="mySwiper"
       >
-        {users.map((item) => (
+        {sortedUsers.map((item) => (
           <SwiperSlide
             key={item.id}
           >

@@ -7,7 +7,6 @@ interface User {
   email: string;
   profilePictures: string;
   follower: number;
-  following: number;
   password: string; 
   bio: string;
   bannerPict: string;
@@ -45,7 +44,6 @@ export const registerUser = createAsyncThunk<User, { email: string; password: st
         username,
         profilePictures: "https://t3.ftcdn.net/jpg/05/17/79/88/360_F_517798821_clzISlzMqjLxx8YjYFBfOaVvIj5qifwm.jpg",
         follower: 0,
-        following: 0,
         bio:"Add more information about yourself",
         password,
         bannerPict: "",

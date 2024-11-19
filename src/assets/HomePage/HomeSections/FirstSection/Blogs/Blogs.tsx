@@ -3,9 +3,10 @@ import { AiFillLike } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/app/store";
-import { fetchPosts } from "../../../../features/Posts/postSlice";
+import { fetchPosts, likedPost } from "../../../../features/Posts/postSlice";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoCloseOutline } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const Blogs = () => {
   const [showWelcome, setShowWelcome] = useState(() => {
@@ -14,7 +15,7 @@ const Blogs = () => {
   const [sliceEnd, setSliceEnd] = useState(3);
   const [likes, setLikes] = useState<{ [key: number]: boolean }>({});
   const [follows, setFollows] = useState<{ [key: number]: boolean }>({});
-
+  const navigate = useNavigate();
   const divRef = useRef<HTMLDivElement>(null);
 
   const dispatch: AppDispatch = useDispatch();
@@ -24,21 +25,34 @@ const Blogs = () => {
   useEffect(() => {
     dispatch(fetchPosts());
   }, [dispatch]);
-
+  useEffect(() => {
+    dispatch(likedPost());
+  }, [dispatch]);
   useEffect(() => {
     if (showWelcome) {
-      setSliceEnd(3); 
+      setSliceEnd(3);
     } else {
       setSliceEnd(4);
     }
   }, [showWelcome]);
-
-  const toggleLike = (id: number) => {
-    setLikes((prev) => ({ ...prev, [id]: !prev[id] }));
+  const toggleLike = (id: number, likeCount: number) => {
+    if (user) {
+      
+      const post = posts.find((p) => p.id === id);
+      if (post) {
+        const newLikeCount = likes[id] ? likeCount - 1 : likeCount + 1;
+        setLikes((prev) => ({ ...prev, [id]: !prev[id] }));
+        dispatch(likedPost({ id, likeCount: newLikeCount }));
+      }
+    } else {
+      navigate(`/register`)
+    }
   };
-
   const toggleFollow = (id: number) => {
     setFollows((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+  const getDetail = (user: string, title: string) => {
+    navigate(`/detail?${user}&-${title}`);
   };
 
   const sortedPosts = [...posts].sort((a, b) => b.id - a.id);
@@ -106,7 +120,6 @@ const Blogs = () => {
         </div>
       )}
 
-
       <div ref={divRef} className="flex flex-col h-full gap-6">
         {limitedPosts.map((item) => (
           <div
@@ -135,13 +148,18 @@ const Blogs = () => {
                   {follows[item.id] ? "Following" : "Follow"}
                 </button>
               </div>
-              <h2 className="text-lg font-semibold">{item.title}</h2>
+              <h2
+                onClick={() => getDetail(item.username, item.title)}
+                className="text-lg cursor-pointer font-semibold"
+              >
+                {item.title}
+              </h2>
               <ul>
-                {
-                  item.tags.map((item)=>(
-                    <li><a href="">{item}</a></li>
-                  ))
-                }
+                {item.tags.map((item) => (
+                  <li>
+                    <a href="">{item}</a>
+                  </li>
+                ))}
               </ul>
               <div className="flex items-center gap-4">
                 <div
@@ -155,6 +173,7 @@ const Blogs = () => {
                   />
                   <span>{item.likeCount}</span>
                 </div>
+
                 <div className="flex items-center gap-1">
                   <FaComment />
                   <span>{item.comentCount}</span>

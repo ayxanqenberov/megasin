@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isRejectedWithValue, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/app/store"; 
 import axios from "axios";
 import { user_api_key } from "../Users/userSlice";
@@ -69,30 +69,72 @@ export const fetchPosts = createAsyncThunk<Posts[], void, { rejectValue: string 
   }
 );
 
+export const likedPost = createAsyncThunk<
+  Posts,
+  { id: number },
+  { rejectValue: string; state: RootState }
+>(
+  "posts/likedPost",
+  async ({ id }, { rejectWithValue, getState }) => {
+    try {
+      const state = getState();
+      const post = state.posts.posts.find((post) => post.id === id);
+
+      if (!post) {
+        throw new Error("Post not found");
+      }
+
+      const isLiked = state.posts.likedPosts.includes(id);
+      const updatedLikeCount = isLiked ? post.likeCount - 1 : post.likeCount + 1;
+
+      const response = await axios.put(
+        `https://${user_api_key}.mockapi.io/users/Posts/${id}`,
+        { likeCount: updatedLikeCount }
+      );
+
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Failed to update like count");
+    }
+  }
+);
+
+
+// const deleteCount = await axios.put(
+//   `https://${user_api_key}.mockapi.io/users/Posts/4`,
+//   {
+//     likeCount: 0,
+//   }
+// );
 const postsSlice = createSlice({
   name: "posts",
   initialState: {
     posts: [] as Posts[],
+    likedPosts: [] as number[], 
     isLoading: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchPosts.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
       .addCase(fetchPosts.fulfilled, (state, action: PayloadAction<Posts[]>) => {
         state.isLoading = false;
         state.posts = action.payload;
       })
-      .addCase(fetchPosts.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload || "Failed to fetch posts";
-      })
+      .addCase(likedPost.fulfilled, (state, action: PayloadAction<Posts>) => {
+        const updatedPost = action.payload;
+        const postIndex = state.posts.findIndex((post) => post.id === updatedPost.id);
+        if (postIndex !== -1) {
+          state.posts[postIndex] = updatedPost; 
+        }
+        if (state.likedPosts.includes(updatedPost.id)) {
+          state.likedPosts = state.likedPosts.filter((id) => id !== updatedPost.id);
+        } else {
+          state.likedPosts.push(updatedPost.id);
+        }
+      });
   },
-  
 });
+
 
 export default postsSlice.reducer;

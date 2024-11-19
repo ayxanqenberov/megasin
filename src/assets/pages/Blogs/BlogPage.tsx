@@ -15,13 +15,15 @@ const BlogPage: React.FC = () => {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+  const sortedPosts = [...posts].sort((a, b) => b.id - a.id);
+
   return (
     <>
       <Header />
-      <section className="blogs w-[70%] bg-[#e4e4e4] m-auto">
-        {posts.map(
+      <section className="blogs w-[70%]  m-auto">
+        {sortedPosts.map(
           ({ id, postPicture, title, content, username, createdAt }) => (
-            <div key={id} className="blog-item w-full gap-6 flex border-b py-4">
+            <div key={id} className="blog-item w-full gap-6 px-2 flex border-b py-4">
               <img
                 src={postPicture}
                 alt={title || "Post Image"}
