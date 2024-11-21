@@ -14,7 +14,7 @@ import { IoDiamondSharp } from "react-icons/io5";
 import createdPost from "../../../../images/createPost.jpg";
 import neon from "../../../../images/neon.png";
 import tagModerator from "../../../../images/tagModerator.jpg";
-import structor from "../../../../images/structure.jpg"
+import structor from "../../../../images/structure.jpg";
 
 const Aside = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -29,9 +29,9 @@ const Aside = () => {
   };
   const username = useSelector((state: RootState) => state.user.user?.username);
 
-  const getWritePost = ()=>{
-    navigate(`/${username}/new`)
-  }
+  const getWritePost = () => {
+    navigate(`/${username}/new`);
+  };
   return (
     <aside className="w-[18%] flex flex-col gap-4">
       <div
@@ -125,21 +125,38 @@ const Aside = () => {
           </strong>
         </div>
       </div>
-      <div className={user ? "bg-white flex flex-col pb-3 gap-2.5 rounded-md px-4 py-2" : 'hidden'}>
-      <span className="text-xl font-medium text-gray-400">Megasin</span>
-      <strong className="text-xl text-[#404040]">Get Your Writing Debut Badge</strong>
-        <p className="text-[15px]">Share your first MEGASIN post and join a vibrant community of tech enthusiasts!</p>
+      <div
+        className={
+          user
+            ? "bg-white flex flex-col pb-3 gap-2.5 rounded-md px-4 py-2"
+            : "hidden"
+        }
+      >
+        <span className="text-xl font-medium text-gray-400">Megasin</span>
+        <strong className="text-xl text-[#404040]">
+          Get Your Writing Debut Badge
+        </strong>
+        <p className="text-[15px]">
+          Share your first MEGASIN post and join a vibrant community of tech
+          enthusiasts!
+        </p>
         <img className="rounded-md" src={createdPost} alt="" />
-        <button onClick={getWritePost} className="border border-[#3B49DF] p-2 rounded-md duration-200 text-[#3B49DF] font-semibold hover:bg-blue-600 hover:text-white">Write Post</button>
+        <button
+          onClick={getWritePost}
+          className="border border-[#3B49DF] p-2 rounded-md duration-200 text-[#3B49DF] font-semibold hover:bg-blue-600 hover:text-white"
+        >
+          Write Post
+        </button>
       </div>
       <div className="bg-white flex flex-col gap-2.5 rounded-md px-4 py-2">
         <span className="text-xl font-medium text-gray-400">Megasin</span>
         <img className="rounded-md" src={structor} alt="" />
         <div className="flex flex-wrap">
-          <span className="text-xl font-bold">
-          It's time to change it up.
-          </span>
-          <p className="text-gray-500">You can change your feed and see more relevant posts by adding a rating to different tags on Megasin.</p>
+          <span className="text-xl font-bold">It's time to change it up.</span>
+          <p className="text-gray-500">
+            You can change your feed and see more relevant posts by adding a
+            rating to different tags on Megasin.
+          </p>
         </div>
       </div>
     </aside>

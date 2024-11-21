@@ -16,10 +16,10 @@ const Blogs = () => {
   const [likes, setLikes] = useState<{ [key: number]: boolean }>({});
   const [follows, setFollows] = useState<{ [key: number]: boolean }>({});
   const navigate = useNavigate();
-  const divRef = useRef<HTMLDivElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);  
 
   const dispatch: AppDispatch = useDispatch();
-  const { posts } = useSelector((state: RootState) => state.posts);
+  const { posts , isLoading } = useSelector((state: RootState) => state.posts);
   const { user } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
@@ -37,11 +37,12 @@ const Blogs = () => {
   }, [showWelcome]);
   const toggleLike = (id: number, likeCount: number) => {
     if (user) {
-      
       const post = posts.find((p) => p.id === id);
       if (post) {
         const newLikeCount = likes[id] ? likeCount - 1 : likeCount + 1;
-        setLikes((prev) => ({ ...prev, [id]: !prev[id] }));
+        const a = setLikes((prev) => ({ ...prev, [id]: !prev[id] }));
+        console.log(a);
+        
         dispatch(likedPost({ id, likeCount: newLikeCount }));
       }
     } else {
@@ -51,13 +52,13 @@ const Blogs = () => {
   const toggleFollow = (id: number) => {
     setFollows((prev) => ({ ...prev, [id]: !prev[id] }));
   };
-  const getDetail = (user: string, title: string) => {
-    navigate(`/detail?${user}&-${title}`);
+  const getDetail = (user: string, id :number) => {
+    navigate(`/@${user}/detail?postId=${id}`);
   };
 
   const sortedPosts = [...posts].sort((a, b) => b.id - a.id);
   const limitedPosts = sortedPosts.slice(0, sliceEnd);
-
+  // if (isLoading) return <> <Loadblogs/></>
   return (
     <div className="flex flex-col gap-4 w-[48%]">
       {user && showWelcome && (
@@ -149,7 +150,7 @@ const Blogs = () => {
                 </button>
               </div>
               <h2
-                onClick={() => getDetail(item.username, item.title)}
+                onClick={() => getDetail(item.username, item.id)}
                 className="text-lg cursor-pointer font-semibold"
               >
                 {item.title}
@@ -168,7 +169,7 @@ const Blogs = () => {
                 >
                   <AiFillLike
                     className={
-                      likes[item.id] ? "text-red-500" : "text-gray-600"
+                      likes[item.userId] ? "text-red-500" : "text-gray-600"
                     }
                   />
                   <span>{item.likeCount}</span>

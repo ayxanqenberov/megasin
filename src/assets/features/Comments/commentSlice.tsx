@@ -1,0 +1,124 @@
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
+import { user_api_key } from "../Users/userSlice";
+
+interface Comment {
+  id: number;
+  userId: number;
+  comment: string;
+  postId: number;
+  created: string;
+}
+
+interface User {
+  id: number;
+  name: string;
+  profilePicture: string;
+}
+
+interface Post {
+  id: number;
+  title: string;
+}
+
+interface CommentWithDetails {
+  id: number;
+  comment: string;
+  created: string;
+  post: Post;
+  user: User;
+}
+
+interface CommentState {
+  commentsWithDetails: CommentWithDetails[];
+  isLoading: boolean;
+  error: string | null;
+}
+
+const initialState: CommentState = {
+  commentsWithDetails: [],
+  isLoading: false,
+  error: null,
+};
+export const sendComment = createAsyncThunk(
+  'comments/sendComment',
+  async ({ userId, comment, postId }: { userId: number, comment: string, postId: number }, { rejectWithValue }) => {
+    try {
+      const newComment = {
+        id: Math.random().toString(),
+        userId,
+        comment,
+        postId,
+        created: new Date().toISOString(),
+        user: { name: 'User', profilePicture: 'https://via.placeholder.com/50' } 
+      };
+
+      return newComment;
+    } catch (error) {
+      return rejectWithValue('Failed to send comment');
+    }
+  }
+);
+const comment_api = import.meta.env.VITE_COMMENT_API_KEY;
+export const checkup = createAsyncThunk<
+  CommentWithDetails[],
+  void,
+  { rejectValue: string }
+>("comments/checkup", async (_, { rejectWithValue }) => {
+  try {
+    const [commentsRes, postsRes, usersRes] = await Promise.all([
+      axios.get(`https://${comment_api}.mockapi.io/comments`),
+      axios.get(`https://${user_api_key}.mockapi.io/Posts`),
+      axios.get(`https://${user_api_key}.mockapi.io/Users`),
+    ]);
+
+    const comments = commentsRes.data;
+    const posts = postsRes.data;
+    const users = usersRes.data;
+    const commentsWithDetails = comments.map((comment: Comment) => {
+      const post = posts.find((post: Post) => post.id === comment.postId);
+      const user = users.find((user: User) => user.id === comment.userId);
+
+      return {
+        id: comment.id,
+        comment: comment.comment,
+        created: comment.created,
+        post,
+        user,
+      };
+    });
+
+    return commentsWithDetails;
+  } catch (error: any) {
+    return rejectWithValue(error.message || "Failed to fetch comment details");
+  }
+});
+
+const commentSlice = createSlice({
+  name: "comments",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(checkup.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(checkup.fulfilled, (state, action: PayloadAction<CommentWithDetails[]>) => {
+        state.isLoading = false;
+        state.commentsWithDetails = action.payload;
+      })
+      .addCase(checkup.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "An error occurred";
+      })
+      .addCase(sendComment.fulfilled, (state, action) => {
+        state.commentsWithDetails.push(action.payload);  
+      })
+      .addCase(sendComment.rejected, (state, action) => {
+        state.error = action.payload;
+      });
+  },
+});
+
+export default commentSlice.reducer;

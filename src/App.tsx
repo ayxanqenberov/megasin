@@ -20,7 +20,8 @@ const App = () => {
         <Route path="/profile/:username" element={<Profile />} />
         <Route path=':username/new' element={<NewPost/>}/>
         <Route path='/blogs' element={<BlogPage/>}/>
-        <Route path='/detail?id:id' element={<Detail />} />
+        <Route path='/:username/detail' element={<Detail />} /> 
+
       </Routes>
     </BrowserRouter>
   );

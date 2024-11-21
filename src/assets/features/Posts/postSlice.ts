@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, isRejectedWithValue, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/app/store"; 
 import axios from "axios";
 import { user_api_key } from "../Users/userSlice";
@@ -101,7 +101,7 @@ export const likedPost = createAsyncThunk<
 
 
 // const deleteCount = await axios.put(
-//   `https://${user_api_key}.mockapi.io/users/Posts/4`,
+//   `https://${user_api_key}.mockapi.io/users/Posts/5`,
 //   {
 //     likeCount: 0,
 //   }

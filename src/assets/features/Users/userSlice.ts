@@ -116,7 +116,7 @@ export const loginUser = createAsyncThunk<User, { username: string; password: st
     } catch (error: any) {
       return rejectWithValue(handleApiError(error));
     }
-  }
+  } 
 );
 
 const userSlice = createSlice({
