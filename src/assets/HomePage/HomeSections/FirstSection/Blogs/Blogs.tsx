@@ -21,6 +21,8 @@ const Blogs = () => {
   const dispatch: AppDispatch = useDispatch();
   const { posts , isLoading } = useSelector((state: RootState) => state.posts);
   const { user } = useSelector((state: RootState) => state.user);
+  const username = useSelector((state: RootState) => state.user.user?.username);
+
 
   useEffect(() => {
     dispatch(fetchPosts());
@@ -90,7 +92,7 @@ const Blogs = () => {
                 <IoIosArrowDroprightCircle className="text-xl mr-3" />
               </a>
             </li>
-            <li className="p-3 py-5 bg-[#626de8] hover:bg-[#7680E9] duration-200 rounded-md">
+            <li onClick={()=> navigate(`${username}/new`)}  className="cursor-pointer p-3 py-5 bg-[#626de8] hover:bg-[#7680E9] duration-200 rounded-md">
               <a className="flex justify-between items-center" href="">
                 <div className="flex pl-3.5 items-center gap-2">
                   <span>✍️</span>
@@ -99,7 +101,7 @@ const Blogs = () => {
                 <IoIosArrowDroprightCircle className="text-xl mr-3" />
               </a>
             </li>
-            <li className="p-3 py-5 bg-[#626de8] hover:bg-[#7680E9] duration-200 rounded-md">
+            <li onClick={()=>navigate(`/profile/${username}`)} className="cursor-pointer p-3 py-5 bg-[#626de8] hover:bg-[#7680E9] duration-200 rounded-md">
               <a className="flex justify-between items-center" href="">
                 <div className="flex pl-3.5 items-center gap-2">
                   <span>💅</span>

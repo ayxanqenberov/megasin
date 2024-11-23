@@ -8,6 +8,8 @@ interface Comment {
   comment: string;
   postId: number;
   created: string;
+  username: string;
+  userPP: string;
 }
 
 interface User {
@@ -35,31 +37,15 @@ interface CommentState {
   error: string | null;
 }
 
+const savedComments = localStorage.getItem("commentsWithDetails");
 const initialState: CommentState = {
-  commentsWithDetails: [],
+  commentsWithDetails: savedComments ? JSON.parse(savedComments) : [],
   isLoading: false,
   error: null,
 };
-export const sendComment = createAsyncThunk(
-  'comments/sendComment',
-  async ({ userId, comment, postId }: { userId: number, comment: string, postId: number }, { rejectWithValue }) => {
-    try {
-      const newComment = {
-        id: Math.random().toString(),
-        userId,
-        comment,
-        postId,
-        created: new Date().toISOString(),
-        user: { name: 'User', profilePicture: 'https://via.placeholder.com/50' } 
-      };
 
-      return newComment;
-    } catch (error) {
-      return rejectWithValue('Failed to send comment');
-    }
-  }
-);
 const comment_api = import.meta.env.VITE_COMMENT_API_KEY;
+
 export const checkup = createAsyncThunk<
   CommentWithDetails[],
   void,
@@ -75,6 +61,7 @@ export const checkup = createAsyncThunk<
     const comments = commentsRes.data;
     const posts = postsRes.data;
     const users = usersRes.data;
+
     const commentsWithDetails = comments.map((comment: Comment) => {
       const post = posts.find((post: Post) => post.id === comment.postId);
       const user = users.find((user: User) => user.id === comment.userId);
@@ -93,6 +80,50 @@ export const checkup = createAsyncThunk<
     return rejectWithValue(error.message || "Failed to fetch comment details");
   }
 });
+export const sendComment = createAsyncThunk<
+  CommentWithDetails,
+  { comment: string; postId: number },
+  { state: { user: UserState }; rejectValue: string }
+>(
+  "comments/sendComment",
+  async ({ comment, postId }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const currentUser = state.user.user;
+
+      if (!currentUser) {
+        return rejectWithValue("User not logged in");
+      }
+
+      const response = await axios.post(
+        `https://${comment_api}.mockapi.io/comments`,
+        {
+          userId: currentUser.id,
+          comment,
+          postId,
+          created: new Date().toISOString(),
+          username: currentUser.username,
+          userPP: currentUser.profilePictures,
+        }
+      );
+      const createdComment = response.data;
+
+      return {
+        id: createdComment.id,
+        comment: createdComment.comment,
+        created: createdComment.created,
+        post: { id: postId, title: "Post Title" },
+        user: {
+          id: currentUser.id,
+          name: currentUser.username,
+          profilePicture: currentUser.profilePictures,
+        },
+      };
+    } catch (error: any) {
+      return rejectWithValue("Failed to send comment to the API");
+    }
+  }
+);
 
 const commentSlice = createSlice({
   name: "comments",
@@ -100,24 +131,29 @@ const commentSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(checkup.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(checkup.fulfilled, (state, action: PayloadAction<CommentWithDetails[]>) => {
-        state.isLoading = false;
-        state.commentsWithDetails = action.payload;
-      })
-      .addCase(checkup.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload || "An error occurred";
-      })
-      .addCase(sendComment.fulfilled, (state, action) => {
-        state.commentsWithDetails.push(action.payload);  
-      })
-      .addCase(sendComment.rejected, (state, action) => {
-        state.error = action.payload;
-      });
+      .addCase(
+        checkup.fulfilled,
+        (state, action: PayloadAction<CommentWithDetails[]>) => {
+          state.isLoading = false;
+          state.commentsWithDetails = action.payload;
+          localStorage.setItem(
+            "commentsWithDetails",
+            JSON.stringify(state.commentsWithDetails)
+          );
+        }
+      )
+      .addCase(
+        sendComment.fulfilled,
+        (state, action: PayloadAction<CommentWithDetails>) => {
+          state.isLoading = false;
+          state.commentsWithDetails.push(action.payload);
+
+          localStorage.setItem(
+            "commentsWithDetails",
+            JSON.stringify(state.commentsWithDetails)
+          );
+        }
+      );
   },
 });
 

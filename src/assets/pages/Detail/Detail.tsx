@@ -13,44 +13,29 @@ const Detail = () => {
   const postId = parseInt(queryParams.get("postId") || "0", 10);
 
   const dispatch = useDispatch();
-  const { posts, isLoading, error } = useSelector(
+  const { posts, isLoading: postsLoading, error: postsError } = useSelector(
     (state: RootState) => state.posts
   );
-  const { commentsWithDetails} = useSelector(
+  const { commentsWithDetails, isLoading: commentsLoading, error: commentsError } = useSelector(
     (state: RootState) => state.comments
   );
   const { user } = useSelector((state: RootState) => state.user);
 
   const [commentText, setCommentText] = useState("");
-
   useEffect(() => {
     dispatch(fetchPosts());
-  }, [dispatch]);
-
-  const post = posts.find((item) => Number(item.id) === postId);
-  useEffect(() => {
     dispatch(checkup());
   }, [dispatch]);
-
-  if (isLoading) {
-    return <div>Loading comments...</div>;
+  const post = posts.find((item) => Number(item.id) === postId);
+  if (postsLoading || commentsLoading) {
+    return <div>Loading...</div>;
   }
-
-  if (error) {
-    return <div>Error fetching comments: {error}</div>;
+  if (postsError) {
+    return <div>Error fetching posts: {postsError}</div>;
   }
-
-  const filteredComments = commentsWithDetails?.filter(
-    (comment) => comment.post?.id === postId
-  ) || [];
-  if (isLoading) {
-    return <div>Loading posts...</div>;
+  if (commentsError) {
+    return <div>Error fetching comments: {commentsError}</div>;
   }
-
-  if (error) {
-    return <div>Error fetching posts: {error}</div>;
-  }
-
   if (!post) {
     return (
       <div>
@@ -58,7 +43,9 @@ const Detail = () => {
       </div>
     );
   }
-
+  const filteredComments = commentsWithDetails.filter(
+    (comment) => comment.post?.id === postId
+  );
   const handleSendComment = () => {
     if (!user) {
       alert("You need to be logged in to comment.");
@@ -72,9 +59,9 @@ const Detail = () => {
 
     dispatch(
       sendComment({
-        userId: user.id, 
+        userId: user.id,
         comment: commentText,
-        postId: post.id,
+        postId: postId,
       })
     );
 
@@ -91,10 +78,11 @@ const Detail = () => {
             <img
               src={post.postPicture || "https://via.placeholder.com/150"}
               alt={post.title}
+              className="w-full h-auto"
             />
             <p className="p-2">{post.content}</p>
             <p className="p-2">Likes: {post.likeCount}</p>
-            <p className="p-2">Comments: {post.comentCount}</p>
+            <p className="p-2">Comments: {filteredComments.length}</p>
             <div className="flex items-center justify-between border-t-black border w-full">
               <input
                 className="px-2 w-[70%] outline-none py-3"
@@ -109,41 +97,40 @@ const Detail = () => {
               />
             </div>
           </div>
-          <div className="w-[35%] bg-white border-[0.5px] border-[#d2d1d1]">
+          <div className="w-[35%] bg-white border-[0.5px] border-[#d2d1d1] p-3">
             <div className="flex items-center gap-2">
               <img
                 className="w-[50px] h-[50px] object-cover rounded-[50%]"
                 src={post.profilePicture}
-                alt=""
+                alt="Profile"
               />
               <span className="text-lg font-semibold">{post.username}</span>
             </div>
-            <button>Follow</button>
-            <p></p>
-            <div className="flex gap-3">
-              <span>Contact:</span>
-              <span>{}</span>
-            </div>
+            <button className="mt-3 bg-blue-500 text-white py-1 px-4 rounded">
+              Follow
+            </button>
           </div>
         </div>
       </section>
-      <section className="comment-section">
+      <section className="comment-section mt-5 w-[70%] m-auto">
         <h2>Comments</h2>
         {filteredComments.length === 0 ? (
           <p>No comments for this post.</p>
         ) : (
           filteredComments.map((comment) => (
-            <div key={comment.id} className="comment-card">
-              <div className="user-info">
+            <div key={comment.id} className="comment-card mb-3 p-3 border rounded">
+              <div className="flex items-center gap-3 mb-2">
                 <img
                   src={comment.user?.profilePicture || "https://via.placeholder.com/50"}
                   alt={`${comment.user?.name}'s profile`}
-                  className="profile-picture"
+                  className="w-[40px] h-[40px] rounded-full"
                 />
-                <span>{comment.user?.name}</span>
+                <span className="font-semibold">{comment.user?.name}</span>
               </div>
               <p>{comment.comment}</p>
-              <small>Posted on: {new Date(comment.created).toLocaleString()}</small>
+              <small className="text-gray-500">
+                Posted on: {new Date(comment.created).toLocaleString()}
+              </small>
             </div>
           ))
         )}

@@ -57,6 +57,7 @@ export const registerUser = createAsyncThunk<User, { email: string; password: st
     }
   }
 );
+
 export const updateData = createAsyncThunk<User, { id: string; username?: string; email?: string; bio?: string; profilePictures?: string; bannerPict?: string }, { rejectValue: string }>(
   "user/updateData",
   async ({ id, username, email, bio, profilePictures, bannerPict }, { rejectWithValue }) => {
