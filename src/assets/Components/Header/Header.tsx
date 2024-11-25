@@ -7,6 +7,7 @@ import { RiNewsLine } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/app/store"; 
+import Search from "../Search/Search";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -89,13 +90,7 @@ const Header = () => {
           <button onClick={getChangeMode}>
             {darkMode ? <MdDarkMode /> : <MdOutlineDarkMode />}
           </button>
-          <div className={isProfilePage ? 'hidden' : 'searching w-1/2'}>
-            <input
-              className="border-b border-grey outline-none w-full py-2"
-              type="text"
-              placeholder="Search..."
-            />
-          </div>
+          {/* <Search/> */}
           <div className="features flex items-center gap-3">
             <FaUserAlt
               onClick={getProfile}

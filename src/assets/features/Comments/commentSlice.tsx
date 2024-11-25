@@ -44,7 +44,7 @@ const initialState: CommentState = {
   error: null,
 };
 
-const comment_api = import.meta.env.VITE_COMMENT_API_KEY;
+export const comment_api = import.meta.env.VITE_COMMENT_API_KEY;
 
 export const checkup = createAsyncThunk<
   CommentWithDetails[],

@@ -9,6 +9,8 @@ import Login from './assets/pages/Registeration/Login';
 import NewPost from './assets/pages/NewPost/NewPost';
 import BlogPage from './assets/pages/Blogs/BlogPage';
 import Detail from './assets/pages/Detail/Detail';
+import AdminLog from './assets/pages/adminPage/AdminLog';
+import AdminPage from './assets/pages/adminPage/AdminPage';
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
         <Route path=':username/new' element={<NewPost/>}/>
         <Route path='/blogs' element={<BlogPage/>}/>
         <Route path='/:username/detail' element={<Detail />} /> 
+        <Route path='/admin' element={<AdminLog/>}/>
+        <Route path='/admin/page' element={<AdminPage/>} />
       </Routes>
     </BrowserRouter>
   );

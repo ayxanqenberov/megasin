@@ -17,7 +17,6 @@ const Profile: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const { posts } = useSelector((state: RootState) => state.posts);
-
   const [isEditMode, setIsEditMode] = useState(false);
   const [username, setUsername] = useState(user?.username || "");
   const [email, setEmail] = useState(user?.email || "");

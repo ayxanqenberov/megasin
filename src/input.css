@@ -65,3 +65,21 @@ body {
 .cursorInputPost{
     font-size: 30px;
 }
+.line{
+    width: 5px;
+    background-color: #ED612A;
+    display: none;
+}
+.dashboard{
+    transition: all  1s;
+
+    &:hover{
+        .line{
+            display: block;
+            transition: all .3s;
+            &:hover{
+                background-color: #1FD085;
+            }
+        }
+    }
+}
