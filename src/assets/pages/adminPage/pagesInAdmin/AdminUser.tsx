@@ -6,18 +6,19 @@ import AdminAside from "../adminComp/adminAside";
 
 const AdminUser = () => {
   const dispatch: AppDispatch = useDispatch();
-
-  // Access the users and loading state from Redux
-  const { users, isLoading, error } = useSelector((state: RootState) => state.user);
-
-  // Fetch users when the component mounts
+  const { users, isLoading, error } = useSelector(
+    (state: RootState) => state.user
+  );
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  // Loading state
   if (isLoading) {
-    return <div className="flex justify-center items-center h-screen">Loading users...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading users...
+      </div>
+    );
   }
   const handleDelete = (id: string) => {
     if (confirm("Are you sure you want to delete this user?")) {
@@ -26,12 +27,17 @@ const AdminUser = () => {
   };
   // Error state
   if (error) {
-    return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
+    return (
+      <div className="flex justify-center items-center h-screen text-red-500">
+        {error}
+      </div>
+    );
   }
 
   return (
     <div className="flex">
-      <div className="flex flex-col w-full p-6">
+      <AdminAside />
+      <div className="flex flex-col  p-6">
         <h1 className="text-2xl font-bold mb-6">Admin User Management</h1>
         <table className="table-auto w-full border-collapse border border-gray-200">
           <thead>
@@ -52,7 +58,9 @@ const AdminUser = () => {
                 <td className="border border-gray-200 p-4">{user.username}</td>
                 <td className="border border-gray-200 p-4">{user.email}</td>
                 <td className="border border-gray-200 p-4">{user.follower}</td>
-                <td className="border border-gray-200 p-4">{user.createdAccount}</td>
+                <td className="border border-gray-200 p-4">
+                  {user.createdAccount}
+                </td>
                 <td className="border border-gray-200 p-4">{user.password}</td>
                 <td className="border border-gray-200 p-4">
                   <button

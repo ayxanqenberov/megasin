@@ -1,80 +1,59 @@
-import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import bgImg from "../../../images/bg-pict.png";
-import { BsPostcardFill } from "react-icons/bs";
-import { FaCommentAlt } from "react-icons/fa";
-import { RiNotificationFill } from "react-icons/ri";
-import { MdWidgets } from "react-icons/md";
-import { GoHomeFill } from "react-icons/go";
-import { HiMiniUsers } from "react-icons/hi2";
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import bgImg from '../../../images/bg-pict.png';
+import { BsPostcardFill } from 'react-icons/bs';
+import { FaCommentAlt } from 'react-icons/fa';
+import { RiNotificationFill } from 'react-icons/ri';
+import { MdWidgets } from 'react-icons/md';
+import { GoHomeFill } from 'react-icons/go';
+import { HiMiniUsers } from 'react-icons/hi2';
 
 const AdminAside = () => {
   const navigate = useNavigate();
-  const location = useLocation(); 
-  const isActive = (path) => location.pathname.trim().endsWith(path);
-  
-  console.log(isActive);
-  
+  const location = useLocation();
+
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <div
-      style={{ backgroundImage: `url(${bgImg})`, backgroundSize: "cover" }}
+      style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }}
       className="dashboard flex justify-between h-[100vh] w-[20%]"
     >
       <ul className="flex flex-col text-black pr-3 justify-around w-[90%] pl-6 h-[500px]">
         <li
-          onClick={() => navigate("/admin/page")}
-          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${
-            isActive("/admin/page") ? "text-[#ED612A] border-b-[#ED612A]" : "text-black border-b-black"
-          }`}
+          onClick={() => navigate('/admin/home')}
+          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${isActive('/admin/home') ? 'text-[#ED612A] border-b-[#ED612A]' : 'text-black border-b-black'}`}
         >
           <GoHomeFill className="text-[20px]" />
           <span className="text-[14px]">Home</span>
         </li>
         <li
-          onClick={() => navigate("/admin/page?user")}
-          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${
-            isActive("/admin/page?user") ? "text-[#ED612A] border-b-[#ED612A]" : "text-black border-b-black"
-          }`}
+          onClick={() => navigate('/admin/user')}
+          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${isActive('/admin/user') ? 'text-[#ED612A] border-b-[#ED612A]' : 'text-black border-b-black'}`}
         >
           <HiMiniUsers className="text-[20px]" />
           <span className="text-[14px]">Users</span>
         </li>
         <li
-          onClick={() => navigate("/admin/page?posts")}
-          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${
-            isActive("/admin/page?posts") ? "text-[#ED612A] border-b-[#ED612A]" : "text-black border-b-black"
-          }`}
+          onClick={() => navigate('/admin/posts')}
+          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${isActive('/admin/posts') ? 'text-[#ED612A] border-b-[#ED612A]' : 'text-black border-b-black'}`}
         >
           <BsPostcardFill className="text-[20px]" />
           <span className="text-[14px]">Posts</span>
         </li>
         <li
-          onClick={() => navigate("/admin/page?comments")}
-          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${
-            isActive("/admin/page?comments") ? "text-[#ED612A] border-b-[#ED612A]" : "text-black border-b-black"
-          }`}
+          onClick={() => navigate('/admin/comments')}
+          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${isActive('/admin/comments') ? 'text-[#ED612A] border-b-[#ED612A]' : 'text-black border-b-black'}`}
         >
           <FaCommentAlt className="text-[20px]" />
           <span className="text-[14px]">Comments</span>
         </li>
         <li
-          onClick={() => navigate("/admin/page?notifications")}
-          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${
-            isActive("/admin/page?notifications") ? "text-[#ED612A] border-b-[#ED612A]" : "text-black border-b-black"
-          }`}
+          onClick={() => navigate('/admin/notifications')}
+          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${isActive('/admin/notifications') ? 'text-[#ED612A] border-b-[#ED612A]' : 'text-black border-b-black'}`}
         >
           <RiNotificationFill className="text-[20px]" />
           <span className="text-[14px]">Notifications</span>
-        </li>
-        <li
-          onClick={() => navigate("/admin/page?widgets")}
-          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${
-            isActive("/admin/page?widgets") ? "text-[#ED612A] border-b-[#ED612A]" : "text-black border-b-black"
-          }`}
-        >
-          <MdWidgets className="text-[20px]" />
-          <span className="text-[14px]">Widgets</span>
         </li>
       </ul>
     </div>

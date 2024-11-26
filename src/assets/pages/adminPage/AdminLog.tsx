@@ -18,7 +18,7 @@ const AdminLog = () => {
     try {
       const resultAction: any = await dispatch(loginAdmin({ name, password }));
       if (loginAdmin.fulfilled.match(resultAction)) {
-        navigate("/admin/page");
+        navigate("/admin/page?home");
       } else {
         return <span>{resultAction}</span>
       }
@@ -30,7 +30,7 @@ const AdminLog = () => {
   return (
     <div className="h-[100vh] w-full flex items-center justify-center">
       <form
-        onSubmit={handleLogin} // Change from onClick to onSubmit
+        onSubmit={handleLogin}
         className="flex flex-col bg-[#f6f6f7] shadow-sm py-6 px-6 rounded-lg justify-center gap-3"
       >
         <input
