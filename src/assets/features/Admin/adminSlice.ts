@@ -87,4 +87,4 @@ export default adminSlice.reducer;
 //   }
 // };
 
-// // postAdmin();
+//  postAdmin();

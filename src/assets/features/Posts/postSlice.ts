@@ -106,9 +106,18 @@ export const likedPost = createAsyncThunk<
     }
   }
 );
-
-
-
+export const deletePosts = createAsyncThunk<
+  string, 
+  string, 
+  { rejectValue: string }
+>("posts/deletePosts", async (postId, { rejectWithValue }) => {
+  try {
+    await axios.delete(`https://${user_api_key}.mockapi.io/users/Posts/${postId}`);
+    return postId;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || "Failed to delete post");
+  }
+});
 // const deleteCount = await axios.put(
 //   https://${user_api_key}.mockapi.io/users/Posts/6,
 //   {
@@ -141,6 +150,12 @@ const postsSlice = createSlice({
         } else {
           state.likedPosts.push(updatedPost.id);
         }
+      })
+      .addCase(deletePosts.fulfilled, (state, action) => {
+        state.posts = state.posts.filter((post) => post.id !== action.payload);
+      })
+      .addCase(deletePosts.rejected, (state, action) => {
+        state.error = action.payload || "Failed to delete post";
       });
   },
 });

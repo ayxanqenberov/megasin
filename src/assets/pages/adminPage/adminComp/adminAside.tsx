@@ -55,6 +55,13 @@ const AdminAside = () => {
           <RiNotificationFill className="text-[20px]" />
           <span className="text-[14px]">Notifications</span>
         </li>
+        <li
+          onClick={() => navigate('/admin/widgets')}
+          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${isActive('/admin/notifications') ? 'text-[#ED612A] border-b-[#ED612A]' : 'text-black border-b-black'}`}
+        >
+          <MdWidgets className="text-[20px]" />
+          <span className="text-[14px]">Widgets</span>
+        </li>
       </ul>
     </div>
   );

@@ -45,7 +45,6 @@ const initialState: CommentState = {
 };
 
 export const comment_api = import.meta.env.VITE_COMMENT_API_KEY;
-
 export const checkup = createAsyncThunk<
   CommentWithDetails[],
   void,
@@ -80,6 +79,8 @@ export const checkup = createAsyncThunk<
     return rejectWithValue(error.message || "Failed to fetch comment details");
   }
 });
+
+// Add new comment
 export const sendComment = createAsyncThunk<
   CommentWithDetails,
   { comment: string; postId: number },
@@ -112,7 +113,7 @@ export const sendComment = createAsyncThunk<
         id: createdComment.id,
         comment: createdComment.comment,
         created: createdComment.created,
-        post: { id: postId, title: "Post Title" },
+        postID : createdComment.postId,
         user: {
           id: currentUser.id,
           name: currentUser.username,
@@ -125,10 +126,13 @@ export const sendComment = createAsyncThunk<
   }
 );
 
+// Slice and reducer
 const commentSlice = createSlice({
   name: "comments",
   initialState,
-  reducers: {},
+  reducers: {
+    getAllComments: (state) => state.commentsWithDetails,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(
@@ -156,5 +160,8 @@ const commentSlice = createSlice({
       );
   },
 });
+
+// Export the getAllComments selector
+export const { getAllComments } = commentSlice.actions;
 
 export default commentSlice.reducer;

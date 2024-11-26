@@ -22,13 +22,18 @@ interface UserState {
 
 const initialState: UserState = {
   user: (() => {
-    const userData = localStorage.getItem("user");
-    return userData ? JSON.parse(userData) : null;
+    try {
+      const userData = localStorage.getItem("user");
+      return userData ? JSON.parse(userData) : null;
+    } catch (error) {
+      return null;
+    }
   })(),
-  isLoading: false,
   users: [],
+  isLoading: false,
   error: null,
 };
+
 
 export const user_api_key = import.meta.env.VITE_USER_API_KEY
 const handleApiError = (error: any) => error.response?.data?.message || error.message || "Something went wrong";

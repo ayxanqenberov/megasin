@@ -4,10 +4,8 @@ import { RootState } from "../redux/app/store";
 
 const CommentsList = () => {
   const { comments, isLoading, error } = useSelector((state: RootState) => state.comments);
-
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
-
   return (
     <ul>
       {comments.map((comment) => (

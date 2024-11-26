@@ -15,9 +15,7 @@ const AdminUser = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        Loading users...
-      </div>
+      <div className="flex justify-center items-center">Loading users...</div>
     );
   }
   const handleDelete = (id: string) => {
@@ -25,7 +23,6 @@ const AdminUser = () => {
       dispatch(deleteUser(id));
     }
   };
-  // Error state
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen text-red-500">
@@ -37,7 +34,7 @@ const AdminUser = () => {
   return (
     <div className="flex">
       <AdminAside />
-      <div className="flex flex-col  p-6">
+      <div className="flex flex-col p-6">
         <h1 className="text-2xl font-bold mb-6">Admin User Management</h1>
         <table className="table-auto w-full border-collapse border border-gray-200">
           <thead>

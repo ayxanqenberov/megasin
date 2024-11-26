@@ -28,7 +28,7 @@ const App = () => {
         <Route path='/:username/detail' element={<Detail />} />
         <Route path='/admin' element={<AdminLog />} />
         <Route path='/admin/page' element={<AdminPage />} /> 
-        <Route path='/admin/page?home' element={<AdminHome/>} />
+        <Route path='/admin/home' element={<AdminHome/>} />
         <Route path='/admin/user' element={<AdminUser/>}/>
         <Route path='/admin/posts' element={<AdminPosts/>} />
         <Route path='/admin/comments' element={<AdminCommen/>} />
