@@ -11,6 +11,7 @@ import BlogPage from './assets/pages/Blogs/BlogPage';
 import Detail from './assets/pages/Detail/Detail';
 import AdminLog from './assets/pages/adminPage/AdminLog';
 import AdminPage from './assets/pages/adminPage/AdminPage';
+import AdminUser from './assets/pages/adminPage/pagesInAdmin/AdminUser';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <Route path='/:username/detail' element={<Detail />} /> 
         <Route path='/admin' element={<AdminLog/>}/>
         <Route path='/admin/page' element={<AdminPage/>} />
+        <Route path='/admin/page?user' element={<AdminUser/>} />
       </Routes>
     </BrowserRouter>
   );

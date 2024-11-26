@@ -1,12 +1,12 @@
 import React from "react";
 import "../../../input.css";
 import AdminAside from "./adminComp/adminAside";
+import AdminUser from "./pagesInAdmin/AdminUser";
 const AdminPage = () => {
   return (
-    <div>
+    <div className="flex">
       <AdminAside />
-      <div className="informations">
-      </div>
+      <AdminUser/>
     </div>
   );
 };

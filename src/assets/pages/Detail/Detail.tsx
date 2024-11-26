@@ -74,14 +74,14 @@ const Detail = () => {
       <section>
         <div className="flex pt-3 items-start w-[70%] gap-[10px] m-auto">
           <div className="flex w-[65%] bg-white border-[0.5px] mb-3 border-t-none border-[#d2d1d1] flex-col">
-            <h1 className="p-2">{post.title}</h1>
+            <h1 className="p-2 text-2xl capitalize" style={{fontFamily: 'Oswald'}}>{post.title}</h1>
             <img
               src={post.postPicture || "https://via.placeholder.com/150"}
               alt={post.title}
               className="w-full h-auto"
             />
-            <p className="p-2">{post.content}</p>
-            <p className="p-2">Likes: {post.likeCount}</p>
+            <p className="p-2 font-semibold">{post.content}</p>
+            <p className="p-2">Likes: {post.likedUsers.length}</p>
             <p className="p-2">Comments: {filteredComments.length}</p>
             <div className="flex items-center justify-between border-t-black border w-full">
               <input

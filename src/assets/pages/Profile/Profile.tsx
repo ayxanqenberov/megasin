@@ -234,7 +234,7 @@ const Profile: React.FC = () => {
                     className="w-full h-40 object-cover rounded"
                   />
                   <div className="flex justify-between text-sm text-gray-500">
-                    <span>Likes: {post.likeCount}</span>
+                    <span>Likes: {post.likedUsers.length}</span>
                     <span>Comments: {post.comentCount}</span>
                   </div>
                 </div>

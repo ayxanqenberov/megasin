@@ -7,6 +7,7 @@ interface Posts {
   username: string;
   userId: number;
   likeCount: number;
+  likedUsers: number[];
   content: string;
   comentCount: number;
   postPicture: string;
@@ -38,6 +39,7 @@ export const createPost = createAsyncThunk<Posts, { title: string; content: stri
         comentCount: 0,
         profilePicture:pp,
         createdAt: new Date().toISOString(),
+        likedUsers: [],
       });
 
       return res.data;
@@ -78,30 +80,37 @@ export const likedPost = createAsyncThunk<
   async ({ id }, { rejectWithValue, getState }) => {
     try {
       const state = getState();
+      const user = state.user.user; 
       const post = state.posts.posts.find((post) => post.id === id);
 
+      if (!user) {
+        throw new Error("User not logged in");
+      }
       if (!post) {
         throw new Error("Post not found");
       }
 
-      const isLiked = state.posts.likedPosts.includes(id);
-      const updatedLikeCount = isLiked ? post.likeCount - 1 : post.likeCount + 1;
+      const isLiked = post.likedUsers.includes(user.id);
+      const updatedLikedUsers = isLiked
+        ? post.likedUsers.filter((userId) => userId !== user.id)
+        : [...post.likedUsers, user.id];
 
       const response = await axios.put(
         `https://${user_api_key}.mockapi.io/users/Posts/${id}`,
-        { likeCount: updatedLikeCount }
+        { likedUsers: updatedLikedUsers }
       );
 
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.message || "Failed to update like count");
+      return rejectWithValue(error.message || "Failed to update like");
     }
   }
 );
 
 
+
 // const deleteCount = await axios.put(
-//   `https://${user_api_key}.mockapi.io/users/Posts/5`,
+//   https://${user_api_key}.mockapi.io/users/Posts/6,
 //   {
 //     likeCount: 0,
 //   }
@@ -136,5 +145,4 @@ const postsSlice = createSlice({
   },
 });
 
-
-export default postsSlice.reducer;
+export default postsSlice.reducer; 

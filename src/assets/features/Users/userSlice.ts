@@ -21,11 +21,15 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user") as string) : null,
+  user: (() => {
+    const userData = localStorage.getItem("user");
+    return userData ? JSON.parse(userData) : null;
+  })(),
   isLoading: false,
   users: [],
   error: null,
 };
+
 export const user_api_key = import.meta.env.VITE_USER_API_KEY
 const handleApiError = (error: any) => error.response?.data?.message || error.message || "Something went wrong";
 export const registerUser = createAsyncThunk<User, { email: string; password: string; username: string }, { rejectValue: string }>(
@@ -119,6 +123,18 @@ export const loginUser = createAsyncThunk<User, { username: string; password: st
     }
   } 
 );
+export const deleteUser = createAsyncThunk<
+  string, 
+  string, 
+  { rejectValue: string }
+>("user/deleteUser", async (userId, { rejectWithValue }) => {
+  try {
+    await axios.delete(`https://${user_api_key}.mockapi.io/users/Users/${userId}`);
+    return userId; 
+  } catch (error: any) {
+    return rejectWithValue(handleApiError(error));
+  }
+});
 
 const userSlice = createSlice({
   name: "user",
@@ -183,6 +199,18 @@ const userSlice = createSlice({
       .addCase(fetchUsers.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "Failed to fetch users";
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteUser.fulfilled, (state, action: PayloadAction<string>) => {
+        state.isLoading = false;
+        state.users = state.users.filter((user) => user.id !== parseInt(action.payload)); // Remove the deleted user
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to delete user";
       });
   },
 });

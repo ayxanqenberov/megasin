@@ -25,27 +25,36 @@ const BlogPage: React.FC = () => {
       <Header />
       <section className="blogs w-[70%]  m-auto">
         {sortedPosts.map(
-          ({ id, postPicture, title, content, username, createdAt , likeCount }) => (
-            <div key={id} className="blog-item w-full gap-6 px-2 flex border-b py-4">
+          ({
+            id,
+            postPicture,
+            title,
+            content,
+            username,
+            createdAt,
+            likedUsers,
+          }) => (
+            <div
+              key={id}
+              className="blog-item w-full gap-6 px-2 flex border-b py-4"
+            >
               <img
                 src={postPicture}
                 alt={title || "Post Image"}
                 className="w-[30%] h-48 object-cover"
               />
               <div className="w-[60%] flex flex-col justify-between">
-                <h2 className="text-lg font-bold">{title}</h2>
+              <p className="text-sm text-gray-600">This blog was created By {username}</p>
+                <h2 style={{fontFamily: 'Oswald',}} className="text-2xl uppercase font-black">{title}</h2>
                 <p className="text-ellipsis">{content}</p>
                 <div className="flex items-center gap-1.5">
-                <AiFillLike
-                    className={
-                      likes[id] ? "text-red-500" : "text-gray-600"
-                    }
+                  <AiFillLike
+                    className={likes[id] ? "text-red-500" : "text-gray-600"}
                   />
-                <span>{likeCount}</span>
+                  <span>{likedUsers.length}</span>
                 </div>
-                <p className="text-sm text-gray-600">By {username}</p>
                 <p className="text-xs text-gray-500">
-                  Created on {new Date(createdAt).toLocaleDateString()} ago
+                  Created on {new Date(createdAt).toLocaleDateString()}
                 </p>
               </div>
             </div>
