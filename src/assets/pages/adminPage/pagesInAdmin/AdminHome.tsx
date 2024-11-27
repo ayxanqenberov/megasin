@@ -79,7 +79,7 @@ const AdminHome = () => {
                 {postLoading
                   ? "Loading..."
                   : mostLikedPost
-                  ? `"${mostLikedPost.title}" (${mostLikedPost.likeCount} likes)`
+                  ? `"${mostLikedPost.title}" (${mostLikedPost.likedUsers.length} likes)`
                   : "No posts available"}
               </p>
             </div>
@@ -117,7 +117,7 @@ const AdminHome = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="likeCount" fill="#82ca9d" />
+                <Bar dataKey="likedUsers" fill="#82ca9d" />
               </BarChart>
             ) : (
               <p>No posts available</p>

@@ -15,34 +15,7 @@ const InfoAside = () => {
         <div className="blogListsAsidePart bg-white border-none border-b-gray-400  py-2 px-4">
           <h2 className="">Blogs</h2>
         </div>
-        <div className="blogListsAsidePart bg-white px-4 py-2">
-          <p>aaa</p>
-          <span>13</span>
-        </div>
-        <div className="blogListsAsidePart bg-white px-4 py-2">
-          <p>aaa</p>
-          <span>13</span>
-        </div>
-        <div className="blogListsAsidePart bg-white px-4 py-2">
-          <p>aaa</p>
-          <span>13</span>
-        </div>
-        <div className="blogListsAsidePart bg-white px-4 py-2">
-          <p>aaa</p>
-          <span>13</span>
-        </div>
-        <div className="blogListsAsidePart bg-white px-4 py-2">
-          <p>aaa</p>
-          <span>13</span>
-        </div>
-        <div className="blogListsAsidePart bg-white px-4 py-2">
-          <p>aaa</p>
-          <span>13</span>
-        </div>
-        <div className="blogListsAsidePart bg-white px-4 py-2">
-          <p>aaa</p>
-          <span>13</span>
-        </div>
+        
         <div className="blogListsAsidePart bg-white px-4 py-2">
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias unde

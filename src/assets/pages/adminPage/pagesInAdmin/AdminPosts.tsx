@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts, deletePosts } from "../../../features/Posts/postSlice";
 import AdminAside from "../adminComp/adminAside";
 import { RootState } from "../../../redux/app/store";
+import Loading from "../../../Components/Loadings/Loading";
 
 const AdminPosts = () => {
   const dispatch = useDispatch();
@@ -22,14 +23,14 @@ const AdminPosts = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        Loading posts...
+        <Loading/>
       </div>
     );
   }
   return (
     <div className="flex">
       <AdminAside />
-      <div className="p-6">
+      <div className="p-6 w-[80%]">
         {isLoading && <p>Loading posts...</p>}
         {error && <p>Error fetching posts: {error}</p>}
         {!isLoading && !error && posts.length === 0 && (

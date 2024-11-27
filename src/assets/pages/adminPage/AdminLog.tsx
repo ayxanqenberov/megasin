@@ -18,7 +18,7 @@ const AdminLog = () => {
     try {
       const resultAction: any = await dispatch(loginAdmin({ name, password }));
       if (loginAdmin.fulfilled.match(resultAction)) {
-        navigate("/admin/page?home");
+        navigate("/admin/home");
       } else {
         return <span>{resultAction}</span>
       }

@@ -29,7 +29,6 @@ const AdminPage = () => {
 
   return (
     <div className="flex">
-      <AdminAside />
       <div className="w-[80%] p-4">
         {renderPage()}
       </div>

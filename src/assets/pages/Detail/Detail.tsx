@@ -6,6 +6,7 @@ import { RootState } from "../../redux/app/store";
 import Header from "../../Components/Header/Header";
 import { IoMdSend } from "react-icons/io";
 import { useEffect, useState } from "react";
+import Loading from "../../Components/Loadings/Loading";
 
 const Detail = () => {
   const location = useLocation();
@@ -13,23 +14,20 @@ const Detail = () => {
   const postId = parseInt(queryParams.get("postId") || "0", 10);
 
   const dispatch = useDispatch();
-  const { posts, isLoading: postsLoading, error: postsError } = useSelector(
+  const { posts,error: postsError } = useSelector(
     (state: RootState) => state.posts
   );
-  const { commentsWithDetails, isLoading: commentsLoading, error: commentsError } = useSelector(
+  const { commentsWithDetails, error: commentsError } = useSelector(
     (state: RootState) => state.comments
   );
   const { user } = useSelector((state: RootState) => state.user);
-
   const [commentText, setCommentText] = useState("");
   useEffect(() => {
     dispatch(fetchPosts());
     dispatch(checkup());
   }, [dispatch]);
+
   const post = posts.find((item) => Number(item.id) === postId);
-  if (postsLoading || commentsLoading) {
-    return <div>Loading...</div>;
-  }
   if (postsError) {
     return <div>Error fetching posts: {postsError}</div>;
   }
@@ -38,14 +36,16 @@ const Detail = () => {
   }
   if (!post) {
     return (
-      <div>
-        <h2>Post not found</h2>
+      <div  className="flex items-center h-[100vh] text-red-600 justify-center">
+        <h2>Post loading...</h2>
       </div>
     );
   }
-  const filteredComments = commentsWithDetails.filter(
-    (comment) => comment.post?.id === postId
-  );
+
+  const filteredComments = commentsWithDetails
+    .filter((comment) => comment.post?.id === postId)
+    .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
+
   const handleSendComment = () => {
     if (!user) {
       alert("You need to be logged in to comment.");
@@ -59,14 +59,14 @@ const Detail = () => {
 
     dispatch(
       sendComment({
-        userId: user.id,
         comment: commentText,
         postId: postId,
       })
     );
 
-    setCommentText(""); 
+    setCommentText("");
   };
+  console.log(commentsWithDetails);
 
   return (
     <>
@@ -74,7 +74,9 @@ const Detail = () => {
       <section>
         <div className="flex pt-3 items-start w-[70%] gap-[10px] m-auto">
           <div className="flex w-[65%] bg-white border-[0.5px] mb-3 border-t-none border-[#d2d1d1] flex-col">
-            <h1 className="p-2 text-2xl capitalize" style={{fontFamily: 'Oswald'}}>{post.title}</h1>
+            <h1 className="p-2 text-2xl capitalize" style={{ fontFamily: "Oswald" }}>
+              {post.title}
+            </h1>
             <img
               src={post.postPicture || "https://via.placeholder.com/150"}
               alt={post.title}
@@ -97,7 +99,7 @@ const Detail = () => {
               />
             </div>
           </div>
-          <div className="w-[35%] bg-white border-[0.5px] border-[#d2d1d1] p-3">
+          <div className="w-[35%] flex flex-col items-start gap-3 bg-white border-[0.5px] border-[#d2d1d1] p-3">
             <div className="flex items-center gap-2">
               <img
                 className="w-[50px] h-[50px] object-cover rounded-[50%]"
@@ -106,9 +108,7 @@ const Detail = () => {
               />
               <span className="text-lg font-semibold">{post.username}</span>
             </div>
-            <button className="mt-3 bg-blue-500 text-white py-1 px-4 rounded">
-              Follow
-            </button>
+            {/* follo */}
           </div>
         </div>
       </section>

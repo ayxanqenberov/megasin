@@ -4,13 +4,13 @@ import ToggleButtonsMultiple from "../NewPost/ToggleButtons";
 import { RootState } from "../../redux/app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost } from "../../features/Posts/postSlice";
-import CircularIndeterminate from "../../Components/Loadings/LoadBttn";
 import { useNavigate } from "react-router-dom";
 import { TiDelete } from "react-icons/ti";
+import Loading from "../../Components/Loadings/Loading";
 
 const NewPost = () => {
   const { user } = useSelector((state: RootState) => state.user);
-  const { isLoading, error } = useSelector((state: RootState) => state.posts);
+  const { isLoading} = useSelector((state: RootState) => state.posts);
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
   const [description, setDescription] = useState("");
@@ -61,8 +61,8 @@ const NewPost = () => {
             disabled={isLoading}
           >
             {isLoading ? (
-              <div className="w-full flex justify-center items-center overflow-hidden">
-                <CircularIndeterminate />
+              <div className="w-full flex justify-center items-center">
+                <Loading/>
               </div>
             ) : (
               "Publish"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Register from './assets/pages/Registeration/Register';
 import Home from './assets/HomePage/Home';
@@ -14,10 +14,26 @@ import AdminPosts from './assets/pages/adminPage/pagesInAdmin/AdminPosts';
 import AdminCommen from './assets/pages/adminPage/pagesInAdmin/AdminCommen';
 import AdminNotf from './assets/pages/adminPage/pagesInAdmin/AdminNotf';
 import AdminHome from './assets/pages/adminPage/pagesInAdmin/AdminHome';
+import NotFound from './assets/Components/NotFound/NotFound';
+import Loading from './assets/Components/Loadings/Loading';
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-[100vh] flex items-center justify-center bg-white">
+        <Loading />
+      </div>
+    );
+  }
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true , v7_relativeSplatPath: true }}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
@@ -33,6 +49,7 @@ const App = () => {
         <Route path='/admin/posts' element={<AdminPosts/>} />
         <Route path='/admin/comments' element={<AdminCommen/>} />
         <Route path='/admin/notifications' element={<AdminNotf/>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
