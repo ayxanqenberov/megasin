@@ -90,7 +90,7 @@ const Header = () => {
           <button onClick={getChangeMode}>
             {darkMode ? <MdDarkMode /> : <MdOutlineDarkMode />}
           </button>
-          {/* <Search/> */}
+          <Search/>
           <div className="features flex items-center gap-3">
             <FaUserAlt
               onClick={getProfile}

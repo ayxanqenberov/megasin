@@ -1,46 +1,54 @@
-import React, { useState, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import { RootState } from '../../redux/app/store';
-import { setSearchQuery } from '../../features/Search/searchSlice';
-
+import React, { useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../../redux/app/store";
+import { setSearchQuery } from "../../features/Search/searchSlice";
 
 const Search = () => {
-  const location = useLocation();
-  const userName = useSelector((state: RootState) => state.user.user?.username || ''); // Fallback for username
-  const isProfilePage = location.pathname === `/profile/${userName}`;
   const dispatch = useDispatch();
-  const searchQuery = useSelector((state: RootState) => state.search.query); // Get the current search query
-  const posts = useSelector((state: RootState) => state.posts.items); // Assuming posts slice exists
-
-  const handleSearchChange = ((value: string) => {
+  const navigate = useNavigate();
+  const searchQuery = useSelector((state: RootState) => state.search.query);
+  const posts = useSelector((state: RootState) => state.posts.posts);
+  const handleSearchChange = (value: string) => {
     dispatch(setSearchQuery(value));
-  }, 300);
+  };
   const filteredPosts = useMemo(
-    () => posts.filter((post) => post.title.toLowerCase().includes(searchQuery.toLowerCase())),
+    () =>
+      posts.filter((post) =>
+        post.title.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
     [posts, searchQuery]
   );
+  const getDetail = (username: string, id: number) => {
+    navigate(`/@${username}/detail?postId=${id}`);
+  };
 
   return (
-    <div className={isProfilePage ? 'hidden' : 'searching w-1/2'}>
+    <div className="search w-1/2 relative">
       <input
-        className="border-b border-grey outline-none w-full py-2"
+        className="border-b border-gray-300 outline-none w-full py-2"
         type="text"
-        placeholder="Search..."
-        defaultValue={searchQuery} 
+        placeholder="Search posts by title..."
+        value={searchQuery} 
         onChange={(e) => handleSearchChange(e.target.value)}
       />
-      <div className="results">
-        {filteredPosts.length > 0 ? (
-          filteredPosts.map((post) => (
-            <div key={post.id} className="result-item py-1">
-              {post.title}
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">No results found</p>
-        )}
-      </div>
+      {searchQuery && (
+        <div className="results absolute top-full left-0 bg-white w-full shadow-lg mt-2 rounded-md max-h-60 overflow-y-auto">
+          {filteredPosts.length > 0 ? (
+            filteredPosts.map((post) => (
+              <div
+                key={post.id}
+                className="result-item py-2 px-4 hover:bg-gray-100 cursor-pointer"
+                onClick={() => getDetail(post.username, post.id)}
+              >
+                {post.title}
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500 py-2 px-4">No posts found</p>
+          )}
+        </div>
+      )}
     </div>
   );
 };
