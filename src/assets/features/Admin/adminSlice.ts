@@ -13,9 +13,8 @@ interface AdminState {
   loading: boolean;
   error: string | null;
 }
-
 const initialState: AdminState = {
-  user: null,
+  user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!) : null,
   loading: false,
   error: null,
 };
@@ -35,15 +34,30 @@ export const loginAdmin = createAsyncThunk<
       );
 
       if (!user) {
-        throw new Error("k");
+        return rejectWithValue("Invalid username or password.");
       }
+      
       return user;
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || "An error occurred.";
+      const errorMessage = error.message || "An error occurred while logging in.";
       return rejectWithValue(errorMessage);
     }
   }
 );
+// const postAdmin = async (name: string, password: string) => {
+//   try {
+//     const response = await axios.post(`https://${comment_api}.mockapi.io/admin`, {
+//       name: name,
+//       password: password,
+//     });
+//     console.log('Admin created:', response.data);
+//   } catch (error: any) {
+//     console.error("Error creating admin:", error.message || error);
+//   }
+// };
+
+// Example usage:
+// postAdmin("adminAyxan", "ayxan0123");
 
 const adminSlice = createSlice({
   name: "admin",

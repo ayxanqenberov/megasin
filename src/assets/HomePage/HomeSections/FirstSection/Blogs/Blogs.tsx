@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/app/store";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
+import Loading from "../../../../Components/Loadings/Loading";
 
 const Blogs = () => {
   const [showWelcome, setShowWelcome] = useState(() => {
@@ -31,7 +32,9 @@ const Blogs = () => {
       navigate("/register");
     }
   };
-
+  const handleUserClick =(username:string)=>{
+    navigate(`/profiles/${username}`)
+  }
   const toggleFollow = (id: number) => {
     setFollows((prev) => ({ ...prev, [id]: !prev[id] }));
   };
@@ -43,7 +46,7 @@ const Blogs = () => {
   const sortedPosts = [...posts].sort((a, b) => b.id - a.id);
   const limitedPosts = sortedPosts.slice(0, sliceEnd);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className="w-full justify-center"><Loading/></div>;
 
   return (
     <div className="flex flex-col gap-4 w-[48%]">
@@ -135,7 +138,7 @@ const Blogs = () => {
                   src={item.profilePicture || "https://via.placeholder.com/50"}
                   alt={item.username}
                 />
-                <span className="font-bold">{item.username}</span>
+                <span onClick={() => handleUserClick(item.username)} className="font-bold cursor-pointer hover:text-blue-600 duration-200">{item.username}</span>
                 <button
                   className={`ml-auto text-sm ${
                     follows[item.id] ? "text-black" : "text-blue-600"

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/app/store";
 import { setSearchQuery } from "../../features/Search/searchSlice";
 
@@ -12,6 +12,7 @@ const Search = () => {
   const handleSearchChange = (value: string) => {
     dispatch(setSearchQuery(value));
   };
+  const location = useLocation();
   const filteredPosts = useMemo(
     () =>
       posts.filter((post) =>
@@ -22,9 +23,12 @@ const Search = () => {
   const getDetail = (username: string, id: number) => {
     navigate(`/@${username}/detail?postId=${id}`);
   };
+  const username = useSelector((state: RootState) => state.user.user?.username);
+
+  const isProfilePage = location.pathname === `/profile/${username}`;
 
   return (
-    <div className="search w-1/2 relative">
+    <div className={isProfilePage ? "hidden" : "search w-1/2 relative"}>
       <input
         className="border-b border-gray-300 outline-none w-full py-2"
         type="text"

@@ -96,7 +96,7 @@ const Profile: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <span className="font-bold">Username: {user.username}</span>
-                <p>Follower: {user.follower}</p>
+                <p className="text-blue-500">{user.followerUser.length} follower</p>
                 <p className="text-gray-400 flex items-center gap-1 font-medium">
                   Account Created: {formattedDate}
                   <LuCake />

@@ -16,7 +16,7 @@ const AdminUser = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center"><Loading/></div>
+      <div className="flex justify-center w-full h-[100vh] items-center"><Loading/></div>
     );
   }
   const handleDelete = (id: string) => {

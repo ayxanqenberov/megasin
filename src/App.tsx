@@ -16,6 +16,7 @@ import AdminNotf from './assets/pages/adminPage/pagesInAdmin/AdminNotf';
 import AdminHome from './assets/pages/adminPage/pagesInAdmin/AdminHome';
 import NotFound from './assets/Components/NotFound/NotFound';
 import Loading from './assets/Components/Loadings/Loading';
+import Profiles from './assets/pages/OtherProfiles/Profiles';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -43,12 +44,13 @@ const App = () => {
         <Route path='/blogs' element={<BlogPage />} />
         <Route path='/:username/detail' element={<Detail />} />
         <Route path='/admin' element={<AdminLog />} />
-        <Route path='/admin/page' element={<AdminPage />} /> 
+        <Route path='/admin/page' element={<AdminPage />} />
         <Route path='/admin/home' element={<AdminHome/>} />
         <Route path='/admin/user' element={<AdminUser/>}/>
         <Route path='/admin/posts' element={<AdminPosts/>} />
         <Route path='/admin/comments' element={<AdminCommen/>} />
         <Route path='/admin/notifications' element={<AdminNotf/>} />
+        <Route path='/profiles/:username' element={<Profiles/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

@@ -157,35 +157,50 @@ export const loginUser = createAsyncThunk<User, { username: string; password: st
     }
   } 
 );
-export const followUsers = createAsyncThunk<
-  User,
-  string, // userId to follow
+export const toggleFollowUser = createAsyncThunk<
+  { updatedUser: User; targetUser: User },
+  { targetUserId: number },
   { rejectValue: string; state: { user: UserState } }
->("user/followUsers", async (userId, { rejectWithValue, getState }) => {
+>("user/toggleFollowUser", async ({ targetUserId }, { rejectWithValue, getState }) => {
   try {
     const state = getState();
-    const currentUser = state.user.user; // Get the current user from state
+    const currentUser = state.user.user;
 
-    if (!currentUser) {
-      throw new Error("User not logged in.");
-    }
+    if (!currentUser) throw new Error("User not logged in.");
 
-    // Add the new userId to the followerUser array
-    const updatedFollowerUsers = [...currentUser.followerUser, parseInt(userId)];
+    const isFollowing = currentUser.followerUser.includes(targetUserId);
 
-    const response = await axios.put(`https://${user_api_key}.mockapi.io/users/Users/${currentUser.id}`, {
-      ...currentUser,
-      followerUser: updatedFollowerUsers,
-    });
+    const updatedFollowerUsers = isFollowing
+      ? currentUser.followerUser.filter((id) => id !== targetUserId)
+      : [...currentUser.followerUser, targetUserId];
 
-    // Update localStorage with the new user data
-    localStorage.setItem("user", JSON.stringify(response.data));
+    const updatedCurrentUser = await axios.put(
+      `https://${user_api_key}.mockapi.io/users/Users/${currentUser.id}`,
+      { followerUser: updatedFollowerUsers }
+    );
 
-    return response.data; // Return updated user data
+    const targetUserResponse = await axios.get(
+      `https://${user_api_key}.mockapi.io/users/Users/${targetUserId}`
+    );
+
+    const targetUser = targetUserResponse.data;
+    const updatedTargetFollowerUsers = isFollowing
+      ? targetUser.followerUser.filter((id: number) => id !== currentUser.id)
+      : [...targetUser.followerUser, currentUser.id];
+
+    const updatedTargetUser = await axios.put(
+      `https://${user_api_key}.mockapi.io/users/Users/${targetUserId}`,
+      { followerUser: updatedTargetFollowerUsers }
+    );
+
+    localStorage.setItem("user", JSON.stringify(updatedCurrentUser.data));
+
+    return { updatedUser: updatedCurrentUser.data, targetUser: updatedTargetUser.data };
   } catch (error: any) {
     return rejectWithValue(handleApiError(error));
   }
 });
+
 export const deleteUser = createAsyncThunk<
   string, 
   string, 
@@ -275,18 +290,28 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload || "Failed to delete user";
       })
-      .addCase(followUsers.pending, (state) => {
+      .addCase(toggleFollowUser.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(followUsers.fulfilled, (state, action: PayloadAction<User>) => {
+      .addCase(
+        toggleFollowUser.fulfilled,
+        (state, action: PayloadAction<{ updatedUser: User; targetUser: User }>) => {
+          state.isLoading = false;
+          state.user = action.payload.updatedUser;
+          const targetIndex = state.users.findIndex(
+            (user) => user.id === action.payload.targetUser.id
+          );
+          if (targetIndex !== -1) {
+            state.users[targetIndex] = action.payload.targetUser;
+          }
+        }
+      )
+      .addCase(toggleFollowUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload;
-      })
-      .addCase(followUsers.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload || "Failed to follow user";
+        state.error = action.payload || "Failed to toggle follow status.";
       });
+      
   },
 });
 

@@ -4,15 +4,14 @@ import { FaUserAlt } from "react-icons/fa";
 import { IoBookSharp, IoNotifications } from "react-icons/io5";
 import { MdDarkMode, MdHome, MdOutlineDarkMode } from "react-icons/md";
 import { RiNewsLine } from "react-icons/ri";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/app/store"; 
+import { RootState } from "../../redux/app/store";
 import Search from "../Search/Search";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const userName = useSelector((state: RootState) => state.user.user?.username);
   const getChangeMode = () => {
@@ -20,12 +19,10 @@ const Header = () => {
   };
   const { user } = useSelector((state: RootState) => state.user);
 
-
-  const username = userName || '';
+  const username = userName || "";
   const getProfile = (): void => {
     navigate(username ? `/profile/${username}` : `/register`);
   };
-  const isProfilePage = location.pathname === `/profile/${username}`;
 
   // const getWritePost = () => {
   //   if (isProfilePage) {
@@ -34,12 +31,12 @@ const Header = () => {
   //     navigate(`${username}/new`);
   //   }
   // }
-  const getWritePost = ()=>{
-    navigate(`/${username}/new`)
-  }
-  const getBlogs = ()=>{
-    navigate(`/blogs`)
-  }
+  const getWritePost = () => {
+    navigate(`/${username}/new`);
+  };
+  const getBlogs = () => {
+    navigate(`/blogs`);
+  };
   return (
     <header className="bg-white text-black">
       <div className="headerpart border-none flex justify-between items-center pr-[19px]">
@@ -77,10 +74,13 @@ const Header = () => {
             </li>
             <li>
               <a
-                href=''
+                href=""
                 className="flex flex-col items-center hover:text-red-700 duration-200"
               >
-                <BsPencilSquare onClick={user ? getWritePost : getProfile} className="text-[25px]" />
+                <BsPencilSquare
+                  onClick={user ? getWritePost : getProfile}
+                  className="text-[25px]"
+                />
                 <span className="text-[13px]">Write</span>
               </a>
             </li>
@@ -90,7 +90,7 @@ const Header = () => {
           <button onClick={getChangeMode}>
             {darkMode ? <MdDarkMode /> : <MdOutlineDarkMode />}
           </button>
-          <Search/>
+          <Search />
           <div className="features flex items-center gap-3">
             <FaUserAlt
               onClick={getProfile}

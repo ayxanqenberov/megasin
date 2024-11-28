@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom"; // Yeni eklenen import
 import { RootState } from "../../../redux/app/store";
 import { fetchUsers } from "../../../features/Users/userSlice";
 import { fetchPosts } from "../../../features/Posts/postSlice";
 import { checkup } from "../../../features/Comments/commentSlice";
+import { logoutAdmin } from "../../../features/Admin/adminSlice"; // Logout action import
 import AdminAside from "../adminComp/adminAside";
 import {
   PieChart,
@@ -16,9 +18,11 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { IoLogOutOutline } from "react-icons/io5";
 
 const AdminHome = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Yeni eklenen navigate
 
   const { users, isLoading: userLoading } = useSelector(
     (state: RootState) => state.user
@@ -35,6 +39,7 @@ const AdminHome = () => {
     dispatch(fetchPosts());
     dispatch(checkup());
   }, [dispatch]);
+
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   const data = [
     { name: "Users", value: users?.length || 0 },
@@ -46,18 +51,29 @@ const AdminHome = () => {
     posts[0]
   );
 
+  const handleLogout = () => {
+    dispatch(logoutAdmin());
+    navigate("/");
+  };
+
   return (
     <div className="flex">
       <AdminAside />
       <div className="w-[80%] p-6 flex flex-col gap-6">
-        <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
+        <div className="flex w-full justify-between items-center">
+          <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
+          <button
+            className="mb-6 bg-red-700 px-2 py-[6px] text-white rounded-md hover:bg-red-600 cursor-pointer duration-200 flex items-center gap-1"
+            onClick={handleLogout} 
+          >
+            Log Out <IoLogOutOutline />
+          </button>
+        </div>
         <div className="w-full ]">
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-gray-100 p-4 rounded shadow">
               <span className="font-semibold text-lg">Total User Count</span>
-              <p className="text-2xl mt-2">
-                 {users?.length}
-              </p>
+              <p className="text-2xl mt-2">{users?.length}</p>
             </div>
             <div className="bg-gray-100 p-4 rounded shadow">
               <span className="font-semibold text-lg">Total Post Count</span>
