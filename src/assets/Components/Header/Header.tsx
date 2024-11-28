@@ -40,11 +40,11 @@ const Header = () => {
   return (
     <header className="bg-white text-black">
       <div className="headerpart border-none flex justify-between items-center pr-[19px]">
-        <div className="headerLeft flex items-center justify-around w-[55%] h-[75px]">
+        <div className="headerLeft flex items-center justify-around w-[55%] max-md:w-[25%] h-[75px]">
           <a className="text-2xl font-bold text-[#E91E63]" href="/">
             MEGASIN<span className="text-black">.</span>
           </a>
-          <ul className="flex items-center justify-evenly w-[50%]">
+          <ul className="flex max-md:hidden items-center justify-evenly w-[50%]">
             <li>
               <a
                 href="/"
@@ -86,7 +86,7 @@ const Header = () => {
             </li>
           </ul>
         </div>
-        <div className="headerRight w-[40%] flex items-center justify-around">
+        <div className="headerRight w-[40%]  flex items-center justify-around max-md:w-[60%] max-md:justify-between">
           <button onClick={getChangeMode}>
             {darkMode ? <MdDarkMode /> : <MdOutlineDarkMode />}
           </button>

@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from "../../../../redux/app/store";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import Loading from "../../../../Components/Loadings/Loading";
+import FollowButton from "../../../../Components/FollowBttn/FollowButton";
 
 const Blogs = () => {
   const [showWelcome, setShowWelcome] = useState(() => {
@@ -139,14 +140,7 @@ const Blogs = () => {
                   alt={item.username}
                 />
                 <span onClick={() => handleUserClick(item.username)} className="font-bold cursor-pointer hover:text-blue-600 duration-200">{item.username}</span>
-                <button
-                  className={`ml-auto text-sm ${
-                    follows[item.id] ? "text-black" : "text-blue-600"
-                  }`}
-                  onClick={() => toggleFollow(item.id)}
-                >
-                  {follows[item.id] ? "Following" : "Follow"}
-                </button>
+                <FollowButton targetUserId={item.id}/>
               </div>
               <h2
                 onClick={() => getDetail(item.username, item.id)}

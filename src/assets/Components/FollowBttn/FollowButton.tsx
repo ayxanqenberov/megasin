@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/app/store";
 import { toggleFollowUser } from "../../features/Users/userSlice";
 
-
 interface FollowButtonProps {
   targetUserId: number;
 }

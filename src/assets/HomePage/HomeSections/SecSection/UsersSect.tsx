@@ -25,18 +25,24 @@ const UsersSect = () => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  if (isLoading) return <div className="w-full h-full items-center justify-center"> <Loading /></div>;
+  // if (isLoading) return <div className="w-full h-full m-auto items-center justify-center"><Loading/></div>;
   if (error) return <p>{error}</p>;
 
   const sortedUsers = [...users].sort((a, b) => b.id - a.id);
-  const usersToDisplay = sortedUsers.filter(item => item.id !== user?.id);
+  const usersToDisplay = sortedUsers.filter((item) => item.id !== user?.id);
 
   const handleUserClick = (username: string) => {
     navigate(`/profiles/${username}`);
   };
 
   return (
-    <section className={user ? "flex flex-col justify-between w-[90%] mt-2 m-auto pt-3" : "hidden"}>
+    <section
+      className={
+        user
+          ? "flex flex-col justify-between w-[90%] mt-2 m-auto pt-3"
+          : "hidden"
+      }
+    >
       <h2 className="font-medium text-[17px] mb-1">Discover more people</h2>
       <Swiper
         slidesPerView={4}
@@ -63,7 +69,8 @@ const UsersSect = () => {
               >
                 {item.username}
               </span>
-              <span>{item.followerUser.length}</span>
+
+              <span className="text-[15px] text-blue-500">{item.followerUser.length} follower</span>
               <FollowButton targetUserId={item.id} />
             </div>
           </SwiperSlide>

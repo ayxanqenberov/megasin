@@ -21,21 +21,22 @@ const Profile: React.FC = () => {
   const [username, setUsername] = useState(user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
   const [bio, setBio] = useState(user?.bio || "");
-  const [profilePictures, setProfilePictures] = useState(
-    user?.profilePictures || ""
-  );
+  const [profilePictures, setProfilePictures] = useState(user?.profilePictures || "");
   const [bannerPict, setBannerPict] = useState(user?.bannerPict || "");
+
   useEffect(() => {
     dispatch(fetchPosts());
   }, [dispatch]);
+
   const userPosts = posts.filter((post) => post.userId === user?.id);
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
   };
-  const getWrite = () =>{
-    navigate(`/${username}/new`)
-  }
+
+  const getWrite = () => {
+    navigate(`/${username}/new`);
+  };
 
   const handleUpdateProfile = () => {
     if (user && bio.length <= 200) {
@@ -80,22 +81,19 @@ const Profile: React.FC = () => {
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
           }}
-          className={`bannerPict flex justify-end items-start p-5 relative h-[200px] w-full bg-black`}
+          className="bannerPict flex justify-end items-start p-5 relative h-[200px] w-full bg-black"
         >
-          <div className="profileContainer w-[60%] left-[20%] pb-4 absolute z-20 top-[50%] rounded-2xl flex flex-col justify-around items-start bg-white">
-            <div className="flex px-7 w-full items-center">
-              <div className="border border-gray-300 rounded-[50%] w-[150px] h-[150px] overflow-hidden m-3">
+          <div className="profileContainer w-[80%]  md:w-[60%] left-[10%] md:left-[20%] pb-4 absolute z-20 top-[50%] rounded-2xl flex flex-col justify-around items-start bg-white">
+            <div className="flex px-7 max-[600px]:flex-col  max-[600px]:text-center w-full items-center">
+              <div className="border border-gray-300 rounded-[50%] w-[120px] h-[120px] md:w-[150px] md:h-[150px] overflow-hidden m-3">
                 <img
-                  className="w-full h-full border-none object-cover flex items-center justify-center  rounded-[50%]"
-                  src={
-                    user.profilePictures ||
-                    "https://t3.ftcdn.net/jpg/05/17/79/88/360_F_517798821_clzISlzMqjLxx8YjYFBfOaVvIj5qifwm.jpg"
-                  }
+                  className="w-full h-full border-none object-cover flex items-center justify-center rounded-[50%]"
+                  src={user.profilePictures || "https://t3.ftcdn.net/jpg/05/17/79/88/360_F_517798821_clzISlzMqjLxx8YjYFBfOaVvIj5qifwm.jpg"}
                   alt=""
                 />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold">Username: {user.username}</span>
+                <span className="font-bold text-lg">{user.username}</span>
                 <p className="text-blue-500">{user.followerUser.length} follower</p>
                 <p className="text-gray-400 flex items-center gap-1 font-medium">
                   Account Created: {formattedDate}
@@ -103,7 +101,7 @@ const Profile: React.FC = () => {
                 </p>
               </div>
             </div>
-            <div className="text-start w-[90%] text-ellipsis flex flex-col justify-start mx-auto text-gray-600">
+            <div className="text-start w-[90%] max-[600px]:text-center text-ellipsis flex flex-col justify-start mx-auto text-gray-600">
               {user.bio}
             </div>
           </div>
@@ -124,11 +122,9 @@ const Profile: React.FC = () => {
         </div>
 
         {isEditMode && (
-          <div className="editModal w-[60%] rounded-xl p-5 top-[16%] left-[20%] absolute bg-white border border-gray-600 z-30">
+          <div className="editModal w-[80%] md:w-[60%] rounded-xl p-5 top-[16%] left-[10%] md:left-[20%] absolute bg-white border border-gray-600 z-30">
             <div className="flex items-center justify-between">
-              <h2 className="pt-3 text-black font-bold text-lg">
-                Edit Profile
-              </h2>
+              <h2 className="pt-3 text-black font-bold text-lg">Edit Profile</h2>
               <TiDelete
                 onClick={() => setIsEditMode(false)}
                 className="text-black duration-200 hover:text-red-600 text-3xl cursor-pointer"
@@ -166,17 +162,13 @@ const Profile: React.FC = () => {
                   maxLength={200}
                 />
                 <span
-                  className={`bio-char-count ${
-                    200 - bio.length <= 5 ? "text-red-600" : "hidden"
-                  }`}
+                  className={`bio-char-count ${200 - bio.length <= 5 ? "text-red-600" : "hidden"}`}
                 >
                   {`${200 - bio.length} characters remaining`}
                 </span>
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-medium text-[#171717]">
-                  Profile Picture URL:
-                </label>
+                <label className="font-medium text-[#171717]">Profile Picture URL:</label>
                 <input
                   className="border border-[#A3A3A3] p-[7px] outline-red-600 rounded-lg"
                   type="text"
@@ -186,9 +178,7 @@ const Profile: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-medium text-[#171717]">
-                  Banner Picture URL:
-                </label>
+                <label className="font-medium text-[#171717]">Banner Picture URL:</label>
                 <input
                   className="border border-[#A3A3A3] p-[7px] outline-red-600 rounded-lg"
                   type="text"
@@ -208,14 +198,13 @@ const Profile: React.FC = () => {
           </div>
         )}
       </section>
-      <section
-        className={userPosts.length == 0 ? "hidden" : "flex flex-col gap-3"}
-      >
-        <div className="bg-[#f7f7f7]  gap-2 rounded-b-2xl shadow-md flex justify-start px-[30px] pb-[15px] items-end w-[60%] m-auto h-[170px]">
+
+      <section className={userPosts.length === 0 ? "hidden" : "flex flex-col gap-3"}>
+        <div className="bg-[#f7f7f7] gap-2 rounded-b-2xl shadow-md flex justify-start px-[30px] pb-[15px] items-end w-[80%] md:w-[60%] m-auto h-[170px] max-[600px]:h-[220px]">
           <span>Posts:</span>
           <span>{userPosts.length}</span>
         </div>
-        <div className="w-[60%] m-auto">
+        <div className="w-[80%] md:w-[60%] m-auto">
           <div className="w-full bg-[#f7f7f7] p-3 rounded-2xl shadow-md m-auto">
             <div className="post-list grid grid-cols-1 md:grid-cols-2 gap-4">
               {userPosts.map((post) => (
@@ -243,14 +232,11 @@ const Profile: React.FC = () => {
           </div>
         </div>
       </section>
+
       <section
-        className={
-          userPosts.length == 0
-            ? "flex h-[454px] flex-col justify-end pb-[30px] items-center w-full m-auto"
-            : "hidden"
-        }
+        className={userPosts.length === 0 ? "flex h-[454px] flex-col justify-end pb-[30px] items-center w-full m-auto" : "hidden"}
       >
-        <div className="w-[60%] rounded-xl mb-[10px] flex flex-col gap-4 justify-center items-center bg-white p-3">
+        <div className="w-[80%] md:w-[60%] rounded-xl mb-[10px] flex flex-col gap-4 justify-center items-center bg-white p-3">
           <span>Not post yet</span>
           <div className="h-[150px] [w-150px] overflow-hidden">
             <img src={notPost} className="w-[300px] object-cover" alt="" />

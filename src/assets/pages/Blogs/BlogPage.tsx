@@ -20,7 +20,7 @@ const BlogPage: React.FC = () => {
     dispatch(fetchPosts());
   }, [dispatch]);
 
-  if (isLoading) return <div className="flex justify-center items-center"><Loading/></div>;
+  if (isLoading) return <div className="flex justify-center items-center"><Loading /></div>;
   if (error) return <div>Error: {error}</div>;
 
   const sortedPosts = [...posts].sort((a, b) => b.id - a.id);
@@ -48,7 +48,7 @@ const BlogPage: React.FC = () => {
 
   const handlePageClick = (pageNumber: number | string) => {
     if (pageNumber !== "..." && pageNumber !== currentPage) {
-      setCurrentPage(Number(pageNumber)); 
+      setCurrentPage(Number(pageNumber));
     }
   };
 
@@ -63,7 +63,7 @@ const BlogPage: React.FC = () => {
   return (
     <>
       <Header />
-      <section className="blogs w-[70%] m-auto">
+      <section className="blogs w-[95%] sm:w-[90%] md:w-[70%] lg:w-[70%] mx-auto">
         {currentPosts.map(
           ({
             id,
@@ -76,14 +76,14 @@ const BlogPage: React.FC = () => {
           }) => (
             <div
               key={id}
-              className="blog-item w-full gap-6 px-2 flex border-b py-4"
+              className="blog-item w-full gap-6 px-2 flex flex-col md:flex-row border-b py-4"
             >
               <img
                 src={postPicture}
                 alt={title || "Post Image"}
-                className="w-[30%] h-48 object-cover"
+                className="w-full md:w-[30%] h-48 object-cover mb-4 md:mb-0"
               />
-              <div className="w-[60%] flex flex-col justify-between">
+              <div className="w-full md:w-[60%] flex flex-col justify-between">
                 <p className="text-sm text-gray-600">
                   This blog was created By {username}
                 </p>
@@ -120,13 +120,11 @@ const BlogPage: React.FC = () => {
           <button
             key={index}
             onClick={() => handlePageClick(number)}
-            className={`px-3 py-1 border rounded ${
-              typeof number === "number" && currentPage === number
-                ? "bg-orange-500 text-white"
-                : ""
-            }`}
-            disabled={number === "..."}
-          >
+            className={`px-3 py-1 border rounded ${typeof number === "number" && currentPage === number
+              ? "bg-orange-500 text-white"
+              : ""
+              }`}
+            disabled={number === "..."}>
             {number}
           </button>
         ))}

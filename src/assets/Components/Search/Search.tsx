@@ -28,7 +28,7 @@ const Search = () => {
   const isProfilePage = location.pathname === `/profile/${username}`;
 
   return (
-    <div className={isProfilePage ? "hidden" : "search w-1/2 relative"}>
+    <div className={isProfilePage ? "hidden" : "search w-1/2 max-md:w-[90%] relative"}>
       <input
         className="border-b border-gray-300 outline-none w-full py-2"
         type="text"
