@@ -4,18 +4,20 @@ import { useSelector } from "react-redux";
 import moderator from "../../../../images/moderator.png";
 import "../../../../../input.css";
 import { FaPlus } from "react-icons/fa";
+import { useMemo } from "react";
 
 const InfoAside = () => {
   const blogs = useSelector((state: RootState) => state.posts.posts.slice(0, 6)); 
-  const mostLikedBlogs = useSelector((state: RootState) =>
-    [...state.posts.posts]
-      .sort((a, b) => b.likeCount - a.likeCount) 
-      .slice(0, 3)
-  );
+  const posts = useSelector((state: RootState) => state.posts.posts); 
+
+  const mostLikedBlogs = useMemo(() => {
+    return [...posts]
+      .sort((a, b) => b.likedUsers.length - a.likedUsers.length)
+      .slice(0, 3);
+  }, [posts]);
 
   return (
     <div className="w-[31%] flex flex-col gap-3">
-      {/* Blogs Section */}
       <div className="blogsSection bg-[#EAEAEA] pb-2 rounded-xl">
         <h2 className="bg-white py-2 px-4">Blogs</h2>
         {blogs.map((blog) => (
@@ -26,11 +28,11 @@ const InfoAside = () => {
             <img
               src={blog.postPicture || "default-image.png"} 
               alt={blog.title}
-              className="w-12 h-12 object-cover rounded-md"
+              className="w-[70px] h-[60px] object-cover rounded-md"
             />
             <div>
               <p className="text-sm font-medium">{blog.title}</p>
-              <span className="text-xs text-gray-500">{blog.likeCount} likes</span>
+              <span className="text-xs text-gray-500">{blog.likedUsers.length} likes</span>
             </div>
           </div>
         ))}
@@ -82,6 +84,7 @@ const InfoAside = () => {
           </button>
         </div>
       </div>
+      {/* Most Liked Blogs Section */}
       <div className="mostLikedBlogs bg-[#EAEAEA] pb-2 rounded-xl">
         <h2 className="bg-white py-2 px-4">Most Liked Blogs</h2>
         {mostLikedBlogs.map((blog) => (
@@ -93,7 +96,7 @@ const InfoAside = () => {
               {blog.title}
             </a>
             <span className="flex items-center gap-1 text-xs text-gray-500">
-              {blog.likeCount} <AiFillLike />
+              {blog.likedUsers.length} <AiFillLike />
             </span>
           </div>
         ))}

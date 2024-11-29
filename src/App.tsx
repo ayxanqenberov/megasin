@@ -17,6 +17,7 @@ import AdminHome from './assets/pages/adminPage/pagesInAdmin/AdminHome';
 import NotFound from './assets/Components/NotFound/NotFound';
 import Loading from './assets/Components/Loadings/Loading';
 import Profiles from './assets/pages/OtherProfiles/Profiles';
+import AdminWidget from './assets/pages/adminPage/pagesInAdmin/AdminWidget';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -50,6 +51,7 @@ const App = () => {
         <Route path='/admin/posts' element={<AdminPosts/>} />
         <Route path='/admin/comments' element={<AdminCommen/>} />
         <Route path='/admin/notifications' element={<AdminNotf/>} />
+        <Route path='/admin/widgets' element={<AdminWidget/>}/>
         <Route path='/profiles/:username' element={<Profiles/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>

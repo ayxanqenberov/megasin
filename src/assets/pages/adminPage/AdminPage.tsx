@@ -9,6 +9,7 @@ import AdminCommen from "./pagesInAdmin/AdminCommen";
 import AdminNotf from "./pagesInAdmin/AdminNotf";
 import AdminHome from "./pagesInAdmin/AdminHome";
 import AdminLog from "./AdminLog";
+import AdminWidget from "./pagesInAdmin/AdminWidget";
 
 const AdminPage = () => {
   const location = useLocation();
@@ -16,12 +17,9 @@ const AdminPage = () => {
   const page = queryParams.get("page");
   const adminUser = useSelector((state) => state.admin.user);
   const dispatch = useDispatch();
-
-  // Sayfa yüklendiğinde token kontrolü
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
     if (token && !adminUser) {
-      // Token varsa kullanıcı bilgilerini yükle
       dispatch(loginAdmin({ token }));
     }
   }, [dispatch, adminUser]);
@@ -42,6 +40,8 @@ const AdminPage = () => {
         return <AdminNotf />;
       case "home":
         return <AdminHome />;
+      case "widgets":
+        return <AdminWidget/>;
       default:
         return <AdminLog />;
     }

@@ -11,7 +11,8 @@ const FollowButton: React.FC<FollowButtonProps> = ({ targetUserId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { user, isLoading } = useSelector((state: RootState) => state.user);
 
-  const isFollowing = user?.followerUser.includes(targetUserId);
+  // Ensure that followerUser is defined before calling includes()
+  const isFollowing = user?.followerUser?.includes(targetUserId) || false;
 
   const handleFollowToggle = () => {
     if (!isLoading) {
@@ -21,10 +22,9 @@ const FollowButton: React.FC<FollowButtonProps> = ({ targetUserId }) => {
 
   return (
     <button
+      id="notification-button" // Ensure this element can trigger the audio
       onClick={handleFollowToggle}
-      className={`px-4 py-2 rounded ${
-        isFollowing ? "bg-gray-200 text-black" : "bg-blue-500 text-white"
-      }`}
+      className={`px-4 py-2 rounded ${isFollowing ? "bg-gray-200 text-black" : "bg-blue-500 text-white"}`}
     >
       {isFollowing ? "Following" : "Follow"}
     </button>

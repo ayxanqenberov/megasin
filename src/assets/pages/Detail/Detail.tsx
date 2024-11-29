@@ -115,7 +115,7 @@ const Detail = () => {
           </div>
         </div>
       </section>
-      <section className="comment-section mt-5 w-[70%] m-auto">
+      <div className="comment-div mt-5 w-[70%] m-auto">
         <h2>Comments</h2>
         {filteredComments.map((comment) => (
           <div
@@ -139,7 +139,7 @@ const Detail = () => {
             </small>
           </div>
         ))}
-      </section>
+      </div>
     </>
   );
 };

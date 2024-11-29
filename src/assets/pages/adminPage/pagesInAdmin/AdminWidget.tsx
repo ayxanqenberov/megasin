@@ -1,9 +1,11 @@
 import React from 'react'
+import AdminAside from '../adminComp/adminAside'
 
 const AdminWidget = () => {
   return (
-    <div>
-      
+    <div className='flex'>
+      <AdminAside/>
+      sss
     </div>
   )
 }
