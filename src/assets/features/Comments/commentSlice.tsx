@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { user_api_key } from "../Users/userSlice";
+import { RootState } from "../../redux/app/store";
 
 interface Comment {
   id: string;
@@ -81,7 +82,7 @@ export const checkup = createAsyncThunk<
 export const sendComment = createAsyncThunk<
   CommentWithDetails,
   { comment: string; postId: number },
-  { state: { user: any }; rejectValue: string }
+  { state: RootState; rejectValue: string }
 >("comments/sendComment", async ({ comment, postId }, { getState, rejectWithValue }) => {
   try {
     const state = getState();
@@ -90,7 +91,6 @@ export const sendComment = createAsyncThunk<
     if (!currentUser) {
       return rejectWithValue("User not logged in");
     }
-
     const response = await axios.post(`https://${comment_api}.mockapi.io/comments`, {
       userId: currentUser.id,
       comment,
@@ -99,22 +99,24 @@ export const sendComment = createAsyncThunk<
     });
 
     const createdComment = response.data;
+    const post = state.posts.posts.find((p) => p.id === postId) || null;
 
     return {
       id: createdComment.id,
       comment: createdComment.comment,
       created: createdComment.created,
-      post: { id: postId, title: "Post Title Placeholder" }, // Post bilgisi olmayabilir
+      post,
       user: {
         id: currentUser.id,
         username: currentUser.username,
-        profilePictures: currentUser.profilePictures,
+        profilePictures: currentUser.profilePicture,
       },
     };
   } catch (error: any) {
     return rejectWithValue("Failed to send comment to the API");
   }
 });
+
 
 const commentSlice = createSlice({
   name: "comments",

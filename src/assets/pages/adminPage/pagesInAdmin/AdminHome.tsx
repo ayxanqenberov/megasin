@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom"; // Yeni eklenen import
+import { useNavigate } from "react-router-dom"; 
 import { RootState } from "../../../redux/app/store";
 import { fetchUsers } from "../../../features/Users/userSlice";
 import { fetchPosts } from "../../../features/Posts/postSlice";
-import { checkup } from "../../../features/Comments/commentSlice";
-import { logoutAdmin } from "../../../features/Admin/adminSlice"; // Logout action import
+import { logoutAdmin } from "../../../features/Admin/adminSlice"; 
 import AdminAside from "../adminComp/adminAside";
 import {
   PieChart,
@@ -19,10 +18,11 @@ import {
   Legend,
 } from "recharts";
 import { IoLogOutOutline } from "react-icons/io5";
+import { checkup } from "../../../features/Comments/commentSlice";
 
 const AdminHome = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Yeni eklenen navigate
+  const navigate = useNavigate(); 
 
   const { users, isLoading: userLoading } = useSelector(
     (state: RootState) => state.user
@@ -145,4 +145,4 @@ const AdminHome = () => {
   );
 };
 
-export default AdminHome;
+export default AdminHome;  

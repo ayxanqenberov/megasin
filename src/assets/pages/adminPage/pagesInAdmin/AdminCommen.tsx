@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../redux/app/store";
-import { checkup } from "../../../features/Comments/commentSlice"; 
 import AdminAside from "../adminComp/adminAside";
+import { checkup } from "../../../features/Comments/commentSlice";
 
 const AdminCommen = () => {
   const dispatch = useDispatch();
-  const { commentsWithDetails = [], isLoading, error } = useSelector(
-    (state: RootState) => state.comments || {} 
+  const { commentsWithDetails, isLoading, error } = useSelector(
+    (state: RootState) => state.comments
   );
 
   useEffect(() => {
-    dispatch(checkup());
+    dispatch(checkup);
   }, [dispatch]);
 
   return (
@@ -28,22 +28,16 @@ const AdminCommen = () => {
           <table className="min-w-full table-auto border-collapse border border-gray-300">
             <thead className="bg-gray-100">
               <tr>
-                <th className="border border-gray-300 px-4 py-2 text-left">
-                  Username
-                </th>
-                <th className="border border-gray-300 px-4 py-2 text-left">
-                  Comment
-                </th>
-                <th className="border border-gray-300 px-4 py-2 text-left">
-                  Date
-                </th>
+                <th className="border border-gray-300 px-4 py-2">Username</th>
+                <th className="border border-gray-300 px-4 py-2">Comment</th>
+                <th className="border border-gray-300 px-4 py-2">Date</th>
               </tr>
             </thead>
             <tbody>
               {commentsWithDetails.map((comment) => (
                 <tr key={comment.id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2">
-                    {comment.user.id || "Unknown User"}
+                    {comment.user?.username || "Unknown User"}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     {comment.comment}

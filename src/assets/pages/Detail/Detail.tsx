@@ -6,7 +6,6 @@ import { RootState } from "../../redux/app/store";
 import Header from "../../Components/Header/Header";
 import { IoMdSend } from "react-icons/io";
 import { useEffect, useState } from "react";
-import Loading from "../../Components/Loadings/Loading";
 
 const Detail = () => {
   const location = useLocation();
@@ -14,7 +13,7 @@ const Detail = () => {
   const postId = parseInt(queryParams.get("postId") || "0", 10);
 
   const dispatch = useDispatch();
-  const { posts,error: postsError } = useSelector(
+  const { posts, error: postsError } = useSelector(
     (state: RootState) => state.posts
   );
   const { commentsWithDetails, error: commentsError } = useSelector(
@@ -36,7 +35,7 @@ const Detail = () => {
   }
   if (!post) {
     return (
-      <div  className="flex items-center h-[100vh] text-red-600 justify-center">
+      <div className="flex items-center h-[100vh] text-red-600 justify-center">
         <h2>Post loading...</h2>
       </div>
     );
@@ -44,7 +43,9 @@ const Detail = () => {
 
   const filteredComments = commentsWithDetails
     .filter((comment) => comment.post?.id === postId)
-    .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
+    .sort(
+      (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
+    );
 
   const handleSendComment = () => {
     if (!user) {
@@ -56,7 +57,7 @@ const Detail = () => {
       alert("Comment cannot be empty.");
       return;
     }
-
+    console.log(commentsWithDetails)
     dispatch(
       sendComment({
         comment: commentText,
@@ -74,7 +75,10 @@ const Detail = () => {
       <section>
         <div className="flex pt-3 items-start w-[70%] gap-[10px] m-auto">
           <div className="flex w-[65%] bg-white border-[0.5px] mb-3 border-t-none border-[#d2d1d1] flex-col">
-            <h1 className="p-2 text-2xl capitalize" style={{ fontFamily: "Oswald" }}>
+            <h1
+              className="p-2 text-2xl capitalize"
+              style={{ fontFamily: "Oswald" }}
+            >
               {post.title}
             </h1>
             <img
@@ -108,32 +112,33 @@ const Detail = () => {
               />
               <span className="text-lg font-semibold">{post.username}</span>
             </div>
-            {/* follo */}
           </div>
         </div>
       </section>
       <section className="comment-section mt-5 w-[70%] m-auto">
         <h2>Comments</h2>
-        {filteredComments.length === 0 ? (
-          <p>No comments for this post.</p>
-        ) : (
-          filteredComments.map((comment) => (
-            <div key={comment.id} className="comment-card mb-3 p-3 border rounded">
-              <div className="flex items-center gap-3 mb-2">
-                <img
-                  src={comment.user?.profilePicture || "https://via.placeholder.com/50"}
-                  alt={`${comment.user?.name}'s profile`}
-                  className="w-[40px] h-[40px] rounded-full"
-                />
-                <span className="font-semibold">{comment.user?.name}</span>
-              </div>
-              <p>{comment.comment}</p>
-              <small className="text-gray-500">
-                Posted on: {new Date(comment.created).toLocaleString()}
-              </small>
+        {filteredComments.map((comment) => (
+          <div
+            key={comment.id}
+            className="comment-card mb-3 p-3 border rounded"
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <img
+                src={
+                  comment.user?.profilePictures ||
+                  "https://via.placeholder.com/50"
+                }
+                alt={`${comment.user?.username}'s profile`}
+                className="w-[40px] h-[40px] rounded-full"
+              />
+              <span className="font-semibold">{comment.user?.username}</span>
             </div>
-          ))
-        )}
+            <p>{comment.comment}</p>
+            <small className="text-gray-500">
+              Posted on: {new Date(comment.created).toLocaleString()}
+            </small>
+          </div>
+        ))}
       </section>
     </>
   );

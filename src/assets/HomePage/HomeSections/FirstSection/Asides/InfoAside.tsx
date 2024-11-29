@@ -1,33 +1,39 @@
-import React from "react";
-import "../../../../../input.css";
-import { FaPlus } from "react-icons/fa";
-import moderator from "../../../../images/moderator.png";
 import { AiFillLike } from "react-icons/ai";
 import { RootState } from "../../../../redux/app/store";
 import { useSelector } from "react-redux";
+import moderator from "../../../../images/moderator.png";
+import "../../../../../input.css";
+import { FaPlus } from "react-icons/fa";
 
 const InfoAside = () => {
-  const { user } = useSelector((state: RootState) => state.user);
+  const blogs = useSelector((state: RootState) => state.posts.posts.slice(0, 6)); 
+  const mostLikedBlogs = useSelector((state: RootState) =>
+    [...state.posts.posts]
+      .sort((a, b) => b.likeCount - a.likeCount) 
+      .slice(0, 3)
+  );
 
   return (
-    <div className="w-[31%] flex flex-col gap-3 ">
-      <div className="flex flex-col gap-[1.3px] bg-[#EAEAEA] pb-[px] rounded-xl">
-        <div className="blogListsAsidePart bg-white border-none border-b-gray-400  py-2 px-4">
-          <h2 className="">Blogs</h2>
-        </div>
-        
-        <div className="blogListsAsidePart bg-white px-4 py-2">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias unde
-            qui autem obcaecati necessitatibus ab odit tempora, placeat quae
-            minima!
-          </p>
-          <span>13</span>
-        </div>
-        <div className="blogListsAsidePart bg-white px-4 py-2">
-          <p>aaaa</p>
-          <span>13</span>
-        </div>
+    <div className="w-[31%] flex flex-col gap-3">
+      {/* Blogs Section */}
+      <div className="blogsSection bg-[#EAEAEA] pb-2 rounded-xl">
+        <h2 className="bg-white py-2 px-4">Blogs</h2>
+        {blogs.map((blog) => (
+          <div
+            key={blog.id}
+            className="blogListsAsidePart bg-white px-4 py-2 flex items-center gap-3"
+          >
+            <img
+              src={blog.postPicture || "default-image.png"} 
+              alt={blog.title}
+              className="w-12 h-12 object-cover rounded-md"
+            />
+            <div>
+              <p className="text-sm font-medium">{blog.title}</p>
+              <span className="text-xs text-gray-500">{blog.likeCount} likes</span>
+            </div>
+          </div>
+        ))}
       </div>
       <div className="relative inline-block p-1 rounded-lg">
         <div className="absolute inset-0 bg-gradient-to-b from-blue-500 to-purple-500 rounded-lg" />
@@ -76,22 +82,21 @@ const InfoAside = () => {
           </button>
         </div>
       </div>
-      <div className={user ? "flex flex-col gap-[3.5px]" : "hidden"}>
-        <div className="blogListsAsidePart bg-white px-4 py-2">
-          <h2>Most Liked Blogs</h2>
-        </div>
-          <div className="blogListsAsidePart flex items-baseline justify-between bg-white px-4 py-2">
-            <a href="">hi everyone ! we are Megasin . We also support them . beacuse we are better </a>
-            <span className="flex items-center gap-1">123 <AiFillLike/></span>
+      <div className="mostLikedBlogs bg-[#EAEAEA] pb-2 rounded-xl">
+        <h2 className="bg-white py-2 px-4">Most Liked Blogs</h2>
+        {mostLikedBlogs.map((blog) => (
+          <div
+            key={blog.id}
+            className="blogListsAsidePart bg-white px-4 py-2 flex items-center justify-between"
+          >
+            <a href={`/${blog.id}`} className="text-sm font-medium">
+              {blog.title}
+            </a>
+            <span className="flex items-center gap-1 text-xs text-gray-500">
+              {blog.likeCount} <AiFillLike />
+            </span>
           </div>
-          <div className="blogListsAsidePart flex items-baseline justify-between bg-white px-4 py-2">
-            <a href="">hi everyone ! we are Megasin</a>
-            <span className="flex items-center gap-1">123 <AiFillLike/></span>
-          </div>
-          <div className="blogListsAsidePart flex items-baseline justify-between bg-white px-4 py-2">
-            <a href="">hi everyone ! we are Megasin</a>
-            <span className="flex items-center gap-1">123 <AiFillLike/></span>
-          </div>
+        ))}
       </div>
     </div>
   );
