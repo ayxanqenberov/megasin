@@ -5,6 +5,7 @@ import userReducer from "../../features/Users/userSlice";
 import searchReducer from "../../features/Search/searchSlice"
 import adminReducer from "../../features/Admin/adminSlice"
 import notificationsReducer from "../../features/Notificians/notifcnsSlice"
+import newsReducer from "../../features/News/newsSlice"
 export const store = configureStore({
   reducer: {
     user: userReducer,
@@ -12,6 +13,7 @@ export const store = configureStore({
     search: searchReducer,
     admin: adminReducer,
     notifications: notificationsReducer,
+    news: newsReducer,
   },
 });
 

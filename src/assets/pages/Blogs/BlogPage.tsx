@@ -6,13 +6,22 @@ import { fetchPosts } from "../../features/Posts/postSlice";
 import { AiFillLike } from "react-icons/ai";
 import Loading from "../../Components/Loadings/Loading";
 import Footer from "../../Components/Footer/Footer";
+import { useNavigate } from "react-router-dom";
+
+const getDescriptionStyles = (formats: string[]) => {
+  let style: React.CSSProperties = {};
+  if (formats.includes("bold")) style.fontWeight = "bold";
+  if (formats.includes("italic")) style.fontStyle = "italic";
+  if (formats.includes("underlined")) style.textDecoration = "underline";
+  return style;
+};
 
 const BlogPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [likes, setLikes] = useState<{ [key: number]: boolean }>({});
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
-
+  const navigate = useNavigate();
   const { posts, isLoading, error } = useSelector(
     (state: RootState) => state.posts
   );
@@ -21,7 +30,12 @@ const BlogPage: React.FC = () => {
     dispatch(fetchPosts());
   }, [dispatch]);
 
-  if (isLoading) return <div className="flex justify-center items-center"><Loading /></div>;
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center">
+        <Loading />
+      </div>
+    );
   if (error) return <div>Error: {error}</div>;
 
   const sortedPosts = [...posts].sort((a, b) => b.id - a.id);
@@ -30,9 +44,9 @@ const BlogPage: React.FC = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
   const getPageNumbers = () => {
     const pageNumbers: (number | string)[] = [];
-
     if (currentPage > 2) pageNumbers.push(1);
     if (currentPage > 3) pageNumbers.push("...");
     for (
@@ -61,6 +75,10 @@ const BlogPage: React.FC = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
+  const getDetail = (username: string, id: number) => {
+    navigate(`/@${username}/detail?postId=${id}`);
+  };
+
   return (
     <>
       <Header />
@@ -74,10 +92,11 @@ const BlogPage: React.FC = () => {
             username,
             createdAt,
             likedUsers,
+            formats, // Stil bilgisi
           }) => (
             <div
               key={id}
-              className="blog-item w-full gap-6 px-2 flex flex-col md:flex-row border-b py-4"
+              className="blog-item w-full border-gray-400 gap-6 px-2 flex flex-col md:flex-row border-b py-4"
             >
               <img
                 src={postPicture}
@@ -90,11 +109,17 @@ const BlogPage: React.FC = () => {
                 </p>
                 <h2
                   style={{ fontFamily: "Oswald" }}
-                  className="text-2xl uppercase font-black"
+                  className="text-2xl cursor-pointer hover:text-red-600 duration-200 uppercase font-black"
+                  onClick={() => getDetail(username, id)}
                 >
                   {title}
                 </h2>
-                <p className="text-ellipsis">{content}</p>
+                <p
+                  className="text-ellipsis"
+                  style={getDescriptionStyles(formats)} 
+                >
+                  {content}
+                </p>
                 <div className="flex items-center gap-1.5">
                   <AiFillLike
                     className={likes[id] ? "text-red-500" : "text-gray-600"}
@@ -121,11 +146,13 @@ const BlogPage: React.FC = () => {
           <button
             key={index}
             onClick={() => handlePageClick(number)}
-            className={`px-3 py-1 border rounded ${typeof number === "number" && currentPage === number
-              ? "bg-orange-500 text-white"
-              : ""
-              }`}
-            disabled={number === "..."}>
+            className={`px-3 py-1 border rounded ${
+              typeof number === "number" && currentPage === number
+                ? "bg-orange-500 text-white"
+                : ""
+            }`}
+            disabled={number === "..."}
+          >
             {number}
           </button>
         ))}
@@ -137,9 +164,10 @@ const BlogPage: React.FC = () => {
           Next
         </button>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };
 
 export default BlogPage;
+

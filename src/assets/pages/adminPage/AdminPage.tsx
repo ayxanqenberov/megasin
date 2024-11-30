@@ -8,7 +8,7 @@ import AdminPosts from "./pagesInAdmin/AdminPosts";
 import AdminNotf from "./pagesInAdmin/AdminNotf";
 import AdminHome from "./pagesInAdmin/AdminHome";
 import AdminLog from "./AdminLog";
-import AdminWidget from "./pagesInAdmin/AdminWidget";
+import AdminWidget from "./pagesInAdmin/AdminNews";
 
 const AdminPage = () => {
   const location = useLocation();

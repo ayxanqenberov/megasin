@@ -152,8 +152,6 @@ const Blogs = () => {
                 >
                   {item.username}
                 </span>
-
-                {/* Only show the FollowButton if the logged-in user is NOT the post author */}
                 {user?.username !== item.username && (
                   <FollowButton targetUserId={item.id} />
                 )}
@@ -173,16 +171,15 @@ const Blogs = () => {
                   <AiFillLike
                     className={
                       item.likedUsers.includes(user?.id)
-                        ? "text-red-500"
-                        : "text-gray-600"
+                        ? "max-sm:text-[19px] text-red-500"
+                        : "max-sm:text-[19px] text-gray-600"
                     }
                   />
-                  <span>{item.likedUsers.length}</span>
+                  <span className="max-sm:text-[16.5px]">{item.likedUsers.length}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <FaComment />
-                  <span>{item.comentCount}</span>
-                </div>
+                <span className="text-gray-400 max-sm:text-[16.5px]">
+                  {new Date(item.createdAt).toLocaleDateString()}
+                </span>
               </div>
             </div>
           </div>

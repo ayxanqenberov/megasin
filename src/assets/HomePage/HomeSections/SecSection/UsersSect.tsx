@@ -55,7 +55,7 @@ const UsersSect = () => {
       >
         {usersToDisplay.map((item) => (
           <SwiperSlide key={item.id}>
-            <div className="bg-white flex flex-col items-center gap-2 py-4 rounded-md">
+            <div className="bg-white max-sm:w-[230px]  max-lg:w-[250px] h-[260px] flex flex-col items-center gap-2 py-4 rounded-md">
               <div>
                 <img
                   src={item.profilePictures}

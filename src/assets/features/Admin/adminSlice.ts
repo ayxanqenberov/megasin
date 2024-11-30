@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const comment_api = import.meta.env.VITE_COMMENT_API_KEY
+export const comment_api = import.meta.env.VITE_COMMENT_API_KEY
 export const loginAdmin = createAsyncThunk(
   "admin/login",
   async ({ username, password }, thunkAPI) => {

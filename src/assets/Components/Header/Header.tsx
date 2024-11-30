@@ -4,16 +4,18 @@ import { FaUserAlt } from "react-icons/fa";
 import { IoBookSharp, IoNotifications } from "react-icons/io5";
 import { MdDarkMode, MdHome, MdOutlineDarkMode } from "react-icons/md";
 import { RiNewsLine } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/app/store";
 import Search from "../Search/Search";
 import { fetchNotifications } from "../../features/Notificians/notifcnsSlice";
 import notfiSound from "../../pages/adminPage/adminComp/mixkit-correct-answer-tone-2870.wav";
 import Menu from "../Menu/Menu";
+
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Mevcut sayfayı almak için
   const [menuOpen, setMenuOpen] = useState(false);
 
   const userName = useSelector((state: RootState) => state.user.user?.username);
@@ -47,7 +49,6 @@ const Header = () => {
           console.error("Audio play error:", err);
         });
       };
-      // document.getElementById('notification-button')?.addEventListener('click', playAudio);
     }
   }, [notifications]);
 
@@ -60,9 +61,13 @@ const Header = () => {
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  const isActive = (path: string) =>
+    location.pathname === path ? "text-red-700" : "hover:text-red-700";
+
   return (
     <header className="bg-white text-black">
-      <div className="headerpart border-none flex justify-between items-center px-[19px] max-[]:">
+      <div className="headerpart border-none flex justify-between items-center px-[19px]">
         <div className="headerLeft flex items-center justify-around w-[55%] max-md:w-[25%] h-[75px]">
           <a
             className="text-2xl max-[360px]:text-[19px] font-bold text-[#E91E63]"
@@ -74,7 +79,9 @@ const Header = () => {
             <li>
               <a
                 href="/"
-                className="flex flex-col items-center hover:text-red-700 duration-200"
+                className={`flex flex-col items-center duration-200 ${isActive(
+                  "/"
+                )}`}
               >
                 <MdHome className="text-[25px]" />
                 <span className="text-[13px]">Home</span>
@@ -83,7 +90,9 @@ const Header = () => {
             <li>
               <a
                 href="/blogs"
-                className="flex flex-col items-center hover:text-red-700 duration-200"
+                className={`flex flex-col items-center duration-200 ${isActive(
+                  "/blogs"
+                )}`}
               >
                 <IoBookSharp onClick={getBlogs} className="text-[25px]" />
                 <span className="text-[13px]">Blogs</span>
@@ -91,8 +100,11 @@ const Header = () => {
             </li>
             <li>
               <a
-                href="#"
-                className="flex flex-col items-center hover:text-red-700 duration-200"
+              onClick={() => navigate('/news')}
+                href=""
+                className={`flex flex-col items-center duration-200 ${isActive(
+                  "/news"
+                )}`}
               >
                 <RiNewsLine className="text-[25px]" />
                 <span className="text-[13px]">News</span>
@@ -100,13 +112,13 @@ const Header = () => {
             </li>
             <li>
               <a
-                href=""
-                className="flex flex-col items-center hover:text-red-700 duration-200"
+                href="#"
+                className={`flex flex-col items-center duration-200 ${isActive(
+                  `/${username}/new`
+                )}`}
+                onClick={user ? getWritePost : getProfile}
               >
-                <BsPencilSquare
-                  onClick={user ? getWritePost : getProfile}
-                  className="text-[25px]"
-                />
+                <BsPencilSquare className="text-[25px]" />
                 <span className="text-[13px]">Write</span>
               </a>
             </li>
@@ -152,42 +164,6 @@ const Header = () => {
               </div>
             )}
           </div>
-          {menuOpen && (
-            <div className="mobileMenu md:hidden flex flex-col gap-5 bg-white text-black p-4 absolute top-16 right-0 w-[200px] rounded-lg shadow-lg">
-              <ul>
-                <li>
-                  <a href="/" onClick={() => navigate("/")}>
-                    Home
-                  </a>
-                </li>
-                <li>
-                  <a href="/blogs" onClick={getBlogs}>
-                    Blogs
-                  </a>
-                </li>
-                <li>
-                  <a href="">News</a>
-                </li>
-                <li>
-                  <a href="#" onClick={user ? getWritePost : getProfile}>
-                    Write
-                  </a>
-                </li>
-                <div className="flex gap-2">
-                  <FaUserAlt
-                    onClick={getProfile}
-                    className="text-lg cursor-pointer hover:text-red-700 duration-200"
-                  />
-                  <div>
-                    <IoNotifications
-                      className="text-lg cursor-pointer hover:text-red-700 duration-200"
-                      onClick={toggleModal}
-                    />
-                  </div>
-                </div>
-              </ul>
-            </div>
-          )}
         </div>
       </div>
     </header>

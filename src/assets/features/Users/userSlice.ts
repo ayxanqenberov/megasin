@@ -38,29 +38,44 @@ const initialState: UserState = {
 
 export const user_api_key = import.meta.env.VITE_USER_API_KEY
 const handleApiError = (error: any) => error.response?.data?.message || error.message || "Something went wrong";
-export const registerUser = createAsyncThunk<User, { email: string; password: string; username: string }, { rejectValue: string }>(
+export const registerUser = createAsyncThunk<
+  User,
+  { email: string; password: string; username: string },
+  { rejectValue: string }
+>(
   "user/registerUser",
   async ({ email, password, username }, { rejectWithValue }) => {
     try {
-      const existingUsers = await axios.get(`https://${user_api_key}.mockapi.io/users/Users`);
-      const usernameExists = existingUsers.data.some((user: User) => user.username === username);
-      const emailExists = existingUsers.data.some((user: User) => user.email === email);
+      const existingUsers = await axios.get(
+        `https://${user_api_key}.mockapi.io/users/Users`
+      );
+      const usernameExists = existingUsers.data.some(
+        (user: User) => user.username === username
+      );
+      const emailExists = existingUsers.data.some(
+        (user: User) => user.email === email
+      );
 
       if (usernameExists) throw new Error("Username already in use.");
       if (emailExists) throw new Error("Email already in use.");
 
-      const response = await axios.post(`https://${user_api_key}.mockapi.io/users/Users`, {
-        email,
-        username,
-        profilePictures: "https://t3.ftcdn.net/jpg/05/17/79/88/360_F_517798821_clzISlzMqjLxx8YjYFBfOaVvIj5qifwm.jpg",
-        follower: 0,
-        bio:"Add more information about yourself",
-        password,
-        bannerPict: "",
-        createdAccount: new Date().toISOString(),
-      });
+      const response = await axios.post(
+        `https://${user_api_key}.mockapi.io/users/Users`,
+        {
+          email,
+          username,
+          profilePictures:
+            "https://t3.ftcdn.net/jpg/05/17/79/88/360_F_517798821_clzISlzMqjLxx8YjYFBfOaVvIj5qifwm.jpg",
+          follower: 0,
+          bio: "Add more information about yourself",
+          password,
+          bannerPict: "",
+          createdAccount: new Date().toISOString(),
+        }
+      );
 
-      // localStorage.setItem("user", JSON.stringify(response.data));
+      // Kullanıcı verisini localStorage'a kaydet
+      localStorage.setItem("user", JSON.stringify(response.data));
       return response.data;
     } catch (error: any) {
       return rejectWithValue(handleApiError(error));
@@ -226,18 +241,18 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
-      .addCase(registerUser.fulfilled, (state, action: PayloadAction<User>) => {
-        state.isLoading = false;
-        state.user = action.payload;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload || "Registration failed";
-      })
+    .addCase(registerUser.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    })
+    .addCase(registerUser.fulfilled, (state, action: PayloadAction<User>) => {
+      state.isLoading = false;
+      state.user = action.payload;
+    })
+    .addCase(registerUser.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload || "Registration failed";
+    })
       .addCase(updateData.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -306,7 +321,7 @@ const userSlice = createSlice({
       .addCase(toggleFollowUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "Failed to toggle follow status.";
-      });
+      })
       
   },
 });

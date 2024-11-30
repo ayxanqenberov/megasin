@@ -1,28 +1,30 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../redux/app/store"; 
+import { RootState } from "../../redux/app/store";
 import axios from "axios";
 import { user_api_key } from "../Users/userSlice";
+
 export interface Posts {
   id: number;
   username: string;
   userId: number;
   likeCount: number;
   likedUsers: number[];
-  commentUsers: number[]; 
+  commentUsers: number[];
   content: string;
   comentCount: number;
   postPicture: string;
   tags: object;
   title: string;
-  createdAt: Date; 
-  profilePicture:string;
+  createdAt: Date;
+  profilePicture: string;
+  formats: string[]; // Stil bilgileri
 }
+
 interface PostState {
   posts: Posts[];
   isLoading: boolean;
   error: string | null;
-  likedPosts: [],
-  
+  likedPosts: number[];
 }
 
 const initialState: PostState = {
@@ -31,14 +33,21 @@ const initialState: PostState = {
   error: null,
   likedPosts: [],
 };
-export const createPost = createAsyncThunk<Posts, { title: string; content: string; postPicture: string }, { rejectValue: string }>(
+
+// Yeni gönderi oluşturma
+export const createPost = createAsyncThunk<
+  Posts,
+  { title: string; content: string; postPicture: string; formats: string[] },
+  { rejectValue: string }
+>(
   "posts/createPost",
-  async ({ title, content, postPicture }, { rejectWithValue, getState }) => {
+  async ({ title, content, postPicture, formats }, { rejectWithValue, getState }) => {
     try {
-      const state = getState() as RootState; 
-      const userName = state.user.user?.username
+      const state = getState() as RootState;
+      const userName = state.user.user?.username;
       const userID = state.user.user?.id;
-      const pp = state.user.user?.profilePictures
+      const pp = state.user.user?.profilePictures;
+
       if (!userID || !userName) {
         throw new Error("User not logged in");
       }
@@ -46,28 +55,35 @@ export const createPost = createAsyncThunk<Posts, { title: string; content: stri
       const res = await axios.post(`https://${user_api_key}.mockapi.io/users/Posts`, {
         title,
         content,
-        userId: userID, 
-        username:userName,
+        userId: userID,
+        username: userName,
         postPicture,
         likeCount: 0,
         comentCount: 0,
-        profilePicture:pp,
+        profilePicture: pp,
         createdAt: new Date().toISOString(),
         likedUsers: [],
+        formats, // Stil bilgilerini kaydediyoruz
       });
 
       return res.data;
     } catch (error: any) {
-      return rejectWithValue(error.message || "Failed to create post"); 
+      return rejectWithValue(error.message || "Failed to create post");
     }
   }
 );
+
+// Gönderileri getirme
 export const fetchPosts = createAsyncThunk<Posts[], void, { rejectValue: string }>(
   "posts/fetchPosts",
   async (_, { rejectWithValue }) => {
     try {
-      const postsResponse = await axios.get(`https://${user_api_key}.mockapi.io/users/Posts`);
-      const usersResponse = await axios.get(`https://${user_api_key}.mockapi.io/users/Users`);
+      const postsResponse = await axios.get(
+        `https://${user_api_key}.mockapi.io/users/Posts`
+      );
+      const usersResponse = await axios.get(
+        `https://${user_api_key}.mockapi.io/users/Users`
+      );
 
       const users = usersResponse.data;
       const posts = postsResponse.data.map((post: any) => {
@@ -86,6 +102,7 @@ export const fetchPosts = createAsyncThunk<Posts[], void, { rejectValue: string 
   }
 );
 
+// Gönderiyi beğenme
 export const likedPost = createAsyncThunk<
   Posts,
   { id: number },
@@ -95,7 +112,7 @@ export const likedPost = createAsyncThunk<
   async ({ id }, { rejectWithValue, getState }) => {
     try {
       const state = getState();
-      const user = state.user.user; 
+      const user = state.user.user;
       const post = state.posts.posts.find((post) => post.id === id);
 
       if (!user) {
@@ -121,27 +138,25 @@ export const likedPost = createAsyncThunk<
     }
   }
 );
-export const deletePosts = createAsyncThunk<
-  string, 
-  string, 
-  { rejectValue: string }
->("posts/deletePosts", async (postId, { rejectWithValue }) => {
-  try {
-    await axios.delete(`https://${user_api_key}.mockapi.io/users/Posts/${postId}`);
-    return postId;
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Failed to delete post");
+
+// Gönderi silme
+export const deletePosts = createAsyncThunk<string, string, { rejectValue: string }>(
+  "posts/deletePosts",
+  async (postId, { rejectWithValue }) => {
+    try {
+      await axios.delete(`https://${user_api_key}.mockapi.io/users/Posts/${postId}`);
+      return postId;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete post"
+      );
+    }
   }
-});
-// const deleteCount = await axios.put(
-//   https://${user_api_key}.mockapi.io/users/Posts/6,
-//   {
-//     likeCount: 0,
-//   }
-// );
+);
+
 const postsSlice = createSlice({
   name: "posts",
- initialState,
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -149,25 +164,22 @@ const postsSlice = createSlice({
         state.isLoading = false;
         state.posts = action.payload;
       })
+      .addCase(createPost.fulfilled, (state, action: PayloadAction<Posts>) => {
+        state.posts.push(action.payload);
+      })
       .addCase(likedPost.fulfilled, (state, action: PayloadAction<Posts>) => {
         const updatedPost = action.payload;
-        const postIndex = state.posts.findIndex((post) => post.id === updatedPost.id);
+        const postIndex = state.posts.findIndex(
+          (post) => post.id === updatedPost.id
+        );
         if (postIndex !== -1) {
-          state.posts[postIndex] = updatedPost; 
-        }
-        if (state.likedPosts.includes(updatedPost.id)) {
-          state.likedPosts = state.likedPosts.filter((id) => id !== updatedPost.id);
-        } else {
-          state.likedPosts.push(updatedPost.id);
+          state.posts[postIndex] = updatedPost;
         }
       })
       .addCase(deletePosts.fulfilled, (state, action) => {
         state.posts = state.posts.filter((post) => post.id !== action.payload);
-      })
-      .addCase(deletePosts.rejected, (state, action) => {
-        state.error = action.payload || "Failed to delete post";
       });
   },
 });
 
-export default postsSlice.reducer; 
+export default postsSlice.reducer;

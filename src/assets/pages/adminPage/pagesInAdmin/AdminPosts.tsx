@@ -54,9 +54,6 @@ const AdminPosts = () => {
                 Likes
               </th>
               <th className="border border-gray-300 px-4 py-2 text-left">
-                Comments
-              </th>
-              <th className="border border-gray-300 px-4 py-2 text-left">
                 Actions
               </th>
             </tr>
@@ -78,9 +75,6 @@ const AdminPosts = () => {
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   {post.likedUsers.length}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {post.comentCount}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   <button

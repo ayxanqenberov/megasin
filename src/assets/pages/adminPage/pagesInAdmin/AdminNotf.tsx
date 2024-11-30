@@ -50,7 +50,7 @@ const AdminNotf = () => {
   return (
     <div className="flex items-start justify-start">
       <AdminAside />
-      <div className="flex flex-col w-[80%] my-4 px-3">
+      <div className="flex justify-between items-baseline w-[80%] my-4 px-3">
         <div className="max-w-md bg-white p-6 rounded-lg shadow-lg mb-6">
           <h2 className="text-2xl font-bold mb-4">Send Notification</h2>
           <div className="space-y-4">

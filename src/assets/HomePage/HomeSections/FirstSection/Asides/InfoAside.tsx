@@ -11,6 +11,7 @@ const InfoAside = () => {
   const blogs = useSelector((state: RootState) =>
     state.posts.posts.slice(0, 6)
   );
+  const news = useSelector((state: RootState) => state.news.news.slice(0, 5));
   const posts = useSelector((state: RootState) => state.posts.posts);
   const navigate = useNavigate();
   const mostLikedBlogs = useMemo(() => {
@@ -97,6 +98,33 @@ const InfoAside = () => {
             Learn More
           </button>
         </div>
+      </div>
+      <div className="bg-[#EAEAEA] pb-2 rounded-xl">
+        <h2 className="bg-white py-2 px-4">Latest News</h2>
+        {news.map((newsItem) => (
+          <div
+            key={newsItem.id}
+            className="bg-white px-4 py-2 flex items-center gap-3"
+          >
+            <img
+              src={newsItem.pict || "default-image.png"}
+              alt={newsItem.title}
+              onClick={() => navigate(`/news/${newsItem.id}`)}
+              className="w-[70px] h-[60px] object-cover rounded-md cursor-pointer"
+            />
+            <div>
+              <p
+                onClick={() => navigate(`/news/${newsItem.id}`)}
+                className="text-sm max-lg:text-[13px] max-md:text-[10px] cursor-pointer hover:text-red-600 duration-200 font-medium"
+              >
+                {newsItem.title}
+              </p>
+              <span className="text-xs text-gray-500">
+                {new Date(newsItem.createdAt).toLocaleDateString()}
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
       <div className="mostLikedBlogs bg-[#EAEAEA] pb-2 rounded-xl">
         <h2 className="bg-white py-2 px-4">Most Liked Blogs</h2>
