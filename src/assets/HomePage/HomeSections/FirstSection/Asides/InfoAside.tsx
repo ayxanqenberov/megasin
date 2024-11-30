@@ -5,19 +5,25 @@ import moderator from "../../../../images/moderator.png";
 import "../../../../../input.css";
 import { FaPlus } from "react-icons/fa";
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 const InfoAside = () => {
-  const blogs = useSelector((state: RootState) => state.posts.posts.slice(0, 6)); 
-  const posts = useSelector((state: RootState) => state.posts.posts); 
-
+  const blogs = useSelector((state: RootState) =>
+    state.posts.posts.slice(0, 6)
+  );
+  const posts = useSelector((state: RootState) => state.posts.posts);
+  const navigate = useNavigate();
   const mostLikedBlogs = useMemo(() => {
     return [...posts]
       .sort((a, b) => b.likedUsers.length - a.likedUsers.length)
       .slice(0, 3);
   }, [posts]);
+  const getDetail = (username: string, id: number) => {
+    navigate(`/@${username}/detail?postId=${id}`);
+  };
 
   return (
-    <div className="w-[31%] flex flex-col gap-3">
+    <div className="w-[31%] max-sm:hidden max-lg:w-[40%] flex flex-col gap-3">
       <div className="blogsSection bg-[#EAEAEA] pb-2 rounded-xl">
         <h2 className="bg-white py-2 px-4">Blogs</h2>
         {blogs.map((blog) => (
@@ -26,18 +32,26 @@ const InfoAside = () => {
             className="blogListsAsidePart bg-white px-4 py-2 flex items-center gap-3"
           >
             <img
-              src={blog.postPicture || "default-image.png"} 
+              src={blog.postPicture || "default-image.png"}
               alt={blog.title}
-              className="w-[70px] h-[60px] object-cover rounded-md"
+              onClick={() => getDetail(blog.username, blog.id)}
+              className="w-[70px] cursor-pointer h-[60px] object-cover rounded-md"
             />
             <div>
-              <p className="text-sm font-medium">{blog.title}</p>
-              <span className="text-xs text-gray-500">{blog.likedUsers.length} likes</span>
+              <p
+                onClick={() => getDetail(blog.username, blog.id)}
+                className="text-sm max-lg:text-[13px] max-md:text-[10px] cursor-pointer hover:text-red-600 duration-200 font-medium"
+              >
+                {blog.title}
+              </p>
+              <span className="text-xs  text-gray-500">
+                {blog.likedUsers.length} likes
+              </span>
             </div>
           </div>
         ))}
       </div>
-      <div className="relative inline-block p-1 rounded-lg">
+      <div className="relative inline-block p-1 rounded-lg max-md:hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-blue-500 to-purple-500 rounded-lg" />
         <div className="relative flex flex-col gap-3 bg-white rounded-lg p-4">
           <span className="text-xl font-medium text-gray-400">Megasin</span>
@@ -57,7 +71,7 @@ const InfoAside = () => {
           </button>
         </div>
       </div>
-      <div className="flex gap-1">
+      <div className="flex gap-1 max-lg:hidden">
         <div className="bg-white p-3 w-1/2 flex gap-2 flex-col justify-between rounded-l-xl">
           <span className="text-xl font-medium text-gray-400">Megasin</span>
           <strong className="text-xl text-[#404040]">
@@ -84,15 +98,14 @@ const InfoAside = () => {
           </button>
         </div>
       </div>
-      {/* Most Liked Blogs Section */}
       <div className="mostLikedBlogs bg-[#EAEAEA] pb-2 rounded-xl">
         <h2 className="bg-white py-2 px-4">Most Liked Blogs</h2>
         {mostLikedBlogs.map((blog) => (
           <div
             key={blog.id}
-            className="blogListsAsidePart bg-white px-4 py-2 flex items-center justify-between"
+            className="blogListsAsidePart max-md:items-baseline max-md:gap-3 bg-white px-4 py-2 flex items-center justify-between"
           >
-            <a href={`/${blog.id}`} className="text-sm font-medium">
+            <a href={`/${blog.id}`} className="text-sm max-md:text-[13px] font-medium">
               {blog.title}
             </a>
             <span className="flex items-center gap-1 text-xs text-gray-500">

@@ -33,9 +33,9 @@ const Blogs = () => {
       navigate("/register");
     }
   };
-  const handleUserClick =(username:string)=>{
-    navigate(`/profiles/${username}`)
-  }
+  const handleUserClick = (username: string) => {
+    navigate(`/profiles/${username}`);
+  };
   const toggleFollow = (id: number) => {
     setFollows((prev) => ({ ...prev, [id]: !prev[id] }));
   };
@@ -47,12 +47,17 @@ const Blogs = () => {
   const sortedPosts = [...posts].sort((a, b) => b.id - a.id);
   const limitedPosts = sortedPosts.slice(0, sliceEnd);
 
-  if (isLoading) return <div className="w-full justify-center"><Loading/></div>;
+  if (isLoading)
+    return (
+      <div className="w-full justify-center">
+        <Loading />
+      </div>
+    );
 
   return (
-    <div className="flex flex-col gap-4 w-[48%]">
+    <div className="flex flex-col gap-4 w-[48%] max-lg:w-[57%] max-sm:w-full">
       {user && showWelcome && (
-        <div>
+        <div className="max-md:hidden">
           <div className="bg-[#3B49DF] p-[30px] text-white rounded-md flex flex-col gap-4">
             <div className="w-full flex items-center justify-between">
               <p className="text-2xl font-bold text-black">
@@ -91,7 +96,9 @@ const Blogs = () => {
                 <div className="flex justify-between items-center">
                   <div className="flex pl-3.5 items-center gap-2">
                     <span>✍️</span>
-                    <p className="font-semibold">Write your first Megasin post</p>
+                    <p className="font-semibold">
+                      Write your first Megasin post
+                    </p>
                   </div>
                   <IoIosArrowDroprightCircle className="text-xl mr-3" />
                 </div>
@@ -125,26 +132,36 @@ const Blogs = () => {
         {limitedPosts.map((item) => (
           <div
             key={item.id}
-            className="flex flex-col justify-between w-full border rounded-md bg-white shadow-md overflow-hidden"
+            className="flex flex-col  justify-between w-full border rounded-md bg-white shadow-md overflow-hidden"
           >
             <img
-              className="w-full h-[270px] object-cover"
+              className="w-full h-[270px] max-md:h-[200px] max-sm:h-[180px]  object-cover"
               src={item.postPicture || "https://via.placeholder.com/150"}
               alt="Post"
             />
-            <div className="p-4 flex flex-col gap-4">
+            <div className="p-4 flex flex-col gap-4 ">
               <div className="flex items-center gap-2">
                 <img
                   className="h-8 w-8 rounded-full object-cover"
-                  src={item.profilePicture || "https://via.placeholder.com/50"}
+                  src={user?.profilePictures}
                   alt={item.username}
                 />
-                <span onClick={() => handleUserClick(item.username)} className="font-bold cursor-pointer hover:text-blue-600 duration-200">{item.username}</span>
-                <FollowButton targetUserId={item.id}/>
+                <span
+                  onClick={() => handleUserClick(item.username)}
+                  className="font-bold cursor-pointer hover:text-blue-600 duration-200"
+                >
+                  {item.username}
+                </span>
+
+                {/* Only show the FollowButton if the logged-in user is NOT the post author */}
+                {user?.username !== item.username && (
+                  <FollowButton targetUserId={item.id} />
+                )}
               </div>
+
               <h2
                 onClick={() => getDetail(item.username, item.id)}
-                className="text-lg cursor-pointer font-semibold"
+                className="text-lg max-md:text-[15px] cursor-pointer font-semibold"
               >
                 {item.title}
               </h2>

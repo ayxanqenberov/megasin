@@ -26,7 +26,7 @@ const Footer = () => {
     <footer className="w-full bg-black text-white">
       <div>
         <div className="footerPart flex flex-wrap justify-between h-[200px] w-[90%] m-auto">
-          <ul className="w-[25%] flex flex-col text-[17.5px] justify-between h-[90%] gap-2 pt-4 items-center">
+          <ul className="w-[25%] max-sm:w-1/2 flex flex-col text-[17.5px] justify-between h-[90%] gap-2 pt-4 items-center">
             <li>
               <a href="">Who we are</a>
             </li>
@@ -56,7 +56,7 @@ const Footer = () => {
               </button>
             </div>
           </ul>
-          <ul className="flex  justify-around text-2xl  h-[90%] gap-2  pt-4 flex-col items-center w-[25%]">
+          <ul className="flex max-sm:hidden  justify-around text-2xl  h-[90%] gap-2  pt-4 flex-col items-center w-[25%]">
             <li className=" hover:text-red-600 socialFooter flex gap-3 items-center">
               <a className=" duration-200 text-white" href="">
                 <FaFacebookSquare />
@@ -82,7 +82,7 @@ const Footer = () => {
               </a>
             </li>
           </ul>
-          <ul className="w-1/4 justify-around text-2xl  h-[90%] gap-2  pt-4  flex flex-col items-center">
+          <ul className="w-1/4 max-sm:hidden  justify-around text-2xl  h-[90%] gap-2  pt-4  flex flex-col items-center">
             <li className=" hover:text-red-600 socialFooter flex gap-3 items-center">
               <a className=" duration-200 text-white" href="">
                 <FaTelegram />
@@ -108,7 +108,7 @@ const Footer = () => {
               </a>
             </li>
           </ul>
-          <ul className="w-1/4 justify-around text-[17.5px]   h-[90%] gap-2  pt-4  flex flex-col items-center">
+          <ul className="w-1/4 justify-around text-[17.5px] max-sm:text-[13px] h-[90%] gap-2  pt-4  flex flex-col items-center">
             <li>
               <a href="" className="hover:text-red-600 duration-200">Term of Use</a>
             </li>

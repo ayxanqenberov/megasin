@@ -2,12 +2,13 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/app/store"; 
 import axios from "axios";
 import { user_api_key } from "../Users/userSlice";
-interface Posts {
+export interface Posts {
   id: number;
   username: string;
   userId: number;
   likeCount: number;
   likedUsers: number[];
+  commentUsers: number[]; 
   content: string;
   comentCount: number;
   postPicture: string;
@@ -16,7 +17,20 @@ interface Posts {
   createdAt: Date; 
   profilePicture:string;
 }
+interface PostState {
+  posts: Posts[];
+  isLoading: boolean;
+  error: string | null;
+  likedPosts: [],
+  
+}
 
+const initialState: PostState = {
+  posts: [],
+  isLoading: false,
+  error: null,
+  likedPosts: [],
+};
 export const createPost = createAsyncThunk<Posts, { title: string; content: string; postPicture: string }, { rejectValue: string }>(
   "posts/createPost",
   async ({ title, content, postPicture }, { rejectWithValue, getState }) => {
@@ -55,12 +69,13 @@ export const fetchPosts = createAsyncThunk<Posts[], void, { rejectValue: string 
       const postsResponse = await axios.get(`https://${user_api_key}.mockapi.io/users/Posts`);
       const usersResponse = await axios.get(`https://${user_api_key}.mockapi.io/users/Users`);
 
-      const users = usersResponse.data; 
+      const users = usersResponse.data;
       const posts = postsResponse.data.map((post: any) => {
-        const user = users.find((user: any) => user.id === post.userId);
+        const user = users.find((u: any) => u.id === post.userId);
         return {
           ...post,
           username: user?.username || "Unknown",
+          profilePicture: user?.profilePicture || "",
         };
       });
 
@@ -126,12 +141,7 @@ export const deletePosts = createAsyncThunk<
 // );
 const postsSlice = createSlice({
   name: "posts",
-  initialState: {
-    posts: [] as Posts[],
-    likedPosts: [] as number[], 
-    isLoading: false,
-    error: null,
-  },
+ initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder

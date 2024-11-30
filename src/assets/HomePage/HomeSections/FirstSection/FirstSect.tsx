@@ -6,7 +6,7 @@ import InfoAside from './Asides/InfoAside'
 const FirstSect = () => {
 
   return (
-    <section className='flex justify-between w-[90%] m-auto pt-3'>
+    <section className='flex max-xl:w-full max-lg:px-2 justify-between w-[90%] m-auto pt-3'>
       <Aside/>
       <Blogs/>
       <InfoAside/>

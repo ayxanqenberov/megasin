@@ -10,6 +10,13 @@ export const fetchNotifications = createAsyncThunk(
     return response.data;
   }
 );
+export const deleteNotification = createAsyncThunk(
+  'notifications/deleteNotification',
+  async (id: number) => {
+    await axios.delete(`https://${noth_api}.mockapi.io/notificians/${id}`);
+    return id;
+  }
+);
 export const postNotification = createAsyncThunk(
   'notifications/postNotification',
   async (notification: { title: string; content: string }) => {
@@ -53,6 +60,11 @@ const notificationsSlice = createSlice({
       })
       .addCase(postNotification.fulfilled, (state, action) => {
         state.notifications.push(action.payload);
+      })
+      .addCase(deleteNotification.fulfilled, (state, action) => {
+        state.notifications = state.notifications.filter(
+          (notif) => notif.id !== action.payload
+        );
       });
   },
 });

@@ -1,11 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { comment_api } from "../Comments/commentSlice";
 import axios from "axios";
 
+const comment_api = import.meta.env.VITE_COMMENT_API_KEY
 export const loginAdmin = createAsyncThunk(
   "admin/login",
   async ({ username, password }, thunkAPI) => {
-    // Backend'e istek atın ve JWT token alın
     const response = await fetch("/api/admin/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -15,7 +14,7 @@ export const loginAdmin = createAsyncThunk(
       throw new Error("Invalid credentials");
     }
     const data = await response.json();
-    localStorage.setItem("adminToken", data.token); // Token'ı kaydediyoruz
+    localStorage.setItem("adminToken", data.token); 
     return data.user;
   }
 );
@@ -42,7 +41,7 @@ const adminSlice = createSlice({
   reducers: {
     logoutAdmin(state) {
       state.user = null;
-      localStorage.removeItem("adminToken"); // Çıkışta token silinir
+      localStorage.removeItem("adminToken");
     },
   },
   extraReducers: (builder) => {

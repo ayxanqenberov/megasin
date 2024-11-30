@@ -28,7 +28,7 @@ const Search = () => {
   const isProfilePage = location.pathname === `/profile/${username}`;
 
   return (
-    <div className={isProfilePage ? "hidden" : "search w-1/2 max-md:w-[90%] relative"}>
+    <div className={isProfilePage ? "hidden" : "search w-1/2 max-md:w-[90%] max-[600px]:w-[45%] relative"}>
       <input
         className="border-b border-gray-300 outline-none w-full py-2"
         type="text"
@@ -36,8 +36,9 @@ const Search = () => {
         value={searchQuery} 
         onChange={(e) => handleSearchChange(e.target.value)}
       />
+      <div>
       {searchQuery && (
-        <div className="results absolute top-full left-0 bg-white w-full shadow-lg mt-2 rounded-md max-h-60 overflow-y-auto">
+        <div className="results absolute top-full left-0 bg-white  shadow-lg mt-2 rounded-md max-h-60 overflow-y-auto">
           {filteredPosts.length > 0 ? (
             filteredPosts.map((post) => (
               <div
@@ -53,6 +54,7 @@ const Search = () => {
           )}
         </div>
       )}
+      </div>
     </div>
   );
 };

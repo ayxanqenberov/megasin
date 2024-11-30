@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from "../../redux/app/store";
 import { fetchPosts } from "../../features/Posts/postSlice";
 import { AiFillLike } from "react-icons/ai";
 import Loading from "../../Components/Loadings/Loading";
+import Footer from "../../Components/Footer/Footer";
 
 const BlogPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -108,7 +109,7 @@ const BlogPage: React.FC = () => {
           )
         )}
       </section>
-      <div className="pagination flex justify-center gap-2 mt-4">
+      <div className="pagination flex justify-center py-6 gap-2 mt-4">
         <button
           onClick={prevPage}
           disabled={currentPage === 1}
@@ -136,6 +137,7 @@ const BlogPage: React.FC = () => {
           Next
         </button>
       </div>
+      <Footer/>
     </>
   );
 };

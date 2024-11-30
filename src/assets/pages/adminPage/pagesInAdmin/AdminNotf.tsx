@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchNotifications, postNotification } from "../../../features/Notificians/notifcnsSlice";
+import { fetchNotifications, postNotification, deleteNotification } from "../../../features/Notificians/notifcnsSlice";
 import AdminAside from "../adminComp/adminAside";
 
 const AdminNotf = () => {
@@ -19,6 +19,16 @@ const AdminNotf = () => {
       return;
     }
 
+    if (title.length > 50) {
+      alert("Title cannot exceed 50 characters.");
+      return;
+    }
+
+    if (content.length > 200) {
+      alert("Content cannot exceed 200 characters.");
+      return;
+    }
+
     const notification = {
       title,
       content,
@@ -31,11 +41,17 @@ const AdminNotf = () => {
     alert("Notification sent successfully!");
   };
 
+  const handleDeleteNotification = (id) => {
+    if (window.confirm("Are you sure you want to delete this notification?")) {
+      dispatch(deleteNotification(id));
+    }
+  };
+
   return (
     <div className="flex items-start justify-start">
       <AdminAside />
-      <div className="flex flex-col my-4 px-3">
-        <div className="max-w-md  bg-white p-6 rounded-lg shadow-lg mb-6">
+      <div className="flex flex-col w-[80%] my-4 px-3">
+        <div className="max-w-md bg-white p-6 rounded-lg shadow-lg mb-6">
           <h2 className="text-2xl font-bold mb-4">Send Notification</h2>
           <div className="space-y-4">
             <input
@@ -44,12 +60,14 @@ const AdminNotf = () => {
               onChange={(e) => setTitle(e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600"
               placeholder="Enter notification title"
+              maxLength={50}
             />
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600"
               placeholder="Enter notification content"
+              maxLength={200}
             />
             <button
               onClick={handleSendNotification}
@@ -59,9 +77,7 @@ const AdminNotf = () => {
             </button>
           </div>
         </div>
-
-        {/* Notification list */}
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        <div className="bg-white p-6 w-[60%] rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold mb-4">Notifications</h2>
           {status === "loading" ? (
             <p>Loading notifications...</p>
@@ -73,17 +89,36 @@ const AdminNotf = () => {
                   <th className="border border-gray-300 px-4 py-2">Title</th>
                   <th className="border border-gray-300 px-4 py-2">Content</th>
                   <th className="border border-gray-300 px-4 py-2">Created At</th>
+                  <th className="border border-gray-300 px-4 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {notifications.map((notif) => (
-                  <tr key={notif.id} className="hover:bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-2">{notif.id}</td>
-                    <td className="border border-gray-300 px-4 py-2">{notif.title}</td>
-                    <td className="border border-gray-300 px-4 py-2">{notif.content}</td>
-                    <td className="border border-gray-300 px-4 py-2">{new Date(notif.createdAt).toLocaleString()}</td>
+                {notifications.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="text-center py-4 text-gray-500">
+                      Nothing
+                    </td>
                   </tr>
-                ))}
+                ) : (
+                  notifications.map((notif) => (
+                    <tr key={notif.id} className="hover:bg-gray-50">
+                      <td className="border border-gray-300 px-4 py-2">{notif.id}</td>
+                      <td className="border border-gray-300 px-4 py-2">{notif.title}</td>
+                      <td className="border border-gray-300 px-4 py-2">{notif.content}</td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {new Date(notif.createdAt).toLocaleString()}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        <button
+                          onClick={() => handleDeleteNotification(notif.id)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           )}

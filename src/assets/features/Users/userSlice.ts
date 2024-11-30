@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface User {
+export interface User {
   id: number;
   username: string;
   email: string;
@@ -70,28 +70,25 @@ export const registerUser = createAsyncThunk<User, { email: string; password: st
 
 export const followUser  = createAsyncThunk<
   User,
-  string, // userId
+  string,
   { rejectValue: string }
 >("user/followUser ", async (userId, { rejectWithValue, getState }) => {
   try {
     const state = getState() as { user: UserState };
-    const currentUser  = state.user.user; // Get the current user from the state
+    const currentUser  = state.user.user; 
 
     if (!currentUser ) {
       throw new Error("User  not logged in.");
     }
 
-    // Update the followUsers array
     const updatedFollowUsers = [...currentUser .followerUser , parseInt(userId)];
 
     const response = await axios.put(`https://${user_api_key}.mockapi.io/users/Users/${currentUser .id}`, {
       follower:User = updatedFollowUsers,
     });
-
-    // Update localStorage if needed
     localStorage.setItem("user", JSON.stringify(response.data));
 
-    return response.data; // Return the updated user data
+    return response.data; 
   } catch (error: any) {
     return rejectWithValue(handleApiError(error));
   }
@@ -127,7 +124,6 @@ interface Posts {
   title:string;
   createdAt:Date;
 }
-// const posting = createAsyncThunk<Posts>
 export const fetchUsers = createAsyncThunk<User[], void, { rejectValue: string }>(
   'user/fetchUsers',
   async (_, { rejectWithValue }) => {

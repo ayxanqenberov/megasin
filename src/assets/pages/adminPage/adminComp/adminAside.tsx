@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import bgImg from '../../../images/bg-pict.png';
 import { BsPostcardFill } from 'react-icons/bs';
-import { FaCommentAlt } from 'react-icons/fa';
 import { RiNotificationFill } from 'react-icons/ri';
 import { MdWidgets } from 'react-icons/md';
 import { GoHomeFill } from 'react-icons/go';
@@ -42,13 +41,6 @@ const AdminAside = () => {
           <span className="text-[14px]">Posts</span>
         </li>
         <li
-          onClick={() => navigate('/admin/comments')}
-          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${isActive('/admin/comments') ? 'text-[#ED612A] border-b-[#ED612A]' : 'text-black border-b-black'}`}
-        >
-          <FaCommentAlt className="text-[20px]" />
-          <span className="text-[14px]">Comments</span>
-        </li>
-        <li
           onClick={() => navigate('/admin/notifications')}
           className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${isActive('/admin/notifications') ? 'text-[#ED612A] border-b-[#ED612A]' : 'text-black border-b-black'}`}
         >
@@ -57,7 +49,7 @@ const AdminAside = () => {
         </li>
         <li
           onClick={() => navigate('/admin/widgets')}
-          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${isActive('/admin/notifications') ? 'text-[#ED612A] border-b-[#ED612A]' : 'text-black border-b-black'}`}
+          className={`flex items-center gap-1 cursor-pointer border-b pb-2 ${isActive('/admin/widgets') ? 'text-[#ED612A] border-b-[#ED612A]' : 'text-black border-b-black'}`}
         >
           <MdWidgets className="text-[20px]" />
           <span className="text-[14px]">Widgets</span>

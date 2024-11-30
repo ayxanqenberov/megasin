@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { loginAdmin } from "../../features/Admin/adminSlice";
 import AdminUser from "./pagesInAdmin/AdminUser";
 import AdminPosts from "./pagesInAdmin/AdminPosts";
-import AdminCommen from "./pagesInAdmin/AdminCommen";
 import AdminNotf from "./pagesInAdmin/AdminNotf";
 import AdminHome from "./pagesInAdmin/AdminHome";
 import AdminLog from "./AdminLog";
@@ -34,8 +33,6 @@ const AdminPage = () => {
         return <AdminUser />;
       case "posts":
         return <AdminPosts />;
-      case "comments":
-        return <AdminCommen />;
       case "notifications":
         return <AdminNotf />;
       case "home":

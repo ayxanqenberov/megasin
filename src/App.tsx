@@ -11,7 +11,6 @@ import AdminLog from './assets/pages/adminPage/AdminLog';
 import AdminPage from './assets/pages/adminPage/AdminPage';
 import AdminUser from './assets/pages/adminPage/pagesInAdmin/AdminUser';
 import AdminPosts from './assets/pages/adminPage/pagesInAdmin/AdminPosts';
-import AdminCommen from './assets/pages/adminPage/pagesInAdmin/AdminCommen';
 import AdminNotf from './assets/pages/adminPage/pagesInAdmin/AdminNotf';
 import AdminHome from './assets/pages/adminPage/pagesInAdmin/AdminHome';
 import NotFound from './assets/Components/NotFound/NotFound';
@@ -49,7 +48,6 @@ const App = () => {
         <Route path='/admin/home' element={<AdminHome/>} />
         <Route path='/admin/user' element={<AdminUser/>}/>
         <Route path='/admin/posts' element={<AdminPosts/>} />
-        <Route path='/admin/comments' element={<AdminCommen/>} />
         <Route path='/admin/notifications' element={<AdminNotf/>} />
         <Route path='/admin/widgets' element={<AdminWidget/>}/>
         <Route path='/profiles/:username' element={<Profiles/>} />

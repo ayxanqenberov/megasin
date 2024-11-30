@@ -36,20 +36,20 @@ const Login: React.FC = () => {
         <a className="text-2xl font-bold text-[#E91E63] text-center" href="/">
           MEGASIN<span className="text-black">.</span>
         </a>
-        <span className="text-3xl font-bold">Log in to your Megasin account</span>
-        <span className="text-gray-500">
+        <span className="text-3xl font-bold max-sm:text-[19px] max-sm:text-center">Log in to your Megasin account</span>
+        <p className="text-gray-500 max-sm:text-[11px] max-sm:px-3 max-sm:mx-auto">
           Megasin Community is a community of 2 amazing developers
-        </span>
+        </p>
         <form className="flex flex-col gap-2 pt-4" onSubmit={handleLogin}>
           <input
-            className="w-full outline-red-500 text-red-600 font-semibold placeholder:text-red-600 p-3 rounded-[10px]"
+            className="w-full outline-red-500 max-sm:w-[70%] max-sm:mx-auto text-red-600 font-semibold placeholder:text-red-600 p-3 rounded-[10px]"
             type="text"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-          <div className="w-[300px] relative">
+          <div className="w-[300px] 500 max-sm:w-[70%] max-sm:mx-auto relative">
             <input
               className="w-full outline-red-500 text-red-600 font-semibold placeholder:text-red-600 p-3 rounded-[10px]"
               type={showPassword ? "text" : "password"}
@@ -72,7 +72,7 @@ const Login: React.FC = () => {
           </div>
           <button
             type="submit"
-            className={`bg-blue-600 w-full p-2 rounded-[8px] text-white ${isLoading ? "cursor-not-allowed opacity-50" : ""}`}
+            className={`bg-blue-600 w-full p-2 rounded-[8px] max-sm:w-[70%] max-sm:mx-auto text-white ${isLoading ? "cursor-not-allowed opacity-50" : ""}`}
             disabled={isLoading}
           >
             {isLoading ? "Logging in..." : "Log In"}

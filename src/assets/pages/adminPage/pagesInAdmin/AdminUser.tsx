@@ -55,7 +55,7 @@ const AdminUser = () => {
                 <td className="border border-gray-200 p-4">{user.id}</td>
                 <td className="border border-gray-200 p-4">{user.username}</td>
                 <td className="border border-gray-200 p-4">{user.email}</td>
-                <td className="border border-gray-200 p-4">{user.follower}</td>
+                <td className="border border-gray-200 p-4">{user.followerUser.length}</td>
                 <td className="border border-gray-200 p-4">
                   {user.createdAccount}
                 </td>

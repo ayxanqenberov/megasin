@@ -33,7 +33,7 @@ const Aside = () => {
     navigate(`/${username}/new`);
   };
   return (
-    <aside className="w-[18%] flex flex-col gap-4">
+    <aside className="w-[18%] max-lg:hidden  flex flex-col gap-4">
       <div
         className={
           user

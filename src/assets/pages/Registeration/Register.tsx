@@ -45,13 +45,13 @@ const Register: React.FC = () => {
       <a className="text-2xl font-bold text-[#E91E63] text-center" href="/">
         MEGASIN<span className="text-black">.</span>
       </a>
-      <span className="text-3xl font-bold">Join the Megasin Community</span>
-      <span className="text-gray-500">
+      <span className="text-3xl font-bold max-sm:text-[20px]">Join the Megasin Community</span>
+      <span className="text-gray-500 max-sm:text-[10px]">
         Megasin Community is a community of 2 amazing developers
       </span>
       <form className="flex flex-col gap-2 pt-4" onSubmit={handleRegister}>
         <input
-          className="w-[300px] outline-red-500 text-red-600 font-semibold placeholder:text-red-600 p-3 rounded-[10px]"
+          className="w-[300px] outline-red-500 max-sm:w-[90%] max-sm:mx-auto text-red-600 font-semibold placeholder:text-red-600 p-3 rounded-[10px]"
           type="text"
           placeholder="Username"
           value={username}
@@ -59,14 +59,14 @@ const Register: React.FC = () => {
           required
         />
         <input
-          className="w-[300px] outline-red-500 text-red-600 font-semibold placeholder:text-red-600 p-3 rounded-[10px]"
+          className="w-[300px] outline-red-500 max-sm:w-[90%] max-sm:mx-auto text-red-600 font-semibold placeholder:text-red-600 p-3 rounded-[10px]"
           type="email"
           placeholder="E-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <div className="w-[300px] relative">
+        <div className="w-[300px] max-sm:w-[90%] max-sm:mx-auto relative">
           <input
             className="w-full outline-red-500 text-red-600 font-semibold placeholder:text-red-600 p-3 rounded-[10px]"
             type={showPassword ? 'text' : 'password'}
@@ -89,12 +89,12 @@ const Register: React.FC = () => {
         </div>
         <button
           type="submit"
-          className={`bg-blue-600 w-full p-2 rounded-[8px] text-white ${
+          className={`bg-blue-600 w-full p-2 rounded-[8px] max-sm:w-[90%] max-sm:mx-auto text-white ${
             isLoading ? "cursor-not-allowed opacity-50" : ""
           }`}
           disabled={isLoading}
         >
-          {isLoading ? "Kayıt Oluyor..." : "Sign up"} {/* "Registering..." in Turkish */}
+          {isLoading ? "Kayıt Oluyor..." : "Sign up"}
         </button>
         <div className="w-full text-center">
           {isLoading ? (

@@ -6,6 +6,7 @@ import { fetchPosts } from "../../features/Posts/postSlice";
 import { fetchUsers } from "../../features/Users/userSlice";
 import Loading from "../../Components/Loadings/Loading";
 import Header from "../../Components/Header/Header";
+import FollowButton from "../../Components/FollowBttn/FollowButton";
 
 const Profiles = () => {
   const { username } = useParams<{ username: string }>();
@@ -81,6 +82,7 @@ const Profiles = () => {
             <span className="text-blue-500">
               {visitedUser.followerUser.length} follower
             </span>
+            <FollowButton targetUserId={visitedUser.id}/>
           </div>
         </div>
         <div className="lg:w-2/3 w-full">
@@ -106,7 +108,6 @@ const Profiles = () => {
                     <p className="text-sm text-gray-600">{post.content}</p>
                     <div className="mt-2 flex items-center gap-4 text-gray-500 text-sm">
                       <span>Likes: {post.likedUsers.length}</span>
-                      <span>Comments: {post.comentCount}</span>
                     </div>
                   </div>
                 </div>

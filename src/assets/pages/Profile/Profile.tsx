@@ -200,7 +200,7 @@ const Profile: React.FC = () => {
       </section>
 
       <section className={userPosts.length === 0 ? "hidden" : "flex flex-col gap-3"}>
-        <div className="bg-[#f7f7f7] gap-2 rounded-b-2xl shadow-md flex justify-start px-[30px] pb-[15px] items-end w-[80%] md:w-[60%] m-auto h-[170px] max-[600px]:h-[220px]">
+        <div className="bg-[#f7f7f7] gap-2 rounded-b-2xl shadow-md flex justify-start px-[30px] pb-[15px] items-end w-[80%] md:w-[60%] m-auto h-[170px] max-sm:text-center max-[600px]:h-[240px]">
           <span>Posts:</span>
           <span>{userPosts.length}</span>
         </div>
@@ -224,7 +224,6 @@ const Profile: React.FC = () => {
                   />
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>Likes: {post.likedUsers.length}</span>
-                    <span>Comments: {post.comentCount}</span>
                   </div>
                 </div>
               ))}

@@ -18,7 +18,6 @@ import {
   Legend,
 } from "recharts";
 import { IoLogOutOutline } from "react-icons/io5";
-import { checkup } from "../../../features/Comments/commentSlice";
 
 const AdminHome = () => {
   const dispatch = useDispatch();
@@ -30,24 +29,19 @@ const AdminHome = () => {
   const { posts, isLoading: postLoading } = useSelector(
     (state: RootState) => state.posts
   );
-  const { commentsWithDetails, isLoading: commentLoading } = useSelector(
-    (state: RootState) => state.comments
-  );
 
   useEffect(() => {
     dispatch(fetchUsers());
     dispatch(fetchPosts());
-    dispatch(checkup());
   }, [dispatch]);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   const data = [
     { name: "Users", value: users?.length || 0 },
     { name: "Posts", value: posts?.length || 0 },
-    { name: "Comments", value: commentsWithDetails?.length || 0 },
   ];
   const mostLikedPost = posts?.reduce(
-    (prev, current) => (current.likeCount > prev.likeCount ? current : prev),
+    (prev, current) => (current.likedUsers.length > prev.likedUsers.length ? current : prev),
     posts[0]
   );
 
@@ -57,9 +51,9 @@ const AdminHome = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex w-full justify-start">
       <AdminAside />
-      <div className="w-[80%] p-6 flex flex-col gap-6">
+      <div className="w-[70%] p-6 flex flex-col gap-6">
         <div className="flex w-full justify-between items-center">
           <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
           <button
@@ -69,7 +63,7 @@ const AdminHome = () => {
             Log Out <IoLogOutOutline />
           </button>
         </div>
-        <div className="w-full ]">
+        <div className="w-full ">
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-gray-100 p-4 rounded shadow">
               <span className="font-semibold text-lg">Total User Count</span>
@@ -82,12 +76,7 @@ const AdminHome = () => {
               </p>
             </div>
             <div className="bg-gray-100 p-4 rounded shadow">
-              <span className="font-semibold text-lg">Total Comment Count</span>
-              <p className="text-2xl mt-2">
-                {commentLoading
-                  ? "Loading..."
-                  : commentsWithDetails?.length || 0}
-              </p>
+              <span className="font-semibold text-lg">Total Notificians Count</span>
             </div>
             <div className="bg-gray-100 p-4 rounded shadow">
               <span className="font-semibold text-lg">Most Liked Post</span>
