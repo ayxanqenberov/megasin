@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/app/store";
 import { logout, updateData } from "../../features/Users/userSlice";
-import { fetchPosts } from "../../features/Posts/postSlice";
+import { deletePosts, fetchPosts } from "../../features/Posts/postSlice";
 import { useNavigate } from "react-router-dom";
 import Register from "../Registeration/Register";
 import Header from "../../Components/Header/Header";
@@ -11,6 +11,7 @@ import { CiLogin } from "react-icons/ci";
 import { TiDelete } from "react-icons/ti";
 import { LuCake } from "react-icons/lu";
 import notPost from "../../images/Empty inbox.png";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const Profile: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -21,7 +22,9 @@ const Profile: React.FC = () => {
   const [username, setUsername] = useState(user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
   const [bio, setBio] = useState(user?.bio || "");
-  const [profilePictures, setProfilePictures] = useState(user?.profilePictures || "");
+  const [profilePictures, setProfilePictures] = useState(
+    user?.profilePictures || ""
+  );
   const [bannerPict, setBannerPict] = useState(user?.bannerPict || "");
 
   useEffect(() => {
@@ -33,7 +36,9 @@ const Profile: React.FC = () => {
     dispatch(logout());
     navigate("/");
   };
-
+  const deletePost = (postId : number) =>{
+    dispatch(deletePosts(postId))
+  }
   const getWrite = () => {
     navigate(`/${username}/new`);
   };
@@ -88,13 +93,18 @@ const Profile: React.FC = () => {
               <div className="border border-gray-300 rounded-[50%] w-[120px] h-[120px] md:w-[150px] md:h-[150px] overflow-hidden m-3">
                 <img
                   className="w-full h-full border-none object-cover flex items-center justify-center rounded-[50%]"
-                  src={user.profilePictures || "https://t3.ftcdn.net/jpg/05/17/79/88/360_F_517798821_clzISlzMqjLxx8YjYFBfOaVvIj5qifwm.jpg"}
+                  src={
+                    user.profilePictures ||
+                    "https://t3.ftcdn.net/jpg/05/17/79/88/360_F_517798821_clzISlzMqjLxx8YjYFBfOaVvIj5qifwm.jpg"
+                  }
                   alt=""
                 />
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-lg">{user.username}</span>
-                <p className="text-blue-500">{user.followerUser.length} follower</p>
+                <p className="text-blue-500">
+                  {user.followerUser.length} follower
+                </p>
                 <p className="text-gray-400 flex items-center gap-1 font-medium">
                   Account Created: {formattedDate}
                   <LuCake />
@@ -124,7 +134,9 @@ const Profile: React.FC = () => {
         {isEditMode && (
           <div className="editModal w-[80%] md:w-[60%] rounded-xl p-5 top-[16%] left-[10%] md:left-[20%] absolute bg-white border border-gray-600 z-30">
             <div className="flex items-center justify-between">
-              <h2 className="pt-3 text-black font-bold text-lg">Edit Profile</h2>
+              <h2 className="pt-3 text-black font-bold text-lg">
+                Edit Profile
+              </h2>
               <TiDelete
                 onClick={() => setIsEditMode(false)}
                 className="text-black duration-200 hover:text-red-600 text-3xl cursor-pointer"
@@ -162,13 +174,17 @@ const Profile: React.FC = () => {
                   maxLength={200}
                 />
                 <span
-                  className={`bio-char-count ${200 - bio.length <= 5 ? "text-red-600" : "hidden"}`}
+                  className={`bio-char-count ${
+                    200 - bio.length <= 5 ? "text-red-600" : "hidden"
+                  }`}
                 >
                   {`${200 - bio.length} characters remaining`}
                 </span>
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-medium text-[#171717]">Profile Picture URL:</label>
+                <label className="font-medium text-[#171717]">
+                  Profile Picture URL:
+                </label>
                 <input
                   className="border border-[#A3A3A3] p-[7px] outline-red-600 rounded-lg"
                   type="text"
@@ -178,7 +194,9 @@ const Profile: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="font-medium text-[#171717]">Banner Picture URL:</label>
+                <label className="font-medium text-[#171717]">
+                  Banner Picture URL:
+                </label>
                 <input
                   className="border border-[#A3A3A3] p-[7px] outline-red-600 rounded-lg"
                   type="text"
@@ -199,7 +217,9 @@ const Profile: React.FC = () => {
         )}
       </section>
 
-      <section className={userPosts.length === 0 ? "hidden" : "flex flex-col gap-3"}>
+      <section
+        className={userPosts.length === 0 ? "hidden" : "flex flex-col gap-3"}
+      >
         <div className="bg-[#f7f7f7] gap-2 rounded-b-2xl shadow-md flex justify-start px-[30px] pb-[15px] items-end w-[80%] md:w-[60%] m-auto h-[170px] max-sm:text-center max-[600px]:h-[240px]">
           <span>Posts:</span>
           <span>{userPosts.length}</span>
@@ -212,7 +232,10 @@ const Profile: React.FC = () => {
                   key={post.id}
                   className="post-card border flex flex-col gap-3 rounded p-4"
                 >
-                  <h3 className="font-bold">{post.title}</h3>
+                  <div className="w-full flex items-center justify-between">
+                    <h3 className="font-bold">{post.title}</h3>
+                    <RiDeleteBinLine onClick={()=>deletePost(post.id)} className="cursor-pointer" />
+                  </div>
                   <span className="text-[#9CA7BC]">
                     {new Date(post.createdAt).toLocaleDateString()}{" "}
                     {new Date(post.createdAt).toLocaleTimeString()}
@@ -233,14 +256,23 @@ const Profile: React.FC = () => {
       </section>
 
       <section
-        className={userPosts.length === 0 ? "flex h-[454px] flex-col justify-end pb-[30px] items-center w-full m-auto" : "hidden"}
+        className={
+          userPosts.length === 0
+            ? "flex h-[454px] flex-col justify-end pb-[30px] items-center w-full m-auto"
+            : "hidden"
+        }
       >
         <div className="w-[80%] md:w-[60%] rounded-xl mb-[10px] flex flex-col gap-4 justify-center items-center bg-white p-3">
           <span>Not post yet</span>
           <div className="h-[150px] [w-150px] overflow-hidden">
             <img src={notPost} className="w-[300px] object-cover" alt="" />
           </div>
-          <button onClick={getWrite} className="border hover:bg-black duration-200 hover:text-white border-black p-2.5 rounded-[15px]">Get Started</button>
+          <button
+            onClick={getWrite}
+            className="border hover:bg-black duration-200 hover:text-white border-black p-2.5 rounded-[15px]"
+          >
+            Get Started
+          </button>
         </div>
       </section>
     </>

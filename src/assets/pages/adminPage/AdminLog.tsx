@@ -17,16 +17,38 @@ const AdminLog = () => {
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
-
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      dispatch(loginAdmin({ username, password }))
-      navigate(`/admin/home`);
+      // Dispatch the login action and wait for it to resolve
+      const actionResult = dispatch(loginAdmin({ username, password }));
+      
+      if (actionResult.error) {
+        // Handle error case here
+        setError("Invalid username or password");
+      } else {
+        // Navigate only if login was successful
+        navigate(`/admin/home`);
+      }
     } catch (err) {
       setError("Invalid username or password");
     }
   };
+//   try {
+//     const actionResult =  dispatch(loginAdmin({ username, password }));
+//     if (actionResult.error) {
+//       // Log the error for debugging
+//       console.log("Error:", actionResult.error.message);
+//       setError(actionResult.error.message);
+//     } else {
+//       navigate(`/admin/home`);
+//     }
+//   } catch (err) {
+//     console.error("Login Error:", err);
+//     setError("Invalid username or password");
+//   }
+//   const token = localStorage.getItem("adminToken");
+// console.log("Stored Token:", token);
 
   return (
     <div className="w-full h-[100vh] flex justify-center items-center bg-gray-100">

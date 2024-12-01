@@ -10,14 +10,27 @@ export const loginAdmin = createAsyncThunk(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
+
+    console.log("Response Status:", response.status);
+    console.log("Response OK:", response.ok);
+
     if (!response.ok) {
       throw new Error("Invalid credentials");
     }
+
     const data = await response.json();
-    localStorage.setItem("adminToken", data.token); 
-    return data.user;
+    console.log("API Response Data:", data);
+
+    // Ensure that the token and user data are correctly returned
+    if (data.token && data.user) {
+      localStorage.setItem("adminToken", data.token);
+      return data.user;
+    } else {
+      throw new Error("Invalid credentials");
+    }
   }
 );
+
 const postAdmin = async (name: string, password: string) => {
   try {
     const response = await axios.post(`https://${comment_api}.mockapi.io/admin`, {
@@ -30,7 +43,7 @@ const postAdmin = async (name: string, password: string) => {
   }
 };
 
-// postAdmin("adminA", "0123ayxan");
+// postAdmin("adminay", "ayxan0123");
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
@@ -45,14 +58,20 @@ const adminSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(loginAdmin.fulfilled, (state, action) => {
-      state.user = action.payload;
-      state.error = null;
-    });
-    builder.addCase(loginAdmin.rejected, (state, action) => {
-      state.error = action.error.message;
-    });
-  },
+    builder
+      .addCase(loginAdmin.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(loginAdmin.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(loginAdmin.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      });
+  },  
 });
 
 export const { logoutAdmin } = adminSlice.actions;

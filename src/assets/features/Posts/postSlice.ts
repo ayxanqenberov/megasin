@@ -17,7 +17,7 @@ export interface Posts {
   title: string;
   createdAt: Date;
   profilePicture: string;
-  formats: string[]; // Stil bilgileri
+  formats: string[]; 
 }
 
 interface PostState {
@@ -33,8 +33,6 @@ const initialState: PostState = {
   error: null,
   likedPosts: [],
 };
-
-// Yeni gönderi oluşturma
 export const createPost = createAsyncThunk<
   Posts,
   { title: string; content: string; postPicture: string; formats: string[] },
@@ -63,7 +61,7 @@ export const createPost = createAsyncThunk<
         profilePicture: pp,
         createdAt: new Date().toISOString(),
         likedUsers: [],
-        formats, // Stil bilgilerini kaydediyoruz
+        formats, 
       });
 
       return res.data;
@@ -72,8 +70,6 @@ export const createPost = createAsyncThunk<
     }
   }
 );
-
-// Gönderileri getirme
 export const fetchPosts = createAsyncThunk<Posts[], void, { rejectValue: string }>(
   "posts/fetchPosts",
   async (_, { rejectWithValue }) => {
@@ -101,8 +97,6 @@ export const fetchPosts = createAsyncThunk<Posts[], void, { rejectValue: string 
     }
   }
 );
-
-// Gönderiyi beğenme
 export const likedPost = createAsyncThunk<
   Posts,
   { id: number },
@@ -138,8 +132,6 @@ export const likedPost = createAsyncThunk<
     }
   }
 );
-
-// Gönderi silme
 export const deletePosts = createAsyncThunk<string, string, { rejectValue: string }>(
   "posts/deletePosts",
   async (postId, { rejectWithValue }) => {
