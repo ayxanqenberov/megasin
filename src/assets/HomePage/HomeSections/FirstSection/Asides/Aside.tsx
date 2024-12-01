@@ -148,6 +148,19 @@ const Aside = () => {
           Write Post
         </button>
       </div>
+      <div
+        className={!user ? "bg-white flex flex-col gap-2.5 rounded-md px-4 py-2" : "hidden"}
+      >
+        <span className="text-xl font-medium text-gray-400">Megasin</span>
+        <img className="rounded-md" src={structor} alt="" />
+        <div className="flex flex-wrap">
+          <span className="text-xl font-bold">It's time to change it up.</span>
+          <p className="text-gray-500">
+            You can change your feed and see more relevant posts by adding a
+            rating to different tags on Megasin.
+          </p>
+        </div>
+      </div>
     </aside>
   );
 };
