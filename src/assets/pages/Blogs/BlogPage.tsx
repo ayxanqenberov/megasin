@@ -80,7 +80,7 @@ const BlogPage: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col justify-between">
       <Header />
       <section className="blogs w-[95%] sm:w-[90%] md:w-[70%] lg:w-[70%] mx-auto">
         {currentPosts.map(
@@ -92,7 +92,7 @@ const BlogPage: React.FC = () => {
             username,
             createdAt,
             likedUsers,
-            formats, // Stil bilgisi
+            formats, 
           }) => (
             <div
               key={id}
@@ -165,7 +165,7 @@ const BlogPage: React.FC = () => {
         </button>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
