@@ -20,14 +20,11 @@ const AdminLog = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // Dispatch the login action and wait for it to resolve
       const actionResult = dispatch(loginAdmin({ username, password }));
       
       if (actionResult.error) {
-        // Handle error case here
         setError("Invalid username or password");
       } else {
-        // Navigate only if login was successful
         navigate(`/admin/home`);
       }
     } catch (err) {

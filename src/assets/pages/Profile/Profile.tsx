@@ -58,7 +58,9 @@ const Profile: React.FC = () => {
       setIsEditMode(false);
     }
   };
-
+  const getDetail = (username: string, id: number) => {
+    navigate(`/@${username}/detail?postId=${id}`);
+  };
   if (!user) {
     return (
       <>
@@ -232,9 +234,9 @@ const Profile: React.FC = () => {
                   key={post.id}
                   className="post-card border flex flex-col gap-3 rounded p-4"
                 >
-                  <div className="w-full flex items-center justify-between">
-                    <h3 className="font-bold">{post.title}</h3>
-                    <RiDeleteBinLine onClick={()=>deletePost(post.id)} className="cursor-pointer" />
+                  <div className="w-full flex items-start justify-between">
+                    <h3 onClick={() => getDetail(username, post.userId)} className="cursor-pointer hover:text-red-600 duration-200 font-bold w-[97%]">{post.title}</h3>
+                    <RiDeleteBinLine onClick={()=>deletePost(post.id)} className="cursor-pointer w-[40px] hover:text-red-600 duration-200" />
                   </div>
                   <span className="text-[#9CA7BC]">
                     {new Date(post.createdAt).toLocaleDateString()}{" "}

@@ -11,17 +11,11 @@ export const loginAdmin = createAsyncThunk(
       body: JSON.stringify({ username, password }),
     });
 
-    console.log("Response Status:", response.status);
-    console.log("Response OK:", response.ok);
-
     if (!response.ok) {
       throw new Error("Invalid credentials");
     }
 
     const data = await response.json();
-    console.log("API Response Data:", data);
-
-    // Ensure that the token and user data are correctly returned
     if (data.token && data.user) {
       localStorage.setItem("adminToken", data.token);
       return data.user;
