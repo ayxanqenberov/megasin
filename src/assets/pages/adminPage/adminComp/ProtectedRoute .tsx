@@ -8,8 +8,6 @@ const ProtectedRoute = ({ children }) => {
   }
   return children;
 };
-
-// In your App component or where you define routes
 <Route
   path="/admin/home"
   element={

@@ -159,7 +159,7 @@ const Blogs = () => {
 
               <h2
                 onClick={() => getDetail(item.username, item.id)}
-                className="text-lg max-md:text-[15px] cursor-pointer font-semibold"
+                className="text-lg max-md:text-[15px] hover:text-red-600 duration-200 cursor-pointer font-semibold"
               >
                 {item.title}
               </h2>

@@ -3,12 +3,11 @@ import Header from "../../Components/Header/Header";
 
 import { useEffect, useState } from "react";
 import { fetchPosts } from "../../features/Posts/postSlice";
+import { fetchUsers } from "../../features/Users/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/app/store";
 import { useLocation } from "react-router-dom";
 import Footer from "../../Components/Footer/Footer";
-
-// import { getCommentsWithUserDetails } from "../../features/Comments/commentSelectors"; // Eklenen selector
 
 const Detail = () => {
   const location = useLocation();
@@ -18,14 +17,17 @@ const Detail = () => {
   const dispatch = useDispatch();
   const { posts, error: postsError } = useSelector(
     (state: RootState) => state.posts
-  );  const { user } = useSelector((state: RootState) => state.user);
+  );
+  const { users } = useSelector((state: RootState) => state.user);
   const [commentText, setCommentText] = useState("");
 
   useEffect(() => {
-    dispatch(fetchPosts());
-  }, [dispatch]);
+    if (posts.length === 0) dispatch(fetchPosts());
+    if (users.length === 0) dispatch(fetchUsers());
+  }, [dispatch, posts.length, users.length]);
 
   const post = posts.find((item) => Number(item.id) === postId);
+  const postUser = users.find((user) => user.id === post?.userId);
 
   if (postsError) {
     return <div>Error fetching posts: {postsError}</div>;
@@ -39,16 +41,10 @@ const Detail = () => {
   }
 
   const handleSendComment = () => {
-    if (!user) {
-      alert("You need to be logged in to comment.");
-      return;
-    }
-
-    if (commentText.trim() === "") {
+    if (!commentText.trim()) {
       alert("Comment cannot be empty.");
       return;
     }
-
     setCommentText("");
   };
 
@@ -58,10 +54,7 @@ const Detail = () => {
       <section>
         <div className="flex pt-3 items-start w-[70%] gap-[10px] m-auto">
           <div className="flex w-[65%] bg-white border-[0.5px] mb-3 border-t-none border-[#d2d1d1] flex-col">
-            <h1
-              className="p-2 text-2xl capitalize"
-              style={{ fontFamily: "Oswald" }}
-            >
+            <h1 className="p-2 text-2xl capitalize" style={{ fontFamily: "Oswald" }}>
               {post.title}
             </h1>
             <img
@@ -71,21 +64,30 @@ const Detail = () => {
             />
             <p className="p-2 font-semibold">{post.content}</p>
             <p className="p-2">Likes: {post.likedUsers.length}</p>
-            
           </div>
           <div className="w-[35%] flex flex-col items-start gap-3 bg-white border-[0.5px] border-[#d2d1d1] p-3">
             <div className="flex items-center gap-2">
               <img
                 className="w-[50px] h-[50px] object-cover rounded-[50%]"
-                src={post.profilePicture || "https://t3.ftcdn.net/jpg/05/17/79/88/360_F_517798821_clzISlzMqjLxx8YjYFBfOaVvIj5qifwm.jpg"}
+                src={postUser?.profilePictures || "https://via.placeholder.com/50"}
                 alt="Profile"
               />
-              <span className="text-lg font-semibold">{post.username}</span>
+              <span className="text-lg font-semibold">{postUser?.username}</span>
             </div>
+            <p className="text-gray-600">{postUser?.bio}</p>
+            <span className="text-blue-500">
+              Followers: {postUser?.followerUser.length || 0}
+            </span>
+            <span className="text-gray-500 text-sm">
+              Joined:{" "}
+              {postUser?.createdAccount
+                ? new Date(postUser.createdAccount).toLocaleDateString()
+                : "Unknown date"}
+            </span>
           </div>
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </>
   );
 };
