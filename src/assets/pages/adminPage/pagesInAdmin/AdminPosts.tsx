@@ -28,11 +28,10 @@ const AdminPosts = () => {
       </div>
     );
   }
-
   return (
     <div className="flex flex-col lg:flex-row">
       <AdminAside />
-      <div className="p-6 w-full lg:w-[80%]">
+      <div className="p-6 w-full max-sm:w-full lg:w-[80%]">
         {isLoading && <p>Loading posts...</p>}
         {error && <p>Error fetching posts: {error}</p>}
         {!isLoading && !error && posts.length === 0 && (

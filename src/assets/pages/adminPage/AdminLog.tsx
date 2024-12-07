@@ -1,51 +1,52 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAdmin } from "../../features/Admin/adminSlice";
+import { loginAdmin, logout } from "../../features/Admin/adminSlice";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { useNavigate } from "react-router-dom";
 
 const AdminLog = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [admin, setAdmin] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(null);
 
-  const { isLoading } = useSelector((state) => state.admin);
+  const { isLoading, error, isAuthenticated } = useSelector((state) => state.admin);
 
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const actionResult = dispatch(loginAdmin({ username, password }));
-      
-      if (actionResult.error) {
-        setError("Invalid username or password");
-      } else {
-        navigate(`/admin/home`);
-      }
+      await dispatch(loginAdmin({ username: admin, password: adminPassword })).unwrap();
+      navigate("/admin/home"); 
     } catch (err) {
-      setError("Invalid username or password");
+      throw new Error(err)
     }
   };
-//   try {
-//     const actionResult =  dispatch(loginAdmin({ username, password }));
-//     if (actionResult.error) {
-//       // Log the error for debugging
-//       console.log("Error:", actionResult.error.message);
-//       setError(actionResult.error.message);
-//     } else {
-//       navigate(`/admin/home`);
-//     }
-//   } catch (err) {
-//     console.error("Login Error:", err);
-//     setError("Invalid username or password");
-//   }
-//   const token = localStorage.getItem("adminToken");
-// console.log("Stored Token:", token);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/admin");
+  };
+
+  if (isAuthenticated) {
+    return (
+      <div className="w-full h-[100vh] flex justify-center items-center bg-gray-100">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-[350px] space-y-4 text-center">
+          <h2 className="text-2xl font-bold text-green-600">Welcome, Admin!</h2>
+          <button
+            onClick={handleLogout}
+            className="w-full bg-red-600 text-white font-semibold py-2 rounded-[10px] hover:bg-red-700 transition"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-[100vh] flex justify-center items-center bg-gray-100">
@@ -61,8 +62,9 @@ const AdminLog = () => {
           className="w-full outline-red-500 text-red-600 font-semibold placeholder:text-red-600 p-3 rounded-[10px] border border-red-300"
           type="text"
           placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          autoComplete="username"
+          value={admin}
+          onChange={(e) => setAdmin(e.target.value)}
           required
         />
         <div className="relative">
@@ -70,8 +72,9 @@ const AdminLog = () => {
             className="w-full outline-red-500 text-red-600 font-semibold placeholder:text-red-600 p-3 rounded-[10px] border border-red-300"
             type={showPassword ? "text" : "password"}
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            value={adminPassword}
+            onChange={(e) => setAdminPassword(e.target.value)}
             required
           />
           {showPassword ? (

@@ -1,72 +1,58 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const comment_api = import.meta.env.VITE_COMMENT_API_KEY
+export const comment_api = import.meta.env.VITE_COMMENT_API_KEY;
+
 export const loginAdmin = createAsyncThunk(
   "admin/login",
-  async ({ username, password }, thunkAPI) => {
-    const response = await fetch("/api/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+  async ({ username, password }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`https://${comment_api}.mockapi.io/admin`);
+      const admins = response.data;
+      const admin = admins.find((a) => a.name === username && a.password === password);
 
-    if (!response.ok) {
-      throw new Error("Invalid credentials");
-    }
-
-    const data = await response.json();
-    if (data.token && data.user) {
-      localStorage.setItem("adminToken", data.token);
-      return data.user;
-    } else {
-      throw new Error("Invalid credentials");
+      if (admin) {
+        const token = "sample_admin_token"; 
+        localStorage.setItem("adminToken", token); 
+        return { token };
+      } else {
+        throw new Error("Invalid username or password");
+      }
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
 
-const postAdmin = async (name: string, password: string) => {
-  try {
-    const response = await axios.post(`https://${comment_api}.mockapi.io/admin`, {
-      name: name,
-      password: password,
-    });
-    console.log('Admin created:', response.data);
-  } catch (error: any) {
-    console.error("Error creating admin:", error.message || error);
-  }
-};
-
-// postAdmin("adminay", "ayxan0123");
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
-    user: null,
+    isAuthenticated: !!localStorage.getItem("adminToken"), 
     isLoading: false,
     error: null,
   },
   reducers: {
-    logoutAdmin(state) {
-      state.user = null;
-      localStorage.removeItem("adminToken");
+    logout: (state) => {
+      state.isAuthenticated = false;
+      localStorage.removeItem("adminToken"); // Token'ı temizle
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(loginAdmin.pending, (state) => {
         state.isLoading = true;
-      })
-      .addCase(loginAdmin.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isLoading = false;
         state.error = null;
+      })
+      .addCase(loginAdmin.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isAuthenticated = true;
       })
       .addCase(loginAdmin.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message;
+        state.error = action.payload || "Login failed";
       });
-  },  
+  },
 });
 
-export const { logoutAdmin } = adminSlice.actions;
+export const { logout } = adminSlice.actions;
 export default adminSlice.reducer;

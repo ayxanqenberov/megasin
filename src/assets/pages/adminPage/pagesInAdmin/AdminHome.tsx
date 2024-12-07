@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../redux/app/store";
 import { fetchUsers } from "../../../features/Users/userSlice";
 import { fetchPosts } from "../../../features/Posts/postSlice";
-import { logoutAdmin } from "../../../features/Admin/adminSlice"; 
 import AdminAside from "../adminComp/adminAside";
 import {
   PieChart,
@@ -18,10 +17,11 @@ import {
   Legend,
 } from "recharts";
 import { IoLogOutOutline } from "react-icons/io5";
+import { logout } from "../../../features/Admin/adminSlice";
 
 const AdminHome = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const { users, isLoading: userLoading } = useSelector(
     (state: RootState) => state.user
@@ -41,59 +41,72 @@ const AdminHome = () => {
     { name: "Posts", value: posts?.length || 0 },
   ];
   const mostLikedPost = posts?.reduce(
-    (prev, current) => (current.likedUsers.length > prev.likedUsers.length ? current : prev),
+    (prev, current) =>
+      current.likedUsers.length > prev.likedUsers.length ? current : prev,
     posts[0]
   );
 
   const handleLogout = () => {
-    dispatch(logoutAdmin());
+    dispatch(logout());
     navigate("/");
   };
 
   return (
-    <div className="flex w-full justify-start">
+    <div className="flex flex-col lg:flex-row w-full min-h-screen bg-gray-50">
       <AdminAside />
-      <div className="w-[70%] p-6 flex flex-col gap-6">
-        <div className="flex w-full justify-between items-center">
-          <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
+      <main className="flex-grow p-4 lg:p-8">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
           <button
-            className="mb-6 bg-red-700 px-2 py-[6px] text-white rounded-md hover:bg-red-600 cursor-pointer duration-200 flex items-center gap-1"
-            onClick={handleLogout} 
+            className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition duration-200"
+            onClick={handleLogout}
           >
-            Log Out <IoLogOutOutline />
+            <IoLogOutOutline size={20} />
+            Log Out
           </button>
         </div>
-        <div className="w-full ">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-100 p-4 rounded shadow">
-              <span className="font-semibold text-lg">Total User Count</span>
-              <p className="text-2xl mt-2">{users?.length}</p>
-            </div>
-            <div className="bg-gray-100 p-4 rounded shadow">
-              <span className="font-semibold text-lg">Total Post Count</span>
-              <p className="text-2xl mt-2">
-                {postLoading ? "Loading..." : posts?.length || 0}
-              </p>
-            </div>
-            <div className="bg-gray-100 p-4 rounded shadow">
-              <span className="font-semibold text-lg">Total Notificians Count</span>
-            </div>
-            <div className="bg-gray-100 p-4 rounded shadow">
-              <span className="font-semibold text-lg">Most Liked Post</span>
-              <p className="mt-2">
-                {postLoading
-                  ? "Loading..."
-                  : mostLikedPost
-                  ? `"${mostLikedPost.title}" (${mostLikedPost.likedUsers.length} likes)`
-                  : "No posts available"}
-              </p>
-            </div>
+
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+          <div className="bg-white shadow rounded-lg p-6">
+            <span className="text-gray-600 text-sm font-medium">
+              Total Users
+            </span>
+            <p className="text-3xl font-bold text-gray-800 mt-2">
+              {userLoading ? "Loading..." : users?.length || 0}
+            </p>
           </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-gray-100 p-4 rounded shadow">
-            <h2 className="text-lg font-semibold mb-4">Data Overview</h2>
-            <PieChart width={400} height={300}>
+          <div className="bg-white shadow rounded-lg p-6">
+            <span className="text-gray-600 text-sm font-medium">
+              Total Posts
+            </span>
+            <p className="text-3xl font-bold text-gray-800 mt-2">
+              {postLoading ? "Loading..." : posts?.length || 0}
+            </p>
+          </div>
+          <div className="bg-white shadow rounded-lg p-6">
+            <span className="text-gray-600 text-sm font-medium">
+              Notifications
+            </span>
+            <p className="text-3xl font-bold text-gray-800 mt-2">0</p>
+          </div>
+          <div className="bg-white shadow rounded-lg p-6">
+            <span className="text-gray-600 text-sm font-medium">
+              Most Liked Post
+            </span>
+            <p className="text-sm text-gray-700 mt-2">
+              {postLoading
+                ? "Loading..."
+                : mostLikedPost
+                ? `"${mostLikedPost.title}" (${mostLikedPost.likedUsers.length} likes)`
+                : "No posts available"}
+            </p>
+          </div>
+        </section>
+
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+          <div className="bg-white shadow rounded-lg p-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Data Overview</h2>
+            <PieChart width={300} height={300}>
               <Pie
                 data={data}
                 dataKey="value"
@@ -114,24 +127,26 @@ const AdminHome = () => {
               <Tooltip />
             </PieChart>
           </div>
-          <div className="bg-gray-100 p-4 rounded shadow">
-            <h2 className="text-lg font-semibold mb-4">Most Liked Post</h2>
+          <div className="bg-white shadow rounded-lg p-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">
+              Most Liked Post
+            </h2>
             {mostLikedPost ? (
               <BarChart width={400} height={300} data={[mostLikedPost]}>
                 <XAxis dataKey="title" />
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="likedUsers" fill="#82ca9d" />
+                <Bar dataKey="likedUsers.length" fill="#82ca9d" />
               </BarChart>
             ) : (
-              <p>No posts available</p>
+              <p className="text-gray-600">No posts available</p>
             )}
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
 };
 
-export default AdminHome;  
+export default AdminHome;

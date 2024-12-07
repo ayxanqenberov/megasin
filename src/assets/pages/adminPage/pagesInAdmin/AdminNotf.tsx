@@ -48,10 +48,10 @@ const AdminNotf = () => {
   };
 
   return (
-    <div className="flex items-start justify-start">
+    <div className="flex items-start max-lg:justify-center justify-start">
       <AdminAside />
-      <div className="flex justify-between items-baseline w-[80%] my-4 px-3">
-        <div className="max-w-md bg-white p-6 rounded-lg shadow-lg mb-6">
+      <div className="flex max-sm:w-full max-lg:flex-col max-sm:items-center justify-between items-baseline w-[80%] my-4 px-3">
+        <div className="max-w-md max-sm:mt-6 bg-white p-6 rounded-lg shadow-lg mb-6">
           <h2 className="text-2xl font-bold mb-4">Send Notification</h2>
           <div className="space-y-4">
             <input
@@ -77,7 +77,7 @@ const AdminNotf = () => {
             </button>
           </div>
         </div>
-        <div className="bg-white p-6 w-[60%] rounded-lg shadow-lg">
+        <div className="bg-white max-sm:bg-transparent max-sm:shadow-none max-sm:p-0 p-6 w-[60%] max-lg:w-full rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold mb-4">Notifications</h2>
           {status === "loading" ? (
             <p>Loading notifications...</p>
