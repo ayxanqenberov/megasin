@@ -1,0 +1,72 @@
+import React, { useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { RootState, AppDispatch } from "../../redux/app/store";
+import { setSearchQuery } from "../../features/Search/searchSlice";
+
+interface PostType {
+  id: string | number;
+  title: string;
+  username?: string;
+  userId?: string | number;
+}
+
+const Search: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const searchQuery = useSelector((state: RootState) => state.search.query);
+  const posts = useSelector((state: RootState) => state.posts.posts) as PostType[];
+  const username = useSelector((state: RootState) => state.user.user?.username);
+
+  const handleSearchChange = (value: string) => {
+    dispatch(setSearchQuery(value));
+  };
+
+  const filteredPosts = useMemo(
+    () =>
+      posts.filter((post) =>
+        post.title.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    [posts, searchQuery]
+  );
+
+  const getDetail = (userNm: string, id: string | number) => {
+    navigate(`/@${userNm}/detail?postId=${id}`);
+  };
+
+  const isProfilePage = location.pathname === `/profile/${username}`;
+
+  return (
+    <div className={isProfilePage ? "hidden" : "search w-1/2 max-md:w-[90%] max-[600px]:w-[45%] relative"}>
+      <input
+        className="border-b border-gray-300 dark:bg-black dark:text-white outline-none w-full py-2"
+        type="text"
+        placeholder="Search posts by title..."
+        value={searchQuery} 
+        onChange={(e) => handleSearchChange(e.target.value)}
+      />
+      <div>
+        {searchQuery && (
+          <div className="results absolute top-full left-0 bg-white shadow-lg mt-2 rounded-md max-h-60 overflow-y-auto w-full z-50 text-black">
+            {filteredPosts.length > 0 ? (
+              filteredPosts.map((post) => (
+                <div
+                  key={post.id}
+                  className="result-item py-2 px-4 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => getDetail(post.username || "user", post.id)}
+                >
+                  {post.title}
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 py-2 px-4">No posts found</p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Search;

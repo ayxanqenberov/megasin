@@ -1,0 +1,34 @@
+import { MouseEvent } from "react";
+import FormatBoldIcon from '@mui/icons-material/FormatBold';
+import FormatItalicIcon from '@mui/icons-material/FormatItalic';
+import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+interface ToggleButtonsProps {
+  formats: string[];
+  setFormats: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export default function ToggleButtonsMultiple({ formats, setFormats }: ToggleButtonsProps) {
+  const handleFormat = (_event: MouseEvent<HTMLElement>, newFormats: string[]) => {
+    setFormats(newFormats);
+  };
+
+  return (
+    <ToggleButtonGroup
+      value={formats}
+      onChange={handleFormat}
+      aria-label="text formatting"
+    >
+      <ToggleButton value="bold" aria-label="bold">
+        <FormatBoldIcon />
+      </ToggleButton>
+      <ToggleButton value="italic" aria-label="italic">
+        <FormatItalicIcon />
+      </ToggleButton>
+      <ToggleButton value="underlined" aria-label="underlined">
+        <FormatUnderlinedIcon />
+      </ToggleButton>
+    </ToggleButtonGroup>
+  );
+}
